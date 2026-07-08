@@ -1,0 +1,21 @@
+
+<mat-card>
+    <mat-icon>{{ icon() }}</mat-icon>
+
+    <h2>{{ title() }}</h2>
+
+    <p>{{ description() }}</p>
+
+    @if (!disabled()) {
+        <a mat-chip [routerLink]="navigateTo()">
+            {{ chipText() }}
+        </a>
+    } @else{
+        <a mat-chip>
+            {{ chipText() }}
+        </a>
+    }
+    
+
+    <!-- ver como faço na questão do botão -->
+</mat-card>
