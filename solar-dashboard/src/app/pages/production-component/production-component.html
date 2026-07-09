@@ -78,7 +78,31 @@
     </mat-table>
 }
 @if (viewMode() === 'chart') {
-    <p>po caralho</p>
+    
+
+<mat-card class="chart-row-card">
+    <mat-card-title >Daily Production Overview</mat-card-title>
+
+    <div class="chart-metrics">
+      <div>
+        <h3>Total Today</h3>
+        <h4>{{ totalToday() }}</h4>
+      </div>
+
+      <div>
+        <h3>Peak Hour</h3>
+        <h4>{{ peakHour() }}</h4>
+      </div>
+    </div>
+
+    <canvas
+      baseChart
+      [data]="barChartData()"
+      [options]="barChartOptions"
+      [type]="barChartType">
+    </canvas>
+</mat-card>
+
 }
 
 

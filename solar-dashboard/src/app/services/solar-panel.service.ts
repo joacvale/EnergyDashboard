@@ -40,8 +40,7 @@ export class SolarPanelService {
 
         try{
             const response = await firstValueFrom(
-                this.http.get<ApiResponse<SolarPanel[]>>(
-                    `${this.apiUrl}/panels`
+                this.http.get<ApiResponse<SolarPanel[]>>(`${this.apiUrl}/panels`
                 )
             );
 
@@ -64,11 +63,11 @@ export class SolarPanelService {
         this.loading.set(true);
 
         try {
-            const productionData = await firstValueFrom(
-                this.http.get<ProductionData[]>(`${this.apiUrl}/production`)
+            const response = await firstValueFrom(
+                this.http.get<ApiResponse<ProductionData[]>>(`${this.apiUrl}/production`)
             );
-            this.productionData.set(productionData);
-            console.log(`Loaded ${productionData.length} production data entries`);
+            this.productionData.set(response.data);
+            console.log(`Loaded ${response.data.length} production data entries`);
         }catch (error){
             this.error.set('Failed to load production data');
             console.error(error);

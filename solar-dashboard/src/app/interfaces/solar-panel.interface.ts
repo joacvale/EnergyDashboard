@@ -9,5 +9,5 @@ export interface SolarPanel {
 export interface ProductionData {
     hour:number;
     production:number;
-    type:['production' | 'limited' | 'idle'];
+    type: 'production' | 'limited' | 'idle';
 }

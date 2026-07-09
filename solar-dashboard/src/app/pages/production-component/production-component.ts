@@ -8,11 +8,16 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SolarPanelService } from '../../services/solar-panel.service';
 import { SolarPanel } from '../../interfaces/solar-panel.interface';
 import { PanelDialogComponent } from '../../components/panel-dialog-component/panel-dialog-component';
+import {BaseChartDirective} from 'ng2-charts';
+import {ChartType} from 'chart.js';
+import { ChartOptions } from 'chart.js';
+import { computed } from '@angular/core';
+
 
 @Component({
   selector: 'app-production-component',
   standalone:true,
-  imports: [MatButtonModule,MatTableModule,MatIconModule,MatChipsModule,MatCardModule,MatDialogModule,PanelDialogComponent],
+  imports: [MatButtonModule,MatTableModule,MatIconModule,MatChipsModule,MatCardModule,MatDialogModule,PanelDialogComponent,BaseChartDirective],
   templateUrl: './production-component.html',
   styleUrl: './production-component.scss',
 })
@@ -23,16 +28,12 @@ export class ProductionComponent {
 
   showTable(){
     this.viewMode.set('table');
-    
     console.log('table click');
-
   }
 
   showChart(){
     this.viewMode.set('chart');
-    
     console.log('chart click');
-
   }
 
   deletePanel(panel: SolarPanel){
@@ -58,6 +59,94 @@ export class ProductionComponent {
     });
   }
   
+barChartData = computed(() => {
+  const data =this.solarPanelService.productionData();
+
+  return {
+    labels: data.map(item => `H${item.hour}`),
+
+    datasets: [
+      {
+        label: 'Production',
+
+        data: data.map(
+          item => item.production
+        ),
+
+        backgroundColor: data.map(item => {
+          switch (item.type) {
+            case 'production':
+              return 'rgba(39, 174, 96, 0.8)';
+            case 'limited':
+              return 'rgba(155, 89, 182, 0.8)';
+            case 'idle':
+              return 'rgba(52, 152, 219, 0.8)';
+            default:
+              return 'rgba(0, 0, 0, 0.08)';
+          }
+        }),
+      }
+    ]
+  };
+});
+
+  totalToday = computed(() =>
+    this.solarPanelService
+      .productionData()
+      .reduce(
+        (total, item) => total + item.production,
+        0
+      )
+  );
+
+  peakHour = computed(() => {
+
+    const data = this.solarPanelService.productionData();
+
+    if (!data.length) {
+      return '-';
+    }
+
+    const peak = data.reduce(
+      (max, current) =>
+        current.production > max.production
+          ? current
+          : max
+    );
+
+    return `H${peak.hour}`;
+
+  });
+
+  barChartOptions: ChartOptions<'bar'>={
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      tooltip: {
+        enabled: true,
+      },
+    },
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    scales: {
+      y:{
+        min:0, 
+        max:25, 
+        title:{
+          display: true,
+          text:'MW',
+        },
+        grid:{
+          color: 'rgba(0,0,0,0.1)'
+        }
+      }
+    }
+  }
+
+  barChartType: 'bar' = 'bar';
+
   columnsToDisplay = [
     'id',
     'location',
