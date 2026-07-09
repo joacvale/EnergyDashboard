@@ -1,0 +1,113 @@
+.metric-container{
+    display: flex;
+    gap: 24px;
+    margin: 32px 40px 0;
+}
+
+.metrics-container mat-card {
+    flex: 1;
+    text-align: center;
+}
+
+mat-card {
+    width: calc(100% - 80px);
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: flex-start; // ou center
+    gap: 48px;
+    margin-left: 40px;
+    margin-right: 40px;
+    box-sizing: border-box;
+}
+
+mat-card-content {
+    text-align: center;
+}
+
+mat-card-content h1,
+mat-card-content h3 {
+    margin: 10;
+}
+
+mat-table{
+    margin: 40px 40px;
+}
+
+
+/* Status chips */
+mat-chip.active-chip {
+    background-color: green;
+
+}
+
+mat-chip.maintenance-chip {
+    background-color: yellow;
+}
+
+mat-chip.inactive-chip {
+    background-color: grey;
+}
+
+mat-icon.delete-icon{
+    color: #dc2626;
+}
+
+mat-icon.update-icon{
+    color: #2563eb;
+}
+
+/* Table header and view toggle */
+.title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px 40px 20px;
+}
+
+.title h3{
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.title .view-toggle{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.title .view-toggle button{
+    background: #f3f4f6;
+    color: #374151;
+    border-radius: 8px;
+    padding: 6px 10px;
+    min-width: 0;
+    height: 34px;
+    box-shadow: none;
+    border: 1px solid rgba(0,0,0,0.04);
+}
+
+.title .view-toggle button .toggle-check{
+    font-size: 16px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.title .view-toggle button.view-active{
+    background: #e5e7eb;
+    color: #111827;
+    border-color: rgba(0,0,0,0.06);
+}
+
+.title .view-toggle button.view-active .toggle-check{
+    color: #111827;
+}
+
+.table-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px 40px 0px;
+}

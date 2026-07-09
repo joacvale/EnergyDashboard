@@ -3,6 +3,12 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { ProductionData, SolarPanel } from '../interfaces/solar-panel.interface';
 import { firstValueFrom } from 'rxjs';
 
+
+interface ApiResponse<T> {
+    success: boolean;
+    data: T;
+}
+
 @Injectable({ providedIn: 'root' })
 export class SolarPanelService {
     private http = inject(HttpClient);
@@ -24,17 +30,25 @@ export class SolarPanelService {
         this.panels().filter(panel => panel.status === 'Active').length
     );
 
+
+
+
     //get all panels
     async loadPanels() {
         this.error.set(null);
         this.loading.set(true);
 
-        try {
-            const panels = await firstValueFrom(
-                this.http.get<SolarPanel[]>(`${this.apiUrl}/panels`)
+        try{
+            const response = await firstValueFrom(
+                this.http.get<ApiResponse<SolarPanel[]>>(
+                    `${this.apiUrl}/panels`
+                )
             );
-            this.panels.set(panels);
-            console.log(`Loaded ${panels.length} panels`);
+
+            this.panels.set(response.data);
+
+            console.log(`Loaded ${response.data.length} panels`);
+
         }catch (error){
             this.error.set('Failed to load solar panels');
             console.error(error);
@@ -112,7 +126,6 @@ export class SolarPanelService {
     async deletePanel(panelId: string) {
         this.error.set(null);
         this.loading.set(true);
-
         try {
             // posso tirar a const porque nunca é lida - deixei para uniformizar com os outros métodos
             const deletePanel = await firstValueFrom(
