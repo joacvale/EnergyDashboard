@@ -12,12 +12,13 @@ import {BaseChartDirective} from 'ng2-charts';
 import {ChartType} from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import { computed } from '@angular/core';
+import { PageStateComponent } from "../../components/page-state-component/page-state-component";
 
 
 @Component({
   selector: 'app-production-component',
   standalone:true,
-  imports: [MatButtonModule,MatTableModule,MatIconModule,MatChipsModule,MatCardModule,MatDialogModule,PanelDialogComponent,BaseChartDirective],
+  imports: [MatButtonModule, MatTableModule, MatIconModule, MatChipsModule, MatCardModule, MatDialogModule, PanelDialogComponent, BaseChartDirective, PageStateComponent],
   templateUrl: './production-component.html',
   styleUrl: './production-component.scss',
 })
