@@ -1,1 +1,47 @@
-<p>panel-dialog-component works!</p>
+<h2>{{title}}</h2>
+<mat-form-field>
+  <mat-label>Location</mat-label>
+  <input matInput type="string" [(ngModel)]="formData.location">
+</mat-form-field>
+<mat-form-field>
+  <mat-label>Capacity</mat-label>
+  <input matInput type="number" [(ngModel)]="formData.capacity">
+  <span matTextSuffix>kW</span>
+</mat-form-field>
+<mat-form-field>
+  <mat-label>Today Production</mat-label>
+  <input matInput type="number" [(ngModel)]="formData.todayProduction">
+  <span matTextSuffix>kWh</span>
+</mat-form-field>
+<mat-form-field>
+  <mat-label>Status</mat-label>
+  <mat-select [(ngModel)]="formData.status">
+    <mat-option value="Active">
+      Active
+    </mat-option>
+    <mat-option value="Maintenance">
+      Maintenance
+    </mat-option>
+    <mat-option value="Inactive">
+      Inactive
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div class="buttons">
+  <div class="dialog-buttons">
+    <button
+      mat-raised-button
+      color="grey"
+      (click)="dialogRef.close()">
+      Cancel
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!isValid()"
+      (click)="formsAction()">
+      Save
+    </button>
+  </div>
+</div>
