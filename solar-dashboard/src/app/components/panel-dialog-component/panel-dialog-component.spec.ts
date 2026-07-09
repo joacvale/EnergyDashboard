@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PanelDialog } from './panel-dialog';
+import { PanelDialogComponent } from './panel-dialog-component';
 
-describe('PanelDialog', () => {
-  let component: PanelDialog;
-  let fixture: ComponentFixture<PanelDialog>;
+describe('PanelDialogComponent', () => {
+  let component: PanelDialogComponent;
+  let fixture: ComponentFixture<PanelDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PanelDialog],
+      imports: [PanelDialogComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PanelDialog);
+    fixture = TestBed.createComponent(PanelDialogComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
