@@ -9,7 +9,7 @@ import { SolarPanel } from '../../interfaces/solar-panel.interface';
 import { PanelDialogComponent } from '../../components/panel-dialog-component/panel-dialog-component';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartOptions } from 'chart.js';
-import { computed, effect, signal, Component, inject, AfterViewInit, ViewChild } from '@angular/core';
+import { computed, effect, signal, Component, inject, AfterViewInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { PageStateComponent } from "../../components/page-state-component/page-state-component";
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -17,8 +17,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { ChangeDetectionStrategy } from '@angular/core';
-
 
 
 @Component({
@@ -72,7 +70,7 @@ export class ProductionComponent implements AfterViewInit {
       });
       dialogRef.afterClosed().subscribe((result)=>{
         if(result){
-          this.snackBar.open('Painel apagado com sucesso','Fechar',{ duration: 3000});
+          this.snackBar.open('Painel apagado com sucesso','Fechar',{ duration: 3000, verticalPosition:'top'});
         }
       });
   }
@@ -86,7 +84,7 @@ export class ProductionComponent implements AfterViewInit {
       });
       dialogRef.afterClosed().subscribe((result)=>{
         if(result){
-          this.snackBar.open('Painel criado com sucesso','Fechar',{ duration: 3000});
+          this.snackBar.open('Painel criado com sucesso','Fechar',{ duration: 3000, verticalPosition:'top'});
         }
       });
   }

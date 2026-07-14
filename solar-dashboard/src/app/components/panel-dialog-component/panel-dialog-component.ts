@@ -23,12 +23,14 @@ export class PanelDialogComponent {
   isEdit: boolean = false;
   isDelete: boolean = false;
 
-  formData = {
+
+  formData : SolarPanel = {
+    id:'',
     location: '',
     capacity: 0,
     todayProduction: 0,
-    status: 'Active' as 'Active' | 'Maintenance' as "Maintenance" | 'Inactive' as "Inactive"
-  };
+    status: "Active",
+  }
 
   solarPanelService = inject(SolarPanelService);
   dialogRef = inject(MatDialogRef<PanelDialogComponent>);
