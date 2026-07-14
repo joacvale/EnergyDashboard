@@ -55,16 +55,13 @@ export class ProductionComponent implements AfterViewInit {
 
   showTable() {
     this.viewMode.set('table');
-    console.log('table click');
   }
 
   showChart() {
     this.viewMode.set('chart');
-    console.log('chart click');
   }
 
   deletePanel(panel: SolarPanel) {
-    console.log("delete"),
       this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
@@ -79,8 +76,6 @@ export class ProductionComponent implements AfterViewInit {
   }
 
   addPanel() {
-    console.log("add"),
-
       this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
@@ -90,8 +85,6 @@ export class ProductionComponent implements AfterViewInit {
   }
 
   updatePanel(panel: SolarPanel) {
-    console.log("update"),
-
       this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
@@ -169,11 +162,8 @@ export class ProductionComponent implements AfterViewInit {
   
   
   filteredSolarPanels(location : String){
-    console.log(location)
     const panels = this.solarPanelService.panels();
-    console.log("Without filter " , panels)
     const filteredPanels = panels.filter(panel=>panel.location.toLowerCase().includes(location.toLowerCase()));
-    console.log("With filter ", filteredPanels)
     this.dataSource.data = filteredPanels;
   }
 

@@ -41,11 +41,9 @@ export class SolarPanelService {
 
         try {
             let params = new HttpParams();
-            console.log('Filter:', filter);
             if (filter?.trim()) {
                 params = params.set('location', filter);
             }
-            console.log(params.toString());
             const response = await firstValueFrom(
                 this.http.get<ApiResponse<SolarPanel[]>>(`${this.apiUrl}/panels`,
                     { params }
@@ -53,11 +51,9 @@ export class SolarPanelService {
             );
 
             this.panels.set(response.data);
-            console.log(`Loaded ${response.data.length} panels`);
 
         } catch (error) {
             this.error.set('Failed to load solar panels');
-            console.error(error);
         } finally {
             this.loading.set(false);
         }
@@ -73,7 +69,6 @@ export class SolarPanelService {
                 this.http.get<ApiResponse<ProductionData[]>>(`${this.apiUrl}/production`)
             );
             this.productionData.set(response.data);
-            console.log(`Loaded ${response.data.length} production data entries`);
         } catch (error) {
             this.error.set('Failed to load production data');
             console.error(error);
@@ -96,7 +91,6 @@ export class SolarPanelService {
                 ...panels,
                 newPanel
             ]);
-            console.log('Panel added successfully', newPanel);
             await this.loadPanels();
 
         } catch (error) {
@@ -120,7 +114,6 @@ export class SolarPanelService {
             this.panels.update(
                 panels => panels.map(p => p.id === panel.id ? updatedPanel : p)
             );
-            console.log('Panel updated successfully', updatedPanel);
             await this.loadPanels();
         } catch (error) {
             this.error.set('Failed to update solar panel');
@@ -140,7 +133,6 @@ export class SolarPanelService {
                 this.http.delete(`${this.apiUrl}/panels/${panelId}`)
             );
             this.panels.update(panels => panels.filter(p => p.id !== panelId));
-            console.log('Panel deleted successfully');
             await this.loadPanels();
 
         } catch (error) {
