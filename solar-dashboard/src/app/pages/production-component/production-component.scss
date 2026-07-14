@@ -1,194 +1,194 @@
 .page {
-    background-color: var(--mat-card-elevated-container-color,var(--mat-sys-surface-container-low));
+  background-color: var(--mat-card-elevated-container-color, var(--mat-sys-surface-container-low));
 }
 
 mat-card {
-    width: 80%;
-    margin: 0 auto;
-    box-sizing: border-box;
-    background: white;
+  width: 80%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background: white;
 }
 
 mat-card-content {
-    text-align: center;
+  text-align: center;
 }
 
 mat-table {
-    background: white;
+  background: white;
 }
 
 .title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width:80%;
-    margin: 0 auto;
-    padding: 24px 0px 24px;
-    box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
+  padding: 24px 0px 24px;
+  box-sizing: border-box;
 }
 
 .title h2 {
-    margin: 0;
-    font-weight: 700;
+  margin: 0;
+  font-weight: 700;
 }
 
 .view-toggle {
-    display: flex;
-    border: 1px solid #2398ba;
-    border-radius: 6px;
-    overflow: hidden;
-    background: white;
+  display: flex;
+  border: 1px solid #2398ba;
+  border-radius: 6px;
+  overflow: hidden;
+  background: white;
 }
 
 .view-toggle button {
-    min-width: 120px;
-    height: 42px;
-    background: white;
-    color: #2398ba;
-    font-weight: 600;
-    border-radius: 0;
+  min-width: 120px;
+  height: 42px;
+  background: white;
+  color: #2398ba;
+  font-weight: 600;
+  border-radius: 0;
 }
 
 .view-toggle button.view-active {
-    background: #2398ba;
-    color: white;
+  background: #2398ba;
+  color: white;
 }
 
 .metric-container {
-    display: flex;
-    width: 80%;
-    gap: 24px;
-    margin: 0 auto;
-    margin-bottom:40px;
-    flex-wrap: wrap;
+  display: flex;
+  width: 80%;
+  gap: 24px;
+  margin: 0 auto;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
 }
 
 .metric-container mat-card {
-    flex: 1 1 280px;
-    min-width: 260px;
-    min-height: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
+  flex: 1 1 280px;
+  min-width: 260px;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
 }
 
 .metrics {
-    text-align: left;
+  text-align: left;
 }
 
 .metrics h1,
 .metric h2,
 .metrics h3 {
-    margin: 0;
+  margin: 0;
 }
 
 @media (max-width: 900px) {
-    .metric-container mat-card {
-        max-width: 100%;
-    }
+  .metric-container mat-card {
+    max-width: 100%;
+  }
 }
 
 .table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 24px 40px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 40px 0;
 }
 
 .panel-button {
-    min-width: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #2398ba;
-    border-radius: 6px;
-    font-weight: 800;
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #2398ba;
+  border-radius: 6px;
+  font-weight: 800;
 }
 
 .chart-row-card {
-    padding: 24px;
-    margin-bottom: 40px;
+  padding: 24px;
+  margin-bottom: 40px;
 }
 
 .chart-header {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .chart-row-card mat-card-title {
-    font-size: 1.2rem;
-    font-weight: 700;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
 .chart-metrics {
-    display: flex;
-    gap: 12px;
+  display: flex;
+  gap: 12px;
 }
 
 .metric-mini-card {
-    min-width: 160px;
-    box-shadow: none;
+  min-width: 160px;
+  box-shadow: none;
 }
 
 .metric-mini-card mat-card-content {
-    padding: 8px;
+  padding: 8px;
 }
 
 .minicard-title {
-    font-size: 1rem;
-    font-weight: 300;
-    margin: 0;
+  font-size: 1rem;
+  font-weight: 300;
+  margin: 0;
 }
 
 .minicard-stat {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 8px 0 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 8px 0 0;
 }
 
 .chart-row-card canvas {
-    width: 100% ;
-    max-height: 400px ;
+  width: 100%;
+  max-height: 400px;
 }
 
 mat-chip.active-chip {
-    background: #2398ba;
+  background: #2398ba;
 }
 
 mat-chip.maintenance-chip {
-    background: #BA4623;
+  background: #BA4623;
 }
 
 mat-chip.inactive-chip {
-    background: grey;
+  background: grey;
 }
 
 mat-icon.update-icon {
-    color: #2398ba;
+  color: #2398ba;
 }
 
 mat-icon.delete-icon {
-    color: #BA4623;
+  color: #BA4623;
 }
 
 .filter-container {
-    display: flex;
-    gap: 12px;
+  display: flex;
+  gap: 12px;
 
-    width: 80%;
-    margin-left: 40px;
+  width: 80%;
+  margin-left: 40px;
 }
 
 .filter {
-    width: 300px;
+  width: 300px;
 }
 
 .search-button {
-    height: 56px;
+  height: 56px;
 
-    background-color: #2398ba !important;
-    color: white !important;
+  background-color: #2398ba !important;
+  color: white !important;
 
-    border-radius: 6px;
-    font-weight: 600;
+  border-radius: 6px;
+  font-weight: 600;
 }

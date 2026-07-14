@@ -1,23 +1,23 @@
-mat-card{
-    text-align: center;
-    height: 100%;
-    width:100%;   
+mat-card {
+  text-align: center;
+  height: 100%;
+  width: 100%;
 }
 
-.title{
-    margin-top: 60px;
-    font-weight: 450;
-    color:#2398BA;
-    font-size: Xx-large;
-    margin-bottom: 15px;
+.title {
+  margin-top: 60px;
+  font-weight: 450;
+  color: #2398BA;
+  font-size: Xx-large;
+  margin-bottom: 15px;
 }
 
-.subTitle{
-  font-weight:200;
+.subTitle {
+  font-weight: 200;
   font-size: large;
   color: #BA4623
 }
-    
+
 .cards-container {
   display: flex;
   justify-content: center;

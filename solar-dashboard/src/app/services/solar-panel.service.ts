@@ -23,7 +23,7 @@ export class SolarPanelService {
     //two computed properties
     getTotalProduction = computed(() =>
         this.panels()
-        .reduce((total, panel) => total + panel.todayProduction, 0)
+            .reduce((total, panel) => total + panel.todayProduction, 0)
     );
 
     getActivePanelsCount = computed(() =>
@@ -34,30 +34,30 @@ export class SolarPanelService {
 
 
     //get all panels
-    async loadPanels(filter?:string) {
+    async loadPanels(filter?: string) {
         this.error.set(null);
         this.loading.set(true);
 
-        try{
+        try {
             let params = new HttpParams();
             console.log('Filter:', filter);
-            if (filter?.trim()){
+            if (filter?.trim()) {
                 params = params.set('location', filter);
             }
             console.log(params.toString());
             const response = await firstValueFrom(
                 this.http.get<ApiResponse<SolarPanel[]>>(`${this.apiUrl}/panels`,
-                {params}
+                    { params }
                 )
             );
 
             this.panels.set(response.data);
             console.log(`Loaded ${response.data.length} panels`);
 
-        }catch (error){
+        } catch (error) {
             this.error.set('Failed to load solar panels');
             console.error(error);
-        }finally{
+        } finally {
             this.loading.set(false);
         }
     }
@@ -73,10 +73,10 @@ export class SolarPanelService {
             );
             this.productionData.set(response.data);
             console.log(`Loaded ${response.data.length} production data entries`);
-        }catch (error){
+        } catch (error) {
             this.error.set('Failed to load production data');
             console.error(error);
-        }finally{
+        } finally {
             this.loading.set(false);
         }
 
@@ -89,19 +89,19 @@ export class SolarPanelService {
 
         try {
             const newPanel = await firstValueFrom(
-                this.http.post<SolarPanel>(`${this.apiUrl}/panels` , panel)
+                this.http.post<SolarPanel>(`${this.apiUrl}/panels`, panel)
             );
             this.panels.update(panels => [
-                ...panels, 
+                ...panels,
                 newPanel
             ]);
             console.log('Panel added successfully', newPanel);
             this.loadPanels();
 
-        }catch (error){
+        } catch (error) {
             this.error.set('Failed to add solar panel');
             console.error(error);
-        }finally{
+        } finally {
             this.loading.set(false);
         }
 
@@ -121,10 +121,10 @@ export class SolarPanelService {
             );
             console.log('Panel updated successfully', updatedPanel);
             this.loadPanels();
-        }catch (error){
+        } catch (error) {
             this.error.set('Failed to update solar panel');
             console.error(error, ' Panel data:', panel);
-        }finally{
+        } finally {
             this.loading.set(false);
         }
     }
@@ -142,10 +142,10 @@ export class SolarPanelService {
             console.log('Panel deleted successfully');
             this.loadPanels();
 
-        }catch (error){
+        } catch (error) {
             this.error.set('Failed to delete solar panel');
             console.error(error, ' Panel data:', panelId);
-        }finally{
+        } finally {
             this.loading.set(false);
         }
     }

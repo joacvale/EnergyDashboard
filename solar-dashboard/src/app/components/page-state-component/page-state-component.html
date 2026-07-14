@@ -1,35 +1,35 @@
 @if (loading()) {
-    <div class="loading">
-        <mat-spinner></mat-spinner>
-        <p>Loading panels from API...</p>
-    </div>
+<div class="loading">
+  <mat-spinner></mat-spinner>
+  <p>Loading panels from API...</p>
+</div>
 }
 @else if (error()) {
-    <div class="error">
-        <mat-icon>error</mat-icon>
-        <h2>Cannot Connect to Backend</h2>
-        <p>{{ error() }}</p>
-        <p>Make sure backend is running on localhost:3000</p>
-        <button (click) = "retry.emit()">
-            <p>Retry</p>
-        </button>
+<div class="error">
+  <mat-icon>error</mat-icon>
+  <h2>Cannot Connect to Backend</h2>
+  <p>{{ error() }}</p>
+  <p>Make sure backend is running on localhost:3000</p>
+  <button (click)="retry.emit()">
+    <p>Retry</p>
+  </button>
 
 
-    </div>
+</div>
 
 }
 @else if (isEmpty()) {
-    <div class="empty">
-        <mat-icon>
-            solar_power
-        </mat-icon>
-        <h2>No panels found</h2>
-        <p>
-            Add your first solar panel to get started
-        </p>
-        <button mat-raised-button color="primary" (click)="add.emit()">
-            <mat-icon>add</mat-icon>
-            Add Panel
-        </button>
-    </div>
+<div class="empty">
+  <mat-icon>
+    solar_power
+  </mat-icon>
+  <h2>No panels found</h2>
+  <p>
+    Add your first solar panel to get started
+  </p>
+  <button mat-raised-button color="primary" (click)="add.emit()">
+    <mat-icon>add</mat-icon>
+    Add Panel
+  </button>
+</div>
 }

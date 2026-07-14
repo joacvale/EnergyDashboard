@@ -1,18 +1,17 @@
-
 <mat-card>
-    <mat-icon class="icon">{{ icon() }}</mat-icon>
+  <mat-icon class="icon">{{ icon() }}</mat-icon>
 
-    <mat-card-title class="title">{{ title() }}</mat-card-title>
+  <mat-card-title class="title">{{ title() }}</mat-card-title>
 
-    <mat-card-subtitle class="description">{{ description() }}</mat-card-subtitle>
+  <mat-card-subtitle class="description">{{ description() }}</mat-card-subtitle>
 
-    @if (!disabled()) {
-        <button mat-button class="button-active" [routerLink]="navigateTo()">
-            {{ chipText() }}
-        </button>
-    } @else{
-        <button mat-button class="button-inactive">
-            {{ chipText() }}
-        </button>
-    }
+  @if (!disabled()) {
+  <button mat-button class="button-active" [routerLink]="navigateTo()">
+    {{ chipText() }}
+  </button>
+  } @else{
+  <button mat-button class="button-inactive">
+    {{ chipText() }}
+  </button>
+  }
 </mat-card>

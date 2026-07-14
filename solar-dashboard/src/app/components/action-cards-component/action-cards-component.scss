@@ -1,4 +1,3 @@
-
 mat-card {
   width: 400px;
   min-height: 220px;
@@ -10,41 +9,41 @@ mat-card {
   gap: 12px;
 }
 
-mat-icon{
+mat-icon {
   font-size: 70px;
   width: 80px;
   height: 80px;
 }
 
-.title{
+.title {
   font-weight: 500;
   text-align: left;
 }
 
-.description{
+.description {
   font-weight: 300;
   text-align: justify;
 }
 
-.button-active{
+.button-active {
   margin-top: 20px;
-  color:black !important; 
+  color: black !important;
   width: fit-content;
-  padding: 10px 20px; 
-  border: none; 
-  border-radius: 5px; 
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
   background-color: #2398BA;
 
 }
 
-.button-inactive{
+.button-inactive {
   margin-top: 20px;
-  color:black !important;
+  color: black !important;
   width: fit-content;
-  padding: 10px 20px; 
-  border: none; 
-  border-radius: 5px; 
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
   background-color: grey;
 

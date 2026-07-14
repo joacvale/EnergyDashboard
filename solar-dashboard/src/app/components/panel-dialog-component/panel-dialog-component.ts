@@ -23,11 +23,11 @@ export class PanelDialogComponent {
   isDelete: boolean = false;
 
   formData = {
-  location: '',
-  capacity: 0,
-  todayProduction: 0,
-  status: 'Active' as 'Active' | 'Maintenance' as "Maintenance" | 'Inactive' as "Inactive"
-  }; 
+    location: '',
+    capacity: 0,
+    todayProduction: 0,
+    status: 'Active' as 'Active' | 'Maintenance' as "Maintenance" | 'Inactive' as "Inactive"
+  };
 
   solarPanelService = inject(SolarPanelService);
   dialogRef = inject(MatDialogRef<PanelDialogComponent>);
@@ -35,20 +35,20 @@ export class PanelDialogComponent {
     optional: true
   });
 
-  isValid(): boolean{
-    const locationValid = this.formData.location.trim().length >=3; //trim tira os espaços em branco do inicio e fim
-    const capacityValid = this.formData.capacity>0;
-    const statusValid =!! this.formData.status;
+  isValid(): boolean {
+    const locationValid = this.formData.location.trim().length >= 3; //trim tira os espaços em branco do inicio e fim
+    const capacityValid = this.formData.capacity > 0;
+    const statusValid = !!this.formData.status;
     const todayProductionValid = true;
-    if(this.formData.todayProduction){
-      const todayProductionValid = this.formData.todayProduction>=0
+    if (this.formData.todayProduction) {
+      const todayProductionValid = this.formData.todayProduction >= 0
     }
 
     return (locationValid && capacityValid && todayProductionValid && statusValid);
   }
 
-  formsAction(){
-    if(this.isDelete){
+  formsAction() {
+    if (this.isDelete) {
       const panelId = this.data.panel.id;
       this.solarPanelService.deletePanel(panelId);
       this.dialogRef.close(this.formData);
@@ -64,7 +64,7 @@ export class PanelDialogComponent {
       this.solarPanelService.updatePanel(updatedPanel);
       this.dialogRef.close(updatedPanel);
 
-    } else if (!this.isDelete && !this.isEdit){
+    } else if (!this.isDelete && !this.isEdit) {
       this.solarPanelService.addPanel({
         location: this.formData.location,
         capacity: this.formData.capacity,
@@ -75,26 +75,26 @@ export class PanelDialogComponent {
     }
   }
 
-  constructor(){
-    if (this.data?.mode ==='delete'){
-      this.isDelete=true;
-      this.formData ={
+  constructor() {
+    if (this.data?.mode === 'delete') {
+      this.isDelete = true;
+      this.formData = {
         ...this.data.panel
       };
       this.title = "Delete";
       this.isEdit = false;
-    }else if ((this.data?.mode ==='update')){
-        this.formData ={
-          ...this.data.panel
-        };
-        this.title = "Edit Solar Panel";
-        this.isEdit = true;
-    }else{
-        this.title = "Add Solar Panel";
-        this.isEdit = false;
+    } else if ((this.data?.mode === 'update')) {
+      this.formData = {
+        ...this.data.panel
+      };
+      this.title = "Edit Solar Panel";
+      this.isEdit = true;
+    } else {
+      this.title = "Add Solar Panel";
+      this.isEdit = false;
     }
-    
-    
+
+
   }
 
 }

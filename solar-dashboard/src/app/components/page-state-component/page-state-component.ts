@@ -6,18 +6,18 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-page-state-component',
-  standalone:true,
-  imports: [MatButtonModule,MatCardModule,MatIconModule,MatProgressSpinnerModule],
+  standalone: true,
+  imports: [MatButtonModule, MatCardModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './page-state-component.html',
   styleUrl: './page-state-component.scss',
 })
 export class PageStateComponent {
-  
+
   loading = input<boolean>(false);
   error = input<string | null>(null);
   isEmpty = input<boolean>(false);
 
-  retry= output<void>();
+  retry = output<void>();
   add = output<void>();
 
 }

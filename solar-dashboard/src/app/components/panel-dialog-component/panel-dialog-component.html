@@ -1,24 +1,17 @@
 @if(isDelete){
-  <h2>{{title}}</h2>
-  <mat-icon>warning</mat-icon>
-  <h3>Are you sure you want to delete the panel? This action is final</h3>
-  <div class="buttons">
-    <div class="dialog-buttons">
-      <button
-        mat-raised-button
-        color="grey"
-        (click)="dialogRef.close()">
-        Cancel
-      </button>
-      <button
-        mat-raised-button
-        color=red
-        [disabled]="!isValid()"
-        (click)="formsAction()">
-        Delete
-      </button>
-    </div>
+<h2>{{title}}</h2>
+<mat-icon>warning</mat-icon>
+<h3>Are you sure you want to delete the panel? This action is final</h3>
+<div class="buttons">
+  <div class="dialog-buttons">
+    <button mat-raised-button color="grey" (click)="dialogRef.close()">
+      Cancel
+    </button>
+    <button mat-raised-button color=red [disabled]="!isValid()" (click)="formsAction()">
+      Delete
+    </button>
   </div>
+</div>
 } @else {
 <h2>{{title}}</h2>
 <mat-form-field>
@@ -52,17 +45,10 @@
 
 <div class="buttons">
   <div class="dialog-buttons">
-    <button
-      mat-raised-button
-      color="grey"
-      (click)="dialogRef.close()">
+    <button mat-raised-button color="grey" (click)="dialogRef.close()">
       Cancel
     </button>
-    <button
-      mat-raised-button
-      color="primary"
-      [disabled]="!isValid()"
-      (click)="formsAction()">
+    <button mat-raised-button color="primary" [disabled]="!isValid()" (click)="formsAction()">
       Save
     </button>
   </div>

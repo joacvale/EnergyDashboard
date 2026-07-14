@@ -1,29 +1,20 @@
 <mat-card>
-    <mat-card-title class="title">
-      Welcome to Solar Energy Dashboard
-    </mat-card-title>
-    <mat-card-title class="subTitle">
-      Monitor, analyze and optimize renewable energy production  
-    </mat-card-title>
+  <mat-card-title class="title">
+    Welcome to Solar Energy Dashboard
+  </mat-card-title>
+  <mat-card-title class="subTitle">
+    Monitor, analyze and optimize renewable energy production
+  </mat-card-title>
 
   <div class="cards-container">
-    <app-action-cards-component
-      [title]="'Solar Panel Production'"
-      [icon]="'insert_chart'"  
+    <app-action-cards-component [title]="'Solar Panel Production'" [icon]="'insert_chart'"
       [description]="'View and manage your solar panel production data with interactive tables and charts.'"
-      [chipText]="'Click to view'"
-      [navigateTo]="'/production'"> 
+      [chipText]="'Click to view'" [navigateTo]="'/production'">
     </app-action-cards-component>
 
-    <app-action-cards-component
-      [title]="'Scenario Analysis '"
-      [icon]="'announcement'" 
+    <app-action-cards-component [title]="'Scenario Analysis '" [icon]="'announcement'"
       [description]="'Create and compare different production scenarios to optimize your energy output'"
-      [chipText]="'Coming Soon'" 
-      [disabled]="true">
+      [chipText]="'Coming Soon'" [disabled]="true">
     </app-action-cards-component>
   </div>
 </mat-card>
-
-
-

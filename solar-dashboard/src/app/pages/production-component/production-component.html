@@ -1,154 +1,140 @@
-<app-page-state-component
-
-  [loading]="solarPanelService.loading()"
-
-  [error]="solarPanelService.error()"
-
-  [isEmpty]="solarPanelService.panels().length === 0"
-
-  (retry)="solarPanelService.loadPanels()"
-
-  (add)="addPanel()">
+<app-page-state-component [loading]="solarPanelService.loading()" [error]="solarPanelService.error()"
+  [isEmpty]="solarPanelService.panels().length === 0" (retry)="solarPanelService.loadPanels()" (add)="addPanel()">
 
 </app-page-state-component>
 
 <div class="page">
 
-<div class="title">
+  <div class="title">
     <h2>Energy Production Data</h2>
     <div class="view-toggle">
-        <button mat-button [class.view-active]="viewMode() === 'table'" (click)="showTable()">
-            Table View
-        </button>
+      <button mat-button [class.view-active]="viewMode() === 'table'" (click)="showTable()">
+        Table View
+      </button>
 
-        <button mat-button [class.view-active]="viewMode() === 'chart'" (click)="showChart()">
-            Chart View
-        </button>
+      <button mat-button [class.view-active]="viewMode() === 'chart'" (click)="showChart()">
+        Chart View
+      </button>
     </div>
-</div>
-<div>
+  </div>
+  <div>
     <div class="metric-container">
-        <mat-card class="metrics">
-            <mat-card-content>
-                <H1>Total Production</H1>
-                <h2>{{solarPanelService.getTotalProduction()}} KWH</h2>
-                
-            </mat-card-content>
-        </mat-card>
+      <mat-card class="metrics">
+        <mat-card-content>
+          <H1>Total Production</H1>
+          <h2>{{solarPanelService.getTotalProduction()}} KWH</h2>
 
-        <mat-card class="metrics">
-            <mat-card-content >
-                <H1>Active Panels</H1>
-                <h2>{{solarPanelService.getActivePanelsCount()}} Units</h2>
-            </mat-card-content>
-        </mat-card>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="metrics">
+        <mat-card-content>
+          <H1>Active Panels</H1>
+          <h2>{{solarPanelService.getActivePanelsCount()}} Units</h2>
+        </mat-card-content>
+      </mat-card>
     </div>
-</div>
+  </div>
 
- 
-@if (viewMode() === 'table') {
-<mat-card class="metrics">
+
+  @if (viewMode() === 'table') {
+  <mat-card class="metrics">
 
     <div class="table-header">
-        <h2>Solar Panels</h2>
-        <button  class="panel-button" (click)="addPanel()">
-            <mat-icon>add</mat-icon> Add new panel
-        </button>
+      <h2>Solar Panels</h2>
+      <button class="panel-button" (click)="addPanel()">
+        <mat-icon>add</mat-icon> Add new panel
+      </button>
 
     </div>
-    <div class="filter-container">   
-        <mat-form-field class="filter">
-            <mat-label> Filter by location</mat-label>
-            <input matInput #locationFilter class="filter-input"> 
-        
-        </mat-form-field>
-        <button mat-button class="search-button" (click)="solarPanelService.loadPanels(locationFilter.value)">
-            Search
-        </button>
+    <div class="filter-container">
+      <mat-form-field class="filter">
+        <mat-label> Filter by location</mat-label>
+        <input matInput #locationFilter class="filter-input">
+
+      </mat-form-field>
+      <button mat-button class="search-button" (click)="solarPanelService.loadPanels(locationFilter.value)">
+        Search
+      </button>
     </div>
 
-        
+
 
     <mat-table [dataSource]="dataSource">
-        <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
-        <mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></mat-row>        
-        <ng-container matColumnDef="id">
-            <mat-header-cell *matHeaderCellDef> Panel ID </mat-header-cell>
-            <mat-cell *matCellDef="let panel"> {{panel.id}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="location">
-            <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>
-            <mat-cell *matCellDef="let panel"> {{panel.location}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="capacity">
-            <mat-header-cell *matHeaderCellDef> Capacity </mat-header-cell>
-            <mat-cell *matCellDef="let panel"> {{panel.capacity}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="todayProduction">
-            <mat-header-cell *matHeaderCellDef> Today Production </mat-header-cell>
-            <mat-cell *matCellDef="let panel"> {{panel.todayProduction}} </mat-cell>
-        </ng-container>
-        <ng-container matColumnDef="status">
-            <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-            <mat-cell *matCellDef="let panel"> 
-                <mat-chip [class.active-chip]="panel.status==='Active'" [class.maintenance-chip]="panel.status==='Maintenance'" [class.inactive-chip]="panel.status==='Inactive'">
-                    {{panel.status}} 
-                </mat-chip>
-            </mat-cell>
-        </ng-container>   
-        <ng-container matColumnDef="actions">
-            <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-            <mat-cell *matCellDef="let panel">
-                <button mat-button color="primary" (click)="updatePanel(panel)">
-                    <mat-icon class="update-icon">edit</mat-icon>
-                </button>
-                <button mat-button color="warn" (click)="deletePanel(panel)">
-                    <mat-icon class="delete-icon">delete</mat-icon>
-                </button>
-            </mat-cell>
-        </ng-container>
-        
+      <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+      <mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></mat-row>
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> Panel ID </mat-header-cell>
+        <mat-cell *matCellDef="let panel"> {{panel.id}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="location">
+        <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>
+        <mat-cell *matCellDef="let panel"> {{panel.location}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="capacity">
+        <mat-header-cell *matHeaderCellDef> Capacity </mat-header-cell>
+        <mat-cell *matCellDef="let panel"> {{panel.capacity}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="todayProduction">
+        <mat-header-cell *matHeaderCellDef> Today Production </mat-header-cell>
+        <mat-cell *matCellDef="let panel"> {{panel.todayProduction}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+        <mat-cell *matCellDef="let panel">
+          <mat-chip [class.active-chip]="panel.status==='Active'"
+            [class.maintenance-chip]="panel.status==='Maintenance'" [class.inactive-chip]="panel.status==='Inactive'">
+            {{panel.status}}
+          </mat-chip>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let panel">
+          <button mat-button color="primary" (click)="updatePanel(panel)">
+            <mat-icon class="update-icon">edit</mat-icon>
+          </button>
+          <button mat-button color="warn" (click)="deletePanel(panel)">
+            <mat-icon class="delete-icon">delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
     </mat-table>
-    
-    <mat-paginator
-        [pageSize]="3"
-        showFirstLastButtons>
+
+    <mat-paginator [pageSize]="3" showFirstLastButtons>
     </mat-paginator>
 
-</mat-card>
+  </mat-card>
 
-}
-@if (viewMode() === 'chart') {
-    
-<mat-card class="chart-row-card">
+  }
+  @if (viewMode() === 'chart') {
+
+  <mat-card class="chart-row-card">
 
     <div class="chart-header">
-        <mat-card-title>
-            Daily Production Overview
-        </mat-card-title>
-        <div class="chart-metrics">
-            <mat-card class="metric-mini-card">
-                <mat-card-content>
-                    <h3 class="minicard-title">Total Today</h3>
-                    <h4 class="minicard-stat">{{ totalToday() }}</h4>
-                </mat-card-content>
-            </mat-card>
-            <mat-card class="metric-mini-card">
-                <mat-card-content>
-                    <h3 class="minicard-title">Peak Hour</h3>
-                    <h4 class="minicard-stat">{{ peakHour() }}</h4>
-                </mat-card-content>
-            </mat-card>
-        </div>
+      <mat-card-title>
+        Daily Production Overview
+      </mat-card-title>
+      <div class="chart-metrics">
+        <mat-card class="metric-mini-card">
+          <mat-card-content>
+            <h3 class="minicard-title">Total Today</h3>
+            <h4 class="minicard-stat">{{ totalToday() }}</h4>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="metric-mini-card">
+          <mat-card-content>
+            <h3 class="minicard-title">Peak Hour</h3>
+            <h4 class="minicard-stat">{{ peakHour() }}</h4>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
-    <canvas
-      baseChart
-      [data]="barChartData()"
-      [options]="barChartOptions"
-      [type]="barChartType">
+    <canvas baseChart [data]="barChartData()" [options]="barChartOptions" [type]="barChartType">
     </canvas>
 
-</mat-card>
-}
-   
+  </mat-card>
+  }
+
 </div>

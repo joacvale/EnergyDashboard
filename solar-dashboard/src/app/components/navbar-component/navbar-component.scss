@@ -1,17 +1,16 @@
-
 mat-toolbar {
   display: flex;
   align-items: center;
   gap: 12px;
 
-  background-color: #2398BA; 
+  background-color: #2398BA;
 
-  mat-icon{
+  mat-icon {
     color: #C9B412
   }
-  span{
-    color:white;
+
+  span {
+    color: white;
     font-weight: 500;
   }
 }
-
