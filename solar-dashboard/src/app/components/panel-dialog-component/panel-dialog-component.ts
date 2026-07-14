@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -40,12 +40,11 @@ export class PanelDialogComponent {
     const locationValid = this.formData.location.trim().length >= 3; //trim tira os espaços em branco do inicio e fim
     const capacityValid = this.formData.capacity > 0;
     const statusValid = !!this.formData.status;
-    const todayProductionValid = true;
     if (this.formData.todayProduction) {
       const todayProductionValid = this.formData.todayProduction >= 0;
+      return (locationValid && capacityValid && todayProductionValid && statusValid);
     }
-
-    return (locationValid && capacityValid && todayProductionValid && statusValid);
+    return (locationValid && capacityValid && statusValid);
   }
 
   formsAction() {

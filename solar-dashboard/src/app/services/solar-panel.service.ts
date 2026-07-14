@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ProductionData, SolarPanel } from '../interfaces/solar-panel.interface';
 import { firstValueFrom } from 'rxjs';
-
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface ApiResponse<T> {
     success: boolean;
@@ -53,7 +53,13 @@ export class SolarPanelService {
             this.panels.set(response.data);
 
         } catch (error) {
-            this.error.set('Failed to load solar panels');
+            if (error instanceof HttpErrorResponse) {
+                this.error.set(`Server error: ${error.status} ${error.message}`);
+            } else if (error instanceof Error) {
+                this.error.set(`Error: ${error.message}`);
+            } else {
+                this.error.set('Unknown error occurred');
+            }
         } finally {
             this.loading.set(false);
         }
@@ -70,8 +76,13 @@ export class SolarPanelService {
             );
             this.productionData.set(response.data);
         } catch (error) {
-            this.error.set('Failed to load production data');
-            console.error(error);
+            if (error instanceof HttpErrorResponse) {
+                this.error.set(`Server error: ${error.status} ${error.message}`);
+            } else if (error instanceof Error) {
+                this.error.set(`Error: ${error.message}`);
+            } else {
+                this.error.set('Unknown error occurred');
+            }
         } finally {
             this.loading.set(false);
         }
@@ -94,8 +105,13 @@ export class SolarPanelService {
             await this.loadPanels();
 
         } catch (error) {
-            this.error.set('Failed to add solar panel');
-            console.error(error);
+            if (error instanceof HttpErrorResponse) {
+                this.error.set(`Server error: ${error.status} ${error.message}`);
+            } else if (error instanceof Error) {
+                this.error.set(`Error: ${error.message}`);
+            } else {
+                this.error.set('Unknown error occurred');
+            }
         } finally {
             this.loading.set(false);
         }
@@ -116,8 +132,13 @@ export class SolarPanelService {
             );
             await this.loadPanels();
         } catch (error) {
-            this.error.set('Failed to update solar panel');
-            console.error(error, ' Panel data:', panel);
+            if (error instanceof HttpErrorResponse) {
+                this.error.set(`Server error: ${error.status} ${error.message}`);
+            } else if (error instanceof Error) {
+                this.error.set(`Error: ${error.message}`);
+            } else {
+                this.error.set('Unknown error occurred');
+            }
         } finally {
             this.loading.set(false);
         }
@@ -129,15 +150,20 @@ export class SolarPanelService {
         this.loading.set(true);
         try {
             // posso tirar a const porque nunca é lida - deixei para uniformizar com os outros métodos
-            const deletePanel = await firstValueFrom(
+            await firstValueFrom(
                 this.http.delete(`${this.apiUrl}/panels/${panelId}`)
             );
             this.panels.update(panels => panels.filter(p => p.id !== panelId));
             await this.loadPanels();
 
         } catch (error) {
-            this.error.set('Failed to delete solar panel');
-            console.error(error, ' Panel data:', panelId);
+            if (error instanceof HttpErrorResponse) {
+                this.error.set(`Server error: ${error.status} ${error.message}`);
+            } else if (error instanceof Error) {
+                this.error.set(`Error: ${error.message}`);
+            } else {
+                this.error.set('Unknown error occurred');
+            }
         } finally {
             this.loading.set(false);
         }

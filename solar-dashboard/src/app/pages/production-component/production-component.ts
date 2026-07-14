@@ -8,7 +8,6 @@ import { SolarPanelService } from '../../services/solar-panel.service';
 import { SolarPanel } from '../../interfaces/solar-panel.interface';
 import { PanelDialogComponent } from '../../components/panel-dialog-component/panel-dialog-component';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartType } from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import { computed, effect, signal, Component, inject, AfterViewInit, ViewChild } from '@angular/core';
 import { PageStateComponent } from "../../components/page-state-component/page-state-component";
@@ -174,7 +173,7 @@ export class ProductionComponent implements AfterViewInit {
   });
   
   
-  filteredSolarPanels(location : String){
+  filteredSolarPanels(location : string){
     const panels = this.solarPanelService.panels();
     const filteredPanels = panels.filter(panel=>panel.location.toLowerCase().includes(location.toLowerCase()));
     this.dataSource.data = filteredPanels;
