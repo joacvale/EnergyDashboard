@@ -18,6 +18,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ChangeDetectionStrategy } from '@angular/core';
+
 
 
 @Component({
@@ -26,6 +28,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   imports: [MatButtonModule, MatSnackBarModule, MatTableModule, MatIconModule, MatChipsModule, MatCardModule, MatDialogModule, BaseChartDirective, PageStateComponent, MatFormFieldModule, MatInputModule, MatPaginatorModule],
   templateUrl: './production-component.html',
   styleUrl: './production-component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductionComponent implements AfterViewInit {
   solarPanelService = inject(SolarPanelService);

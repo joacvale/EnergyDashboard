@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { ActionCardsComponent } from "../../components/action-cards-component/action-cards-component";
+import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-home-component',
@@ -8,5 +9,6 @@ import { ActionCardsComponent } from "../../components/action-cards-component/ac
   imports: [MatCardModule, ActionCardsComponent],
   templateUrl: './home-component.html',
   styleUrl: './home-component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent { }

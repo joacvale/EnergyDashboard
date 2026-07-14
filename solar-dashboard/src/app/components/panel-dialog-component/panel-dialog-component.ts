@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { SolarPanelService } from '../../services/solar-panel.service';
 import { SolarPanel } from '../../interfaces/solar-panel.interface';
 import { MatIconModule } from '@angular/material/icon';
-
+import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-panel-dialog-component',
@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, MatButtonModule, MatIconModule],
   templateUrl: './panel-dialog-component.html',
   styleUrl: './panel-dialog-component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PanelDialogComponent {
   title: string = '';
