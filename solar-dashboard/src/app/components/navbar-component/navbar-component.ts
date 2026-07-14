@@ -13,7 +13,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
   styleUrl: './navbar-component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Navbar {
+export class NavbarComponent {
   title = 'Solar Energy Dashboard';
   icon = 'light_mode';
 }
