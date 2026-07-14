@@ -42,15 +42,10 @@ export class ProductionComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-
-
-
   constructor() {
-
     effect(() => {
       this.dataSource.data = this.solarPanelService.panels();
     });
-
   }
 
   showTable() {
