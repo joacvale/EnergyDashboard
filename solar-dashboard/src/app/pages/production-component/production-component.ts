@@ -16,25 +16,24 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @Component({
   selector: 'app-production-component',
   standalone: true,
-  imports: [MatButtonModule, MatTableModule, MatIconModule, MatChipsModule, MatCardModule, MatDialogModule, BaseChartDirective, PageStateComponent, MatFormFieldModule, MatInputModule, MatPaginatorModule],
+  imports: [MatButtonModule, MatSnackBarModule, MatTableModule, MatIconModule, MatChipsModule, MatCardModule, MatDialogModule, BaseChartDirective, PageStateComponent, MatFormFieldModule, MatInputModule, MatPaginatorModule],
   templateUrl: './production-component.html',
   styleUrl: './production-component.scss',
 })
 export class ProductionComponent implements AfterViewInit {
-
-
-
   solarPanelService = inject(SolarPanelService);
   dialog = inject(MatDialog);
   viewMode = signal<'table' | 'chart'>('table');
   filter = "";
   dataSource = new MatTableDataSource<SolarPanel>();
+  snackBar = inject(MatSnackBar);
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
@@ -62,34 +61,45 @@ export class ProductionComponent implements AfterViewInit {
   }
 
   deletePanel(panel: SolarPanel) {
-      this.dialog.open(PanelDialogComponent, {
+      const dialogRef = this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
           mode: 'delete',
           panel
         }
       });
-    //if (confirmed) {
-    //const panelId = panel.id;
-    //this.solarPanelService.deletePanel(panelId);
-    //}
+      dialogRef.afterClosed().subscribe((result)=>{
+        if(result){
+          this.snackBar.open('Painel apagado com sucesso','Fechar',{ duration: 3000});
+        }
+      });
   }
 
   addPanel() {
-      this.dialog.open(PanelDialogComponent, {
+      const dialogRef = this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
           mode: 'add',
         }
       });
+      dialogRef.afterClosed().subscribe((result)=>{
+        if(result){
+          this.snackBar.open('Painel criado com sucesso','Fechar',{ duration: 3000});
+        }
+      });
   }
 
   updatePanel(panel: SolarPanel) {
-      this.dialog.open(PanelDialogComponent, {
+      const dialogRef = this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
           mode: 'update',
           panel
+        }
+      });
+      dialogRef.afterClosed().subscribe((result)=>{
+        if(result){
+          this.snackBar.open('Painel atualizado com sucesso','Fechar',{ duration: 3000 , verticalPosition:'top'});
         }
       });
   }
