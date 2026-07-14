@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,18 +7,20 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { SolarPanelService } from '../../services/solar-panel.service';
 import { SolarPanel } from '../../interfaces/solar-panel.interface';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
   selector: 'app-panel-dialog-component',
   standalone: true,
-  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, MatButtonModule],
+  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, MatButtonModule, MatIconModule],
   templateUrl: './panel-dialog-component.html',
   styleUrl: './panel-dialog-component.scss',
 })
 export class PanelDialogComponent {
   title: string = '';
   isEdit: boolean = false;
+  isDelete: boolean = false;
 
   formData = {
   location: '',
@@ -46,9 +48,14 @@ export class PanelDialogComponent {
   }
 
   formsAction(){
-    if (this.isEdit) {
+    if(this.isDelete){
+      const panelId = this.data.panel.id;
+      this.solarPanelService.deletePanel(panelId);
+      this.dialogRef.close(this.formData);
+
+    } else if (!this.isDelete && this.isEdit) {
       const updatedPanel: SolarPanel = {
-        id: this.data.id,
+        id: this.data.panel.id,
         location: this.formData.location,
         capacity: this.formData.capacity,
         todayProduction: this.formData.todayProduction,
@@ -57,7 +64,7 @@ export class PanelDialogComponent {
       this.solarPanelService.updatePanel(updatedPanel);
       this.dialogRef.close(updatedPanel);
 
-    } else if (!this.isEdit){
+    } else if (!this.isDelete && !this.isEdit){
       this.solarPanelService.addPanel({
         location: this.formData.location,
         capacity: this.formData.capacity,
@@ -69,16 +76,25 @@ export class PanelDialogComponent {
   }
 
   constructor(){
-    if (this.data){
+    if (this.data?.mode ==='delete'){
+      this.isDelete=true;
       this.formData ={
-        ...this.data
+        ...this.data.panel
       };
-      this.title = "Edit Solar Panel";
-      this.isEdit = true;
-    }else{
-      this.title = "Add Solar Panel";
+      this.title = "Delete";
       this.isEdit = false;
+    }else if ((this.data?.mode ==='update')){
+        this.formData ={
+          ...this.data.panel
+        };
+        this.title = "Edit Solar Panel";
+        this.isEdit = true;
+    }else{
+        this.title = "Add Solar Panel";
+        this.isEdit = false;
     }
+    
+    
   }
 
 }

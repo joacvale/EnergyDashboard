@@ -9,6 +9,19 @@ h2{
     margin-bottom: 5%;
 }
 
+h3{
+    text-align: center;
+    margin-top: 10%;
+    margin-bottom: 5%;
+}
+
+mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin:0 auto;
+    color: red;
+}
 .dialog-buttons{
     display: flex;
     justify-content: flex-end;

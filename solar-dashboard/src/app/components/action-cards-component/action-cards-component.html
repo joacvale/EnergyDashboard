@@ -1,21 +1,18 @@
 
 <mat-card>
-    <mat-icon>{{ icon() }}</mat-icon>
+    <mat-icon class="icon">{{ icon() }}</mat-icon>
 
-    <h2>{{ title() }}</h2>
+    <mat-card-title class="title">{{ title() }}</mat-card-title>
 
-    <p>{{ description() }}</p>
+    <mat-card-subtitle class="description">{{ description() }}</mat-card-subtitle>
 
     @if (!disabled()) {
-        <a mat-chip [routerLink]="navigateTo()">
+        <button mat-button class="button-active" [routerLink]="navigateTo()">
             {{ chipText() }}
-        </a>
+        </button>
     } @else{
-        <a mat-chip>
+        <button mat-button class="button-inactive">
             {{ chipText() }}
-        </a>
+        </button>
     }
-    
-
-    <!-- ver como faço na questão do botão -->
 </mat-card>

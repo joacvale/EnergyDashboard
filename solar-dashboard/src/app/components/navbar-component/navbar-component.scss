@@ -4,7 +4,14 @@ mat-toolbar {
   align-items: center;
   gap: 12px;
 
-  background-color: #1976d2; //todo confirmar se é a cor que queremos
-  color: white;
+  background-color: #2398BA; 
+
+  mat-icon{
+    color: #C9B412
+  }
+  span{
+    color:white;
+    font-weight: 500;
+  }
 }
 

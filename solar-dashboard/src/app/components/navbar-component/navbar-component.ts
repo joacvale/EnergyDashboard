@@ -12,6 +12,6 @@ import { RouterLink } from '@angular/router';
   styleUrl: './navbar-component.scss',
 })
 export class Navbar {
-  title = 'solar-dashboard';
-  icon = 'solar_power';
+  title = 'Solar Energy Dashboard';
+  icon = 'light_mode';
 }

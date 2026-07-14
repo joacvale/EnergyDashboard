@@ -3,10 +3,11 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatChipsModule } from "@angular/material/chips";
 import { RouterLink } from '@angular/router';
+import { MatAnchor } from "@angular/material/button";
 
 @Component({
   selector: 'app-action-cards-component',
-  imports: [MatCardModule, MatIconModule, MatChipsModule, RouterLink],
+  imports: [MatCardModule, MatIconModule, MatChipsModule, RouterLink, MatAnchor],
   templateUrl: './action-cards-component.html',
   styleUrl: './action-cards-component.scss',
 })

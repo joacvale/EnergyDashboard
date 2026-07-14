@@ -1,4 +1,3 @@
-import { Component, inject, signal } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,21 +10,50 @@ import { PanelDialogComponent } from '../../components/panel-dialog-component/pa
 import {BaseChartDirective} from 'ng2-charts';
 import {ChartType} from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import { computed } from '@angular/core';
+import { computed, effect, signal, Component, inject, AfterViewInit, ViewChild } from '@angular/core';
 import { PageStateComponent } from "../../components/page-state-component/page-state-component";
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 
 
 @Component({
   selector: 'app-production-component',
   standalone:true,
-  imports: [MatButtonModule, MatTableModule, MatIconModule, MatChipsModule, MatCardModule, MatDialogModule, PanelDialogComponent, BaseChartDirective, PageStateComponent],
+  imports: [MatButtonModule, MatTableModule, MatIconModule, MatChipsModule, MatCardModule, MatDialogModule, PanelDialogComponent, BaseChartDirective, PageStateComponent, MatFormFieldModule, MatInputModule, MatPaginatorModule],
   templateUrl: './production-component.html',
   styleUrl: './production-component.scss',
 })
-export class ProductionComponent {
+export class ProductionComponent implements AfterViewInit {
+
+
+  
   solarPanelService = inject(SolarPanelService);
   dialog = inject(MatDialog);
   viewMode = signal<'table' | 'chart'>('table');
+  filter = "";
+  dataSource = new MatTableDataSource<SolarPanel>();
+  
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+
+
+  
+  constructor() {
+
+    effect(() => {
+      this.dataSource.data = this.solarPanelService.panels();
+    });
+
+  }
 
   showTable(){
     this.viewMode.set('table');
@@ -38,27 +66,48 @@ export class ProductionComponent {
   }
 
   deletePanel(panel: SolarPanel){
-    const confirmed = confirm('Are you sure you want to delete this panel?');
-
-    if (confirmed) {
-      const panelId = panel.id;
-      this.solarPanelService.deletePanel(panelId);
-    }
+    console.log("delete"),
+    this.dialog.open(PanelDialogComponent,{
+      width: '500px',
+      data: {
+        mode: 'delete',
+        panel
+      }
+    });
+    //if (confirmed) {
+      //const panelId = panel.id;
+      //this.solarPanelService.deletePanel(panelId);
+    //}
   }
 
   addPanel(){
+    console.log("add"),
+
     this.dialog.open(PanelDialogComponent, {
       width: '500px',
-      data: undefined,
+      data: {
+        mode: 'add',
+      }
     });
   }
 
   updatePanel(panel: SolarPanel){
+    console.log("update"),
+
     this.dialog.open(PanelDialogComponent, {
       width: '500px',
-      data: panel,
+      data: {
+        mode: 'update',
+        panel
+      }
     });
   }
+
+  onFilterChange(value: string) {
+    this.filter = value;
+    this.solarPanelService.loadPanels(value);
+  }
+  
   
 barChartData = computed(() => {
   const data =this.solarPanelService.productionData();
@@ -125,7 +174,17 @@ barChartData = computed(() => {
     plugins: {
       tooltip: {
         enabled: true,
+      
+      
+        callbacks: {
+          label: (context) => {
+            const item = this.solarPanelService.productionData()[context.dataIndex];
+
+            return `${item.type}: ${item.production} MW`;
+          },
+        }
       },
+
     },
     interaction: {
       mode: 'index',
@@ -156,7 +215,7 @@ barChartData = computed(() => {
     'status',
     'actions'
   ];
-
-    
+  
+  
 
 }

@@ -106,10 +106,17 @@ function generateId() {
 
 // GET /api/panels - Get all panels
 app.get('/api/panels', (req, res) => {
+  const {location} = req.query;
+  let filteredPanels = panels;
+
+  if(location){
+    filteredPanels=panels.filter(panel=>panel.location.toLowerCase().includes(location.toLowerCase()));
+  }
   res.json({
     success: true,
-    data: panels,
+    data: filteredPanels,
   });
+  
 });
 
 // GET /api/panels/:id - Get single panel

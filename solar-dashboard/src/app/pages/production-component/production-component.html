@@ -12,43 +12,64 @@
 
 </app-page-state-component>
 
+<div class="page">
+
 <div class="title">
     <h2>Energy Production Data</h2>
-    <div justify-content=center >
-        <button mat-button (click)="showTable()">
+    <div class="view-toggle">
+        <button mat-button [class.view-active]="viewMode() === 'table'" (click)="showTable()">
             Table View
         </button>
 
-        <button mat-button (click)="showChart()">
+        <button mat-button [class.view-active]="viewMode() === 'chart'" (click)="showChart()">
             Chart View
         </button>
     </div>
 </div>
 <div>
     <div class="metric-container">
-        <mat-card>
+        <mat-card class="metrics">
             <mat-card-content>
                 <H1>Total Production</H1>
-                <h3>{{solarPanelService.getTotalProduction()}}</h3>
+                <h2>{{solarPanelService.getTotalProduction()}} KWH</h2>
+                
             </mat-card-content>
         </mat-card>
 
-        <mat-card>
-            <mat-card-content>
+        <mat-card class="metrics">
+            <mat-card-content >
                 <H1>Active Panels</H1>
-                <h3>{{solarPanelService.getActivePanelsCount()}}</h3>
+                <h2>{{solarPanelService.getActivePanelsCount()}} Units</h2>
             </mat-card-content>
         </mat-card>
     </div>
 </div>
 
+ 
 @if (viewMode() === 'table') {
+<mat-card class="metrics">
+
     <div class="table-header">
-        <h3>Solar Panels</h3>
-        <button mat-raised-button color="primary" (click)="addPanel()"><mat-icon>add</mat-icon>
+        <h2>Solar Panels</h2>
+        <button  class="panel-button" (click)="addPanel()">
+            <mat-icon>add</mat-icon> Add new panel
+        </button>
+
+    </div>
+    <div class="filter-container">   
+        <mat-form-field class="filter">
+            <mat-label> Filter by location</mat-label>
+            <input matInput #locationFilter class="filter-input"> 
+        
+        </mat-form-field>
+        <button mat-button class="search-button" (click)="solarPanelService.loadPanels(locationFilter.value)">
+            Search
         </button>
     </div>
-    <mat-table [dataSource]="solarPanelService.panels()">
+
+        
+
+    <mat-table [dataSource]="dataSource">
         <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
         <mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></mat-row>        
         <ng-container matColumnDef="id">
@@ -88,33 +109,46 @@
         </ng-container>
         
     </mat-table>
+    
+    <mat-paginator
+        [pageSize]="3"
+        showFirstLastButtons>
+    </mat-paginator>
+
+</mat-card>
+
 }
 @if (viewMode() === 'chart') {
     
-
 <mat-card class="chart-row-card">
-    <mat-card-title >Daily Production Overview</mat-card-title>
 
-    <div class="chart-metrics">
-      <div>
-        <h3>Total Today</h3>
-        <h4>{{ totalToday() }}</h4>
-      </div>
-
-      <div>
-        <h3>Peak Hour</h3>
-        <h4>{{ peakHour() }}</h4>
-      </div>
+    <div class="chart-header">
+        <mat-card-title>
+            Daily Production Overview
+        </mat-card-title>
+        <div class="chart-metrics">
+            <mat-card class="metric-mini-card">
+                <mat-card-content>
+                    <h3 class="minicard-title">Total Today</h3>
+                    <h4 class="minicard-stat">{{ totalToday() }}</h4>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="metric-mini-card">
+                <mat-card-content>
+                    <h3 class="minicard-title">Peak Hour</h3>
+                    <h4 class="minicard-stat">{{ peakHour() }}</h4>
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
-
     <canvas
       baseChart
       [data]="barChartData()"
       [options]="barChartOptions"
       [type]="barChartType">
     </canvas>
+
 </mat-card>
-
 }
-
-
+   
+</div>

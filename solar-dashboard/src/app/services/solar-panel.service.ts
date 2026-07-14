@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ProductionData, SolarPanel } from '../interfaces/solar-panel.interface';
 import { firstValueFrom } from 'rxjs';
@@ -34,18 +34,24 @@ export class SolarPanelService {
 
 
     //get all panels
-    async loadPanels() {
+    async loadPanels(filter?:string) {
         this.error.set(null);
         this.loading.set(true);
 
         try{
+            let params = new HttpParams();
+            console.log('Filter:', filter);
+            if (filter?.trim()){
+                params = params.set('location', filter);
+            }
+            console.log(params.toString());
             const response = await firstValueFrom(
-                this.http.get<ApiResponse<SolarPanel[]>>(`${this.apiUrl}/panels`
+                this.http.get<ApiResponse<SolarPanel[]>>(`${this.apiUrl}/panels`,
+                {params}
                 )
             );
 
             this.panels.set(response.data);
-
             console.log(`Loaded ${response.data.length} panels`);
 
         }catch (error){
@@ -54,7 +60,6 @@ export class SolarPanelService {
         }finally{
             this.loading.set(false);
         }
-
     }
 
     //get all production data
@@ -91,6 +96,8 @@ export class SolarPanelService {
                 newPanel
             ]);
             console.log('Panel added successfully', newPanel);
+            this.loadPanels();
+
         }catch (error){
             this.error.set('Failed to add solar panel');
             console.error(error);
@@ -113,6 +120,7 @@ export class SolarPanelService {
                 panels => panels.map(p => p.id === panel.id ? updatedPanel : p)
             );
             console.log('Panel updated successfully', updatedPanel);
+            this.loadPanels();
         }catch (error){
             this.error.set('Failed to update solar panel');
             console.error(error, ' Panel data:', panel);
@@ -132,6 +140,8 @@ export class SolarPanelService {
             );
             this.panels.update(panels => panels.filter(p => p.id !== panelId));
             console.log('Panel deleted successfully');
+            this.loadPanels();
+
         }catch (error){
             this.error.set('Failed to delete solar panel');
             console.error(error, ' Panel data:', panelId);
