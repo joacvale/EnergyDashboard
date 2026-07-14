@@ -41,7 +41,7 @@ export class PanelDialogComponent {
     const statusValid = !!this.formData.status;
     const todayProductionValid = true;
     if (this.formData.todayProduction) {
-      const todayProductionValid = this.formData.todayProduction >= 0
+      const todayProductionValid = this.formData.todayProduction >= 0;
     }
 
     return (locationValid && capacityValid && todayProductionValid && statusValid);

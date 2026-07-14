@@ -35,6 +35,7 @@ export class SolarPanelService {
 
     //get all panels
     async loadPanels(filter?: string) {
+        //adicionei hipotese de filtro
         this.error.set(null);
         this.loading.set(true);
 
@@ -96,7 +97,7 @@ export class SolarPanelService {
                 newPanel
             ]);
             console.log('Panel added successfully', newPanel);
-            this.loadPanels();
+            await this.loadPanels();
 
         } catch (error) {
             this.error.set('Failed to add solar panel');
@@ -120,7 +121,7 @@ export class SolarPanelService {
                 panels => panels.map(p => p.id === panel.id ? updatedPanel : p)
             );
             console.log('Panel updated successfully', updatedPanel);
-            this.loadPanels();
+            await this.loadPanels();
         } catch (error) {
             this.error.set('Failed to update solar panel');
             console.error(error, ' Panel data:', panel);
@@ -140,7 +141,7 @@ export class SolarPanelService {
             );
             this.panels.update(panels => panels.filter(p => p.id !== panelId));
             console.log('Panel deleted successfully');
-            this.loadPanels();
+            await this.loadPanels();
 
         } catch (error) {
             this.error.set('Failed to delete solar panel');
@@ -149,7 +150,7 @@ export class SolarPanelService {
             this.loading.set(false);
         }
     }
-    //TODO - check if necessary
+
     constructor() {
         this.loadPanels();
         this.loadProductionData();

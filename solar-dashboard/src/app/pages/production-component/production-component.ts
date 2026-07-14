@@ -101,10 +101,7 @@ export class ProductionComponent implements AfterViewInit {
       });
   }
 
-  onFilterChange(value: string) {
-    this.filter = value;
-    this.solarPanelService.loadPanels(value);
-  }
+
 
 
   barChartData = computed(() => {
@@ -115,7 +112,7 @@ export class ProductionComponent implements AfterViewInit {
 
       datasets: [
         {
-          label: 'Production',
+          label: 'ver dados',
 
           data: data.map(
             item => item.production
@@ -171,8 +168,6 @@ export class ProductionComponent implements AfterViewInit {
     maintainAspectRatio: false,
     plugins: {
       tooltip: {
-        enabled: true,
-
 
         callbacks: {
           label: (context) => {
@@ -184,10 +179,7 @@ export class ProductionComponent implements AfterViewInit {
       },
 
     },
-    interaction: {
-      mode: 'index',
-      intersect: false,
-    },
+
     scales: {
       y: {
         min: 0,

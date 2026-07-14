@@ -1,10 +1,12 @@
-<app-page-state-component [loading]="solarPanelService.loading()" [error]="solarPanelService.error()"
-  [isEmpty]="solarPanelService.panels().length === 0" (retry)="solarPanelService.loadPanels()" (add)="addPanel()">
-
+<app-page-state-component 
+  [loading]="solarPanelService.loading()" 
+  [error]="solarPanelService.error()"
+  [isEmpty]="solarPanelService.panels().length === 0" 
+  (retry)="solarPanelService.loadPanels()" 
+  (add)="addPanel()">
 </app-page-state-component>
 
 <div class="page">
-
   <div class="title">
     <h2>Energy Production Data</h2>
     <div class="view-toggle">

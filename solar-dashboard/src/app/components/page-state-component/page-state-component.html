@@ -10,8 +10,8 @@
   <h2>Cannot Connect to Backend</h2>
   <p>{{ error() }}</p>
   <p>Make sure backend is running on localhost:3000</p>
-  <button (click)="retry.emit()">
-    <p>Retry</p>
+  <button mat-raised-button color="warn" (click)="retry.emit()">
+    Retry
   </button>
 
 
