@@ -17,6 +17,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ViewMode, DialogMode } from '../../enums';
+
 
 
 @Component({
@@ -31,7 +33,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 export class ProductionComponent implements AfterViewInit {
   solarPanelService = inject(SolarPanelService);
   dialog = inject(MatDialog);
-  viewMode = signal<'table' | 'chart'>('table');
+  viewMode = signal<ViewMode>(ViewMode.TABLE);
   filter = "";
   dataSource = new MatTableDataSource<SolarPanel>();
   snackBar = inject(MatSnackBar);
@@ -49,18 +51,18 @@ export class ProductionComponent implements AfterViewInit {
   }
 
   showTable() {
-    this.viewMode.set('table');
+    this.viewMode.set(ViewMode.TABLE);
   }
 
   showChart() {
-    this.viewMode.set('chart');
+    this.viewMode.set(ViewMode.CHART);
   }
 
   deletePanel(panel: SolarPanel) {
       const dialogRef = this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
-          mode: 'delete',
+          mode: DialogMode.DELETE,
           panel
         }
       });
@@ -75,7 +77,7 @@ export class ProductionComponent implements AfterViewInit {
       const dialogRef = this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
-          mode: 'add',
+          mode: DialogMode.ADD,
         }
       });
       dialogRef.afterClosed().subscribe((result)=>{
@@ -89,7 +91,7 @@ export class ProductionComponent implements AfterViewInit {
       const dialogRef = this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
-          mode: 'update',
+          mode: DialogMode.EDIT,
           panel
         }
       });
