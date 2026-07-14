@@ -39,7 +39,7 @@ export class PanelDialogComponent {
   });
 
   isValid(): boolean {
-    const locationValid = this.formData.location.trim().length >= 3; //trim tira os espaços em branco do inicio e fim
+    const locationValid = this.formData.location.trim().length >= 3;
     const capacityValid = this.formData.capacity > 0;
     const statusValid = !!this.formData.status;
     if (this.formData.todayProduction) {
