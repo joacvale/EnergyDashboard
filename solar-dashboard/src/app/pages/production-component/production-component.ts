@@ -167,6 +167,15 @@ export class ProductionComponent implements AfterViewInit {
 
   });
   
+  
+  filteredSolarPanels(location : String){
+    console.log(location)
+    const panels = this.solarPanelService.panels();
+    console.log("Without filter " , panels)
+    const filteredPanels = panels.filter(panel=>panel.location.toLowerCase().includes(location.toLowerCase()));
+    console.log("With filter ", filteredPanels)
+    this.dataSource.data = filteredPanels;
+  }
 
   barChartOptions: ChartOptions<'bar'> = {
     responsive: true,

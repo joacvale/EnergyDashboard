@@ -52,12 +52,8 @@
     <div class="filter-container">
       <mat-form-field class="filter">
         <mat-label> Filter by location</mat-label>
-        <input matInput #locationFilter class="filter-input">
-
+        <input matInput #locationFilter class="filter-input" (input)="filteredSolarPanels(locationFilter.value)">
       </mat-form-field>
-      <button mat-button class="search-button" (click)="solarPanelService.loadPanels(locationFilter.value)">
-        Search
-      </button>
     </div>
 
 
