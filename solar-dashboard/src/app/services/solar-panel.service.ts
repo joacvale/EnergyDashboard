@@ -34,16 +34,13 @@ export class SolarPanelService {
 
 
     //get all panels
-    async loadPanels(filter?: string) {
+    async loadPanels() {
         //adicionei hipotese de filtro
         this.error.set(null);
         this.loading.set(true);
 
         try {
             let params = new HttpParams();
-            if (filter?.trim()) {
-                params = params.set('location', filter);
-            }
             const response = await firstValueFrom(
                 this.http.get<ApiResponse<SolarPanel[]>>(`${this.apiUrl}/panels`,
                     { params }
