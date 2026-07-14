@@ -22,7 +22,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-production-component',
   standalone: true,
-  imports: [MatButtonModule, MatSnackBarModule, MatTableModule, MatIconModule, MatChipsModule, MatCardModule, MatDialogModule, BaseChartDirective, PageStateComponent, MatFormFieldModule, MatInputModule, MatPaginatorModule],
+  imports: [MatFormFieldModule,MatInputModule,MatButtonModule,MatCardModule,MatTableModule,MatPaginatorModule,MatIconModule,MatChipsModule,MatDialogModule,BaseChartDirective,PageStateComponent,MatSnackBarModule],
+
   templateUrl: './production-component.html',
   styleUrl: './production-component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
