@@ -112,24 +112,28 @@ export class ProductionComponent implements AfterViewInit {
 
       datasets: [
         {
-          label: 'ver dados',
-
-          data: data.map(
-            item => item.production
+          label: 'Production',
+          data: data.map(item => 
+            item.type==='production'
+            ? item.production : null
           ),
-
-          backgroundColor: data.map(item => {
-            switch (item.type) {
-              case 'production':
-                return 'rgba(39, 174, 96, 0.8)';
-              case 'limited':
-                return 'rgba(155, 89, 182, 0.8)';
-              case 'idle':
-                return 'rgba(52, 152, 219, 0.8)';
-              default:
-                return 'rgba(0, 0, 0, 0.08)';
-            }
-          }),
+          backgroundColor: 'rgba(39, 174, 96, 0.8)',
+        },
+        {
+          label: 'Limited',
+          data: data.map(item => 
+            item.type==='limited'
+            ? item.production : null
+          ),
+          backgroundColor: 'rgba(155, 89, 182, 0.8)',
+        },
+        {
+          label: 'Idle',
+          data: data.map(item => 
+            item.type==='idle'
+            ? item.production : null
+          ),
+          backgroundColor: 'rgba(52, 152, 219, 0.8)',
         }
       ]
     };
@@ -162,6 +166,7 @@ export class ProductionComponent implements AfterViewInit {
     return `H${peak.hour}`;
 
   });
+  
 
   barChartOptions: ChartOptions<'bar'> = {
     responsive: true,
