@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { SolarPanelService } from '../../services/solar-panel.service';
 import { SolarPanel } from '../../interfaces/solar-panel.interface';
 import { MatIconModule } from '@angular/material/icon';
-
+import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-panel-dialog-component',
@@ -16,18 +16,21 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule, MatButtonModule, MatIconModule],
   templateUrl: './panel-dialog-component.html',
   styleUrl: './panel-dialog-component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PanelDialogComponent {
   title: string = '';
   isEdit: boolean = false;
   isDelete: boolean = false;
 
-  formData = {
+
+  formData : SolarPanel = {
+    id:'',
     location: '',
     capacity: 0,
     todayProduction: 0,
-    status: 'Active' as 'Active' | 'Maintenance' as "Maintenance" | 'Inactive' as "Inactive"
-  };
+    status: "Active",
+  }
 
   solarPanelService = inject(SolarPanelService);
   dialogRef = inject(MatDialogRef<PanelDialogComponent>);
@@ -36,15 +39,14 @@ export class PanelDialogComponent {
   });
 
   isValid(): boolean {
-    const locationValid = this.formData.location.trim().length >= 3; //trim tira os espaços em branco do inicio e fim
+    const locationValid = this.formData.location.trim().length >= 3;
     const capacityValid = this.formData.capacity > 0;
     const statusValid = !!this.formData.status;
-    const todayProductionValid = true;
     if (this.formData.todayProduction) {
       const todayProductionValid = this.formData.todayProduction >= 0;
+      return (locationValid && capacityValid && todayProductionValid && statusValid);
     }
-
-    return (locationValid && capacityValid && todayProductionValid && statusValid);
+    return (locationValid && capacityValid && statusValid);
   }
 
   formsAction() {
@@ -93,8 +95,6 @@ export class PanelDialogComponent {
       this.title = "Add Solar Panel";
       this.isEdit = false;
     }
-
-
   }
 
 }

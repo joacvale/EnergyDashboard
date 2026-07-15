@@ -8,33 +8,35 @@ import { SolarPanelService } from '../../services/solar-panel.service';
 import { SolarPanel } from '../../interfaces/solar-panel.interface';
 import { PanelDialogComponent } from '../../components/panel-dialog-component/panel-dialog-component';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartType } from 'chart.js';
 import { ChartOptions } from 'chart.js';
-import { computed, effect, signal, Component, inject, AfterViewInit, ViewChild } from '@angular/core';
+import { computed, effect, signal, Component, inject, AfterViewInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { PageStateComponent } from "../../components/page-state-component/page-state-component";
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ViewMode, DialogMode } from '../../enums';
 
 
 
 @Component({
   selector: 'app-production-component',
   standalone: true,
-  imports: [MatButtonModule, MatTableModule, MatIconModule, MatChipsModule, MatCardModule, MatDialogModule, BaseChartDirective, PageStateComponent, MatFormFieldModule, MatInputModule, MatPaginatorModule],
+  imports: [MatFormFieldModule,MatInputModule,MatButtonModule,MatCardModule,MatTableModule,MatPaginatorModule,MatIconModule,MatChipsModule,MatDialogModule,BaseChartDirective,PageStateComponent,MatSnackBarModule],
+
   templateUrl: './production-component.html',
   styleUrl: './production-component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductionComponent implements AfterViewInit {
-
-
-
   solarPanelService = inject(SolarPanelService);
   dialog = inject(MatDialog);
-  viewMode = signal<'table' | 'chart'>('table');
+  viewMode = signal<ViewMode>(ViewMode.TABLE);
   filter = "";
   dataSource = new MatTableDataSource<SolarPanel>();
+  snackBar = inject(MatSnackBar);
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
@@ -42,61 +44,60 @@ export class ProductionComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-
-
-
   constructor() {
-
     effect(() => {
       this.dataSource.data = this.solarPanelService.panels();
     });
-
   }
 
   showTable() {
-    this.viewMode.set('table');
-    console.log('table click');
+    this.viewMode.set(ViewMode.TABLE);
   }
 
   showChart() {
-    this.viewMode.set('chart');
-    console.log('chart click');
+    this.viewMode.set(ViewMode.CHART);
   }
 
   deletePanel(panel: SolarPanel) {
-    console.log("delete"),
-      this.dialog.open(PanelDialogComponent, {
+      const dialogRef = this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
-          mode: 'delete',
+          mode: DialogMode.DELETE,
           panel
         }
       });
-    //if (confirmed) {
-    //const panelId = panel.id;
-    //this.solarPanelService.deletePanel(panelId);
-    //}
+      dialogRef.afterClosed().subscribe((result)=>{
+        if(result){
+          this.snackBar.open('Painel apagado com sucesso','Fechar',{ duration: 3000, verticalPosition:'top'});
+        }
+      });
   }
 
   addPanel() {
-    console.log("add"),
-
-      this.dialog.open(PanelDialogComponent, {
+      const dialogRef = this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
-          mode: 'add',
+          mode: DialogMode.ADD,
+        }
+      });
+      dialogRef.afterClosed().subscribe((result)=>{
+        if(result){
+          this.snackBar.open('Painel criado com sucesso','Fechar',{ duration: 3000, verticalPosition:'top'});
         }
       });
   }
 
   updatePanel(panel: SolarPanel) {
-    console.log("update"),
-
-      this.dialog.open(PanelDialogComponent, {
+      const dialogRef = this.dialog.open(PanelDialogComponent, {
         width: '500px',
         data: {
-          mode: 'update',
+          mode: DialogMode.EDIT,
           panel
+        }
+      });
+      dialogRef.afterClosed().subscribe((result)=>{
+        if(result){
+          this.snackBar.open('Painel atualizado com sucesso','Fechar',{ duration: 3000 , verticalPosition:'top'});
         }
       });
   }
@@ -168,12 +169,9 @@ export class ProductionComponent implements AfterViewInit {
   });
   
   
-  filteredSolarPanels(location : String){
-    console.log(location)
+  filteredSolarPanels(location : string){
     const panels = this.solarPanelService.panels();
-    console.log("Without filter " , panels)
     const filteredPanels = panels.filter(panel=>panel.location.toLowerCase().includes(location.toLowerCase()));
-    console.log("With filter ", filteredPanels)
     this.dataSource.data = filteredPanels;
   }
 
@@ -191,7 +189,6 @@ export class ProductionComponent implements AfterViewInit {
           },
         }
       },
-
     },
 
     scales: {

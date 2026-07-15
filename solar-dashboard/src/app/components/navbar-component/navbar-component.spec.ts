@@ -1,22 +1,46 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NavbarComponent } from './navbar-component';
+import { provideRouter } from '@angular/router';
 
-import { Navbar } from './navbar-component';
-
-describe('Navbar', () => {
-  let component: Navbar;
-  let fixture: ComponentFixture<Navbar>;
+describe('NavbarComponent', () => {
+  let component: NavbarComponent;
+  let fixture: ComponentFixture<NavbarComponent>; 
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Navbar],
+      imports: [NavbarComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Navbar);
+    fixture = TestBed.createComponent(NavbarComponent);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
+  //#1
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  //#2
+  it('should have correct title', () => {
+    expect(component.title).toBe('Solar Energy Dashboard');
+  });
+
+  //#3
+  it('should have correct icon', () => {
+    expect(component.icon).toBe('light_mode');
+  });
+
+  //#4
+  it('should render title in template', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Solar Energy Dashboard');
+  });
+
+  //#5
+  it('should render icon in template', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('light_mode');
   });
 });

@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-page-state-component',
@@ -10,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   imports: [MatButtonModule, MatCardModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './page-state-component.html',
   styleUrl: './page-state-component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageStateComponent {
 
