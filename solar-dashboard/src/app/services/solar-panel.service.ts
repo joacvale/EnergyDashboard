@@ -30,12 +30,8 @@ export class SolarPanelService {
         this.panels().filter(panel => panel.status === 'Active').length
     );
 
-
-
-
     //get all panels
     async loadPanels() {
-        //adicionei hipotese de filtro
         this.error.set(null);
         this.loading.set(true);
 

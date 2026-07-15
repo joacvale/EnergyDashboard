@@ -189,7 +189,6 @@ export class ProductionComponent implements AfterViewInit {
           },
         }
       },
-
     },
 
     scales: {

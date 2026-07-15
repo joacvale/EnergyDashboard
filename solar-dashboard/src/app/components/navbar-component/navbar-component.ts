@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true, //serve para indicar que o componente é independente e não precisa ser declarado em um módulo
+  standalone: true, 
   imports: [MatToolbarModule, MatIconModule, MatButtonModule, RouterLink],
   templateUrl: './navbar-component.html',
   styleUrl: './navbar-component.scss',

@@ -56,8 +56,6 @@
       </mat-form-field>
     </div>
 
-
-
     <mat-table [dataSource]="dataSource">
       <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
       <mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></mat-row>
@@ -104,7 +102,6 @@
     </mat-paginator>
 
   </mat-card>
-
   }
   @if (viewMode() === 'chart') {
 

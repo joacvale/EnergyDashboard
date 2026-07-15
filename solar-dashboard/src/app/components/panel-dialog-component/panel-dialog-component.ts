@@ -95,8 +95,6 @@ export class PanelDialogComponent {
       this.title = "Add Solar Panel";
       this.isEdit = false;
     }
-
-
   }
 
 }
