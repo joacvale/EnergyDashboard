@@ -86,7 +86,6 @@ export class SolarPanelService {
     async addPanel(panel: Omit<SolarPanel, 'id'>) {
         this.error.set(null);
         this.loading.set(true);
-
         try {
             const newPanel = await firstValueFrom(
                 this.http.post<SolarPanel>(`${this.apiUrl}/panels`, panel)
@@ -96,7 +95,6 @@ export class SolarPanelService {
                 newPanel
             ]);
             await this.loadPanels();
-
         } catch (error) {
             if (error instanceof HttpErrorResponse) {
                 this.error.set(`Server error: ${error.status} ${error.message}`);
@@ -108,14 +106,12 @@ export class SolarPanelService {
         } finally {
             this.loading.set(false);
         }
-
     }
 
     //update panel
     async updatePanel(panel: SolarPanel) {
         this.error.set(null);
         this.loading.set(true);
-
         try {
             const updatedPanel = await firstValueFrom(
                 this.http.put<SolarPanel>(`${this.apiUrl}/panels/${panel.id}`, panel)
@@ -142,13 +138,11 @@ export class SolarPanelService {
         this.error.set(null);
         this.loading.set(true);
         try {
-            // posso tirar a const porque nunca é lida - deixei para uniformizar com os outros métodos
             await firstValueFrom(
                 this.http.delete(`${this.apiUrl}/panels/${panelId}`)
             );
             this.panels.update(panels => panels.filter(p => p.id !== panelId));
             await this.loadPanels();
-
         } catch (error) {
             if (error instanceof HttpErrorResponse) {
                 this.error.set(`Server error: ${error.status} ${error.message}`);
