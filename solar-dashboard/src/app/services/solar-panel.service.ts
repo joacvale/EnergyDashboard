@@ -86,7 +86,6 @@ export class SolarPanelService {
     async loadEnergyPriceData() {
         this.error.set(null);
         this.loading.set(true);
-
         try {
             const response = await firstValueFrom(
                 this.http.get<ApiResponse<EnergyPriceData[]>>(`${this.apiUrl}/energy-prices`)
@@ -103,8 +102,8 @@ export class SolarPanelService {
         } finally {
             this.loading.set(false);
         }
-
     }
+
 
 
     //add panel

@@ -212,9 +212,9 @@ export class ProductionComponent implements AfterViewInit {
       tooltip: {
         callbacks: {
           label: (context: TooltipItem<any>) => {
-            const item =
-              this.solarPanelService.productionData()[context.dataIndex];
-            return `${item.type}: ${item.production} MW`;
+            const item = this.solarPanelService.productionData()[context.dataIndex];
+            const price = this.solarPanelService.energyPriceData().find(item => item.hour === item.hour)?.price;
+            return `${item.type}: ${item.production} MW : ${price} $ pMWH` ;
           },
         }
       },
