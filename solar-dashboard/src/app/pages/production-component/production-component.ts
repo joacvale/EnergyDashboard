@@ -5,7 +5,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SolarPanelService } from '../../services/solar-panel.service';
-import { SolarPanel } from '../../interfaces/solar-panel.interface';
+import { SolarPanel, ProductionData, EnergyPriceData } from '../../interfaces/solar-panel.interface';
 import { PanelDialogComponent } from '../../components/panel-dialog-component/panel-dialog-component';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartOptions } from 'chart.js';

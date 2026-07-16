@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { ProductionData, SolarPanel } from '../interfaces/solar-panel.interface';
+import { ProductionData, SolarPanel, EnergyPriceData } from '../interfaces/solar-panel.interface';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -17,13 +17,13 @@ export class SolarPanelService {
     //four signals for state management
     panels = signal<SolarPanel[]>([]); //list of solar panels - default empty array
     productionData = signal<ProductionData[]>([]); //list of production data - default empty array
+    energyPriceData = signal<EnergyPriceData[]>([]); //list of energy price data - default empty array
     loading = signal<boolean>(false); //loading state - default false
     error = signal<string | null>(null); //error state - default null
 
     //two computed properties
     getTotalProduction = computed(() =>
-        this.panels()
-            .reduce((total, panel) => total + panel.todayProduction, 0)
+        this.panels().reduce((total, panel) => total + panel.todayProduction, 0)
     );
 
     getActivePanelsCount = computed(() =>
@@ -81,6 +81,31 @@ export class SolarPanelService {
         }
 
     }
+
+    //get all energy price
+    async loadEnergyPriceData() {
+        this.error.set(null);
+        this.loading.set(true);
+
+        try {
+            const response = await firstValueFrom(
+                this.http.get<ApiResponse<EnergyPriceData[]>>(`${this.apiUrl}/energy-prices`)
+            );
+            this.energyPriceData.set(response.data);
+        } catch (error) {
+            if (error instanceof HttpErrorResponse) {
+                this.error.set(`Server error: ${error.status} ${error.message}`);
+            } else if (error instanceof Error) {
+                this.error.set(`Error: ${error.message}`);
+            } else {
+                this.error.set('Unknown error occurred');
+            }
+        } finally {
+            this.loading.set(false);
+        }
+
+    }
+
 
     //add panel
     async addPanel(panel: Omit<SolarPanel, 'id'>) {
@@ -159,6 +184,7 @@ export class SolarPanelService {
     constructor() {
         this.loadPanels();
         this.loadProductionData();
+        this.loadEnergyPriceData();
     }
 
 }

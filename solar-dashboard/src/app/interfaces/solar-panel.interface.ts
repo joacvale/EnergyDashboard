@@ -22,7 +22,7 @@ export interface Country {
 
 export interface EnergyPriceData {
   hour: number;
-  cournty: string;
+  country: string;
   price: number;
 }
 
