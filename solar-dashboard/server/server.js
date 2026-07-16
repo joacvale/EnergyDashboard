@@ -110,6 +110,33 @@ const countries = [
   { code: 'IT', name: 'Italy'}
 ];
 */
+//mock energy price data
+const energyPriceData = [
+  { hour: 1, country: 'PT',price: 28.50 },
+  { hour: 2, country: 'PT',price: 32.75 },
+  { hour: 3, country: 'PT',price: 12.30 },
+  { hour: 4, country: 'PT',price: 29.40 },
+  { hour: 5, country: 'PT',price: 34.80 },
+  { hour: 6, country: 'PT',price: 2.50 },
+  { hour: 7, country: 'PT',price: 18.20 },
+  { hour: 8, country: 'PT',price: 27.10 },
+  { hour: 9, country: 'PT',price: 15.60 },
+  { hour: 10, country: 'PT',price: 31.00 },
+  { hour: 11, country: 'PT',price: 3.10 },
+  { hour: 12, country: 'PT',price: 24.00 },
+  { hour: 13, country: 'PT',price: 30.50 },
+  { hour: 14, country: 'PT',price: 7.80 },
+  { hour: 15, country: 'PT',price: 35.20 },
+  { hour: 16, country: 'PT',price: 16.40 },
+  { hour: 17, country: 'PT',price: 21.30 },
+  { hour: 18, country: 'PT',price: 5.60 },
+  { hour: 19, country: 'PT',price: 29.90 },
+  { hour: 20, country: 'PT',price: 11.20 },
+  { hour: 21, country: 'PT',price: 25.60 },
+  { hour: 22, country: 'PT',price: 33.40 },
+  { hour: 23, country: 'PT',price: 14.80 },
+  { hour: 24, country: 'PT',price: 28.70 },
+];
 // Helper function to generate ID
 function generateId() {
   const existingIds = panels.map((p) => parseInt(p.id.split('-')[1]));
@@ -236,6 +263,33 @@ app.get('/api/production', (req, res) => {
   res.json({
     success: true,
     data: productionData,
+  });
+});
+
+// GET /api/energy-prices
+app.get('/api/energy-prices', (req, res) => {
+  res.json({
+    success: true,
+    data: energyPriceData,
+  });
+});
+// GET /api/energy-prices/{hour}
+app.get('/api/energy-prices/:hour', (req, res) => {
+
+  const data = energyPriceData.find(
+    p => p.hour === Number(req.params.hour)
+  );
+
+  if (!data) {
+    return res.status(404).json({
+      success: false,
+      message: 'Hour not found'
+    });
+  }
+
+  res.json({
+    success: true,
+    data
   });
 });
 

@@ -12,9 +12,17 @@ export interface ProductionData {
     production: number;
     type: 'production' | 'limited' | 'idle';
 }
-
+/*
 
 export interface Country {
     code: string;
     name: string;
 }
+*/
+
+export interface EnergyPriceData {
+  hour: number;
+  cournty: string;
+  price: number;
+}
+
