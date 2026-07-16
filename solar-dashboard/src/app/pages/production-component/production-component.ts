@@ -37,7 +37,7 @@ import {
   styleUrl: './production-component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductionComponent implements AfterViewInit {
+export class ProductionComponent {
   solarPanelService = inject(SolarPanelService);
   dialog = inject(MatDialog);
   viewMode = signal<ViewMode>(ViewMode.TABLE);
@@ -46,10 +46,14 @@ export class ProductionComponent implements AfterViewInit {
   snackBar = inject(MatSnackBar);
 
   @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  set matPaginator(paginator: MatPaginator) {
+
+  if (paginator) {
+    this.dataSource.paginator = paginator;
   }
+
+}
+
 
   constructor() {
     effect(() => {
@@ -109,9 +113,6 @@ export class ProductionComponent implements AfterViewInit {
     });
   }
 
-
-
-  
   totalToday = computed(() =>
     this.solarPanelService
       .productionData()
