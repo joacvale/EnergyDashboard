@@ -1,31 +1,35 @@
 <mat-toolbar>
-
+  <div>
+    <button mat-button>
+      <mat-icon>view_headline</mat-icon>
+    </button> 
+  </div>
   <div class="left-section" routerLink="/">
     <mat-icon>{{ icon }}</mat-icon>
     <span>{{ title }}</span>
   </div>
 
-<mat-form-field class="country-selector" appearance="outline">
-  <mat-label>Country</mat-label>
+  <mat-form-field class="country-selector" appearance="outline">
+    <mat-label>Country</mat-label>
 
-  <mat-select [(ngModel)]="selectedCountry">
-    @for (country of countries; track country.code) {
+    <mat-select [(ngModel)]="selectedCountry">
+      @for (country of countries; track country.code) {
       <mat-option [value]="country.code">
         {{ country.name }}
       </mat-option>
-    }
-  </mat-select>
-</mat-form-field>
+      }
+    </mat-select>
+  </mat-form-field>
 
   <span class="spacer"></span>
 
   @if (!isLogged) {
-    <button mat-raised-button color="primary" (click)="login()">Login</button>
+  <button mat-raised-button color="primary" (click)="login()">Login</button>
   } @else {
-    <button mat-button (click)="logout()">
-      <mat-icon>account_circle</mat-icon>
-      Logout
-    </button>
+  <button mat-button (click)="logout()">
+    <mat-icon>account_circle</mat-icon>
+    Logout
+  </button>
   }
 
 </mat-toolbar>
