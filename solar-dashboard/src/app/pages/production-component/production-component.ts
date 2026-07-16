@@ -19,12 +19,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ViewMode, DialogMode } from '../../enums';
 
+import {
+  ChartConfiguration,
+  ChartData,
+  ChartType,
+  TooltipItem
+
+} from 'chart.js';
 
 
 @Component({
   selector: 'app-production-component',
   standalone: true,
-  imports: [MatFormFieldModule,MatInputModule,MatButtonModule,MatCardModule,MatTableModule,MatPaginatorModule,MatIconModule,MatChipsModule,MatDialogModule,BaseChartDirective,PageStateComponent,MatSnackBarModule],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatCardModule, MatTableModule, MatPaginatorModule, MatIconModule, MatChipsModule, MatDialogModule, BaseChartDirective, PageStateComponent, MatSnackBarModule],
 
   templateUrl: './production-component.html',
   styleUrl: './production-component.scss',
@@ -59,53 +66,52 @@ export class ProductionComponent implements AfterViewInit {
   }
 
   deletePanel(panel: SolarPanel) {
-      const dialogRef = this.dialog.open(PanelDialogComponent, {
-        width: '500px',
-        data: {
-          mode: DialogMode.DELETE,
-          panel
-        }
-      });
-      dialogRef.afterClosed().subscribe((result)=>{
-        if(result){
-          this.snackBar.open('Painel apagado com sucesso','Fechar',{ duration: 3000, verticalPosition:'top'});
-        }
-      });
+    const dialogRef = this.dialog.open(PanelDialogComponent, {
+      width: '500px',
+      data: {
+        mode: DialogMode.DELETE,
+        panel
+      }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.snackBar.open('Painel apagado com sucesso', 'Fechar', { duration: 3000, verticalPosition: 'top' });
+      }
+    });
   }
 
   addPanel() {
-      const dialogRef = this.dialog.open(PanelDialogComponent, {
-        width: '500px',
-        data: {
-          mode: DialogMode.ADD,
-        }
-      });
-      dialogRef.afterClosed().subscribe((result)=>{
-        if(result){
-          this.snackBar.open('Painel criado com sucesso','Fechar',{ duration: 3000, verticalPosition:'top'});
-        }
-      });
+    const dialogRef = this.dialog.open(PanelDialogComponent, {
+      width: '500px',
+      data: {
+        mode: DialogMode.ADD,
+      }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.snackBar.open('Painel criado com sucesso', 'Fechar', { duration: 3000, verticalPosition: 'top' });
+      }
+    });
   }
 
   updatePanel(panel: SolarPanel) {
-      const dialogRef = this.dialog.open(PanelDialogComponent, {
-        width: '500px',
-        data: {
-          mode: DialogMode.EDIT,
-          panel
-        }
-      });
-      dialogRef.afterClosed().subscribe((result)=>{
-        if(result){
-          this.snackBar.open('Painel atualizado com sucesso','Fechar',{ duration: 3000 , verticalPosition:'top'});
-        }
-      });
+    const dialogRef = this.dialog.open(PanelDialogComponent, {
+      width: '500px',
+      data: {
+        mode: DialogMode.EDIT,
+        panel
+      }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.snackBar.open('Painel atualizado com sucesso', 'Fechar', { duration: 3000, verticalPosition: 'top' });
+      }
+    });
   }
 
 
 
-
-  barChartData = computed(() => {
+  barChartData = computed<ChartData<any>>(() => {
     const data = this.solarPanelService.productionData();
 
     return {
@@ -114,28 +120,44 @@ export class ProductionComponent implements AfterViewInit {
       datasets: [
         {
           label: 'Production',
-          data: data.map(item => 
-            item.type==='production'
-            ? item.production : null
+          data: data.map(item =>
+            item.type === 'production'
+              ? item.production : null
           ),
           backgroundColor: 'rgba(39, 174, 96, 0.8)',
         },
         {
           label: 'Limited',
-          data: data.map(item => 
-            item.type==='limited'
-            ? item.production : null
+          data: data.map(item =>
+            item.type === 'limited'
+              ? item.production : null
           ),
           backgroundColor: 'rgba(155, 89, 182, 0.8)',
         },
         {
           label: 'Idle',
-          data: data.map(item => 
-            item.type==='idle'
-            ? item.production : null
+          data: data.map(item =>
+            item.type === 'idle'
+              ? item.production : null
           ),
           backgroundColor: 'rgba(52, 152, 219, 0.8)',
+        },
+
+
+
+        {
+          type: 'line',
+          label: 'Energy Price',
+          data: this.priceLineData(),
+          borderColor: '#000000',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          pointRadius: 2,
+          tension: 0.2,
+          yAxisID: 'yPrice'
         }
+
+
       ]
     };
   });
@@ -167,24 +189,31 @@ export class ProductionComponent implements AfterViewInit {
     return `H${peak.hour}`;
 
   });
-  
-  
-  filteredSolarPanels(location : string){
+
+
+  filteredSolarPanels(location: string) {
     const panels = this.solarPanelService.panels();
-    const filteredPanels = panels.filter(panel=>panel.location.toLowerCase().includes(location.toLowerCase()));
+    const filteredPanels = panels.filter(panel => panel.location.toLowerCase().includes(location.toLowerCase()));
     this.dataSource.data = filteredPanels;
   }
 
-  barChartOptions: ChartOptions<'bar'> = {
+
+  priceLineData = computed(() =>
+    this.solarPanelService.energyPriceData().map(item => item.price)
+  );
+
+
+  barChartType: ChartType = 'bar';
+
+  barChartOptions: ChartOptions<any> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       tooltip: {
-
         callbacks: {
-          label: (context) => {
-            const item = this.solarPanelService.productionData()[context.dataIndex];
-
+          label: (context: TooltipItem<any>) => {
+            const item =
+              this.solarPanelService.productionData()[context.dataIndex];
             return `${item.type}: ${item.production} MW`;
           },
         }
@@ -202,11 +231,21 @@ export class ProductionComponent implements AfterViewInit {
         grid: {
           color: 'rgba(0,0,0,0.1)'
         }
+      },
+
+      yPrice: {
+        position: 'right',
+        min: 0,
+        max: 40,
+
+        title: {
+          display: true,
+          text: '€ / MWH'
+        },
+
       }
     }
-  }
-
-  barChartType: 'bar' = 'bar';
+  };
 
   columnsToDisplay = [
     'id',
