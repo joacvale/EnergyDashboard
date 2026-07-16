@@ -12,6 +12,7 @@ let panels = [
   {
     id: 'SP-001',
     location: 'North Sector A',
+    country: 'PT',
     capacity: 250.0,
     todayProduction: 1856.5,
     status: 'Active',
@@ -19,6 +20,7 @@ let panels = [
   {
     id: 'SP-002',
     location: 'South Sector B',
+    country: 'ES',
     capacity: 300.0,
     todayProduction: 2234.8,
     status: 'Active',
@@ -26,6 +28,7 @@ let panels = [
   {
     id: 'SP-003',
     location: 'East Sector C',
+    country: 'PT',
     capacity: 200.0,
     todayProduction: 1423.2,
     status: 'Maintenance',
@@ -33,6 +36,7 @@ let panels = [
   {
     id: 'SP-004',
     location: 'West Sector D',
+    country: 'PT',
     capacity: 280.0,
     todayProduction: 2087.4,
     status: 'Active',
@@ -40,6 +44,7 @@ let panels = [
   {
     id: 'SP-005',
     location: 'Central Sector E',
+    country: 'ES',
     capacity: 320.0,
     todayProduction: 2401.6,
     status: 'Active',
@@ -47,6 +52,7 @@ let panels = [
   {
     id: 'SP-006',
     location: 'South Sector F',
+    country: 'ES',
     capacity: 270.0,
     todayProduction: 1998.3,
     status: 'Active',
@@ -54,6 +60,7 @@ let panels = [
   {
     id: 'SP-007',
     location: 'East Sector G',
+    country: 'PT',
     capacity: 240.0,
     todayProduction: 1765.8,
     status: 'Inactive',
@@ -61,6 +68,7 @@ let panels = [
   {
     id: 'SP-008',
     location: 'North Sector H',
+    country: 'ES',
     capacity: 290.0,
     todayProduction: 2156.7,
     status: 'Active',
@@ -94,7 +102,14 @@ const productionData = [
   { hour: 23, production: 7.5, type: 'idle' },
   { hour: 24, production: 21.25, type: 'production' },
 ];
-
+/*
+const countries = [
+  { code: 'PT',name: 'Portugal'},
+  { code: 'ES', name: 'Spain'},
+  { code: 'FR', name: 'France'},
+  { code: 'IT', name: 'Italy'}
+];
+*/
 // Helper function to generate ID
 function generateId() {
   const existingIds = panels.map((p) => parseInt(p.id.split('-')[1]));

@@ -14,3 +14,25 @@ mat-toolbar {
     font-weight: 500;
   }
 }
+
+.spacer {
+  flex: 1;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.country-selector {
+  width: 180px;
+  margin-left: 24px;
+  margin-top: 20px;
+
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+  }
+}
