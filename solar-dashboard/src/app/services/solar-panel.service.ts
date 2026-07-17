@@ -39,14 +39,17 @@ export class SolarPanelService {
         this.loading.set(true);
 
         try {
+            const country=this.selectedCountry();
+
             let params = new HttpParams();
             const response = await firstValueFrom(
                 this.http.get<ApiResponse<SolarPanel[]>>(`${this.apiUrl}/panels`,
                     { params }
                 )
             );
+            const filteredData = response.data.filter(panels => panels.country === country);
 
-            this.panels.set(response.data);
+            this.panels.set(filteredData);
 
         } catch (error) {
             if (error instanceof HttpErrorResponse) {
@@ -67,10 +70,12 @@ export class SolarPanelService {
         this.loading.set(true);
 
         try {
+            const country=this.selectedCountry();
             const response = await firstValueFrom(
                 this.http.get<ApiResponse<ProductionData[]>>(`${this.apiUrl}/production`)
             );
-            this.productionData.set(response.data);
+            const filteredData = response.data.filter(productionData => productionData.country === country);
+            this.productionData.set(filteredData);
         } catch (error) {
             if (error instanceof HttpErrorResponse) {
                 this.error.set(`Server error: ${error.status} ${error.message}`);
@@ -90,10 +95,12 @@ export class SolarPanelService {
         this.error.set(null);
         this.loading.set(true);
         try {
+            const country=this.selectedCountry();
             const response = await firstValueFrom(
                 this.http.get<ApiResponse<EnergyPriceData[]>>(`${this.apiUrl}/energy-prices`)
             );
-            this.energyPriceData.set(response.data);
+            const filteredData = response.data.filter(energyPrice => energyPrice.country === country);
+            this.energyPriceData.set(filteredData);
         } catch (error) {
             if (error instanceof HttpErrorResponse) {
                 this.error.set(`Server error: ${error.status} ${error.message}`);
@@ -205,12 +212,20 @@ export class SolarPanelService {
         }
     }
 
-    constructor() {
+    async setCountry(countryId: string){
+        this.selectedCountry.set(countryId);
         this.loadPanels();
         this.loadProductionData();
         this.loadEnergyPriceData();
         this.loadCountryData();
-        this.selectedCountry.set('PT');
+    }
+
+    constructor() {
+        this.selectedCountry.set('ES');
+        this.loadPanels();
+        this.loadProductionData();
+        this.loadEnergyPriceData();
+        this.loadCountryData();
     }
 
 }

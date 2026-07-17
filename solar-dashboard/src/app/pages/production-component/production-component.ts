@@ -40,25 +40,24 @@ export class ProductionComponent {
   dialog = inject(MatDialog);
   viewMode = signal<ViewMode>(ViewMode.TABLE);
   filter = "";
-  dataSource = new MatTableDataSource<SolarPanel>();
+  panelsDataSource = new MatTableDataSource<SolarPanel>();
   snackBar = inject(MatSnackBar);
 
   @ViewChild(MatPaginator)
   set matPaginator(paginator: MatPaginator) {
 
-  if (paginator) {
-    this.dataSource.paginator = paginator;
+    if (paginator) {
+      this.panelsDataSource.paginator = paginator;
+    }
   }
-
-}
-
 
   constructor() {
     effect(() => {
-      this.dataSource.data = this.solarPanelService.panels();
+      this.panelsDataSource.data = this.solarPanelService.panels();
     });
   }
 
+  
   showTable() {
     this.viewMode.set(ViewMode.TABLE);
   }
@@ -122,7 +121,7 @@ export class ProductionComponent {
 
   peakHour = computed(() => {
     const data = this.solarPanelService.productionData();
-    if (!data.length) {return '-';}
+    if (!data.length) { return '-'; }
 
     const peak = data.reduce(
       (max, current) =>
@@ -136,72 +135,72 @@ export class ProductionComponent {
 
   filteredSolarPanels(location: string) {
     const panels = this.solarPanelService.panels();
-  
+
     const filteredPanels = panels.filter(panel => panel.location.toLowerCase().includes(location.toLowerCase()));
-    this.dataSource.data = filteredPanels;
+    this.panelsDataSource.data = filteredPanels;
   }
 
   priceLineData = computed(() =>
     this.solarPanelService.energyPriceData().map(item => item.price)
   );
-  
 
-barChartData = computed<ChartData<any>>(() => {
-  const productionData = this.solarPanelService.productionData();
-  const energyPrices = this.solarPanelService.energyPriceData();
-  const priceData = productionData.map(hour => {
-    const energyPrice = energyPrices.find(price => price.hour === hour.hour);
-    return energyPrice? energyPrice.price: null;
-  });
 
-  return {
-    labels: productionData.map(item => `H${item.hour}`),
+  barChartData = computed<ChartData<any>>(() => {
+    const productionData = this.solarPanelService.productionData();
+    const energyPrices = this.solarPanelService.energyPriceData();
+    const priceData = productionData.map(hour => {
+      const energyPrice = energyPrices.find(price => price.hour === hour.hour);
+      return energyPrice ? energyPrice.price : null;
+    });
 
-    datasets: [
-      {
-        label: 'Production',
-        data: productionData.map(item =>
-          item.type === 'production'? item.production: null
-        ),
-        backgroundColor: 'rgba(39, 174, 96, 0.8)',
-      },
-      {
-        label: 'Limited',
-        data: productionData.map(item =>
-          item.type === 'limited'? item.production: null
-        ),
-        backgroundColor: 'rgba(155, 89, 182, 0.8)',
-      },
-      {
-        label: 'Idle',
-        data: productionData.map(item =>
-          item.type === 'idle'? item.production: null
-        ),
-        backgroundColor: 'rgba(52, 152, 219, 0.8)',
-      },
-      {
-        type: 'line',
-        label: 'Energy Price',
-        data: priceData,
-        borderColor: '#000000',
-        backgroundColor: 'transparent',
-        borderWidth: 1.5,
-        pointRadius: 1.5,
-        tension: 0.1,
-        yAxisID: 'yPrice',
-        spanGaps: true,
+    return {
+      labels: productionData.map(item => `H${item.hour}`),
 
-        segment: {
-          borderDash: (ctx:any) =>
-            ctx.p0.skip || ctx.p1.skip //if previous point or next point is null - skip. if skip 6px draw, 6 px space. else normal line
-              ? [6, 6]
-              : []
+      datasets: [
+        {
+          label: 'Production',
+          data: productionData.map(item =>
+            item.type === 'production' ? item.production : null
+          ),
+          backgroundColor: 'rgba(39, 174, 96, 0.8)',
+        },
+        {
+          label: 'Limited',
+          data: productionData.map(item =>
+            item.type === 'limited' ? item.production : null
+          ),
+          backgroundColor: 'rgba(155, 89, 182, 0.8)',
+        },
+        {
+          label: 'Idle',
+          data: productionData.map(item =>
+            item.type === 'idle' ? item.production : null
+          ),
+          backgroundColor: 'rgba(52, 152, 219, 0.8)',
+        },
+        {
+          type: 'line',
+          label: 'Energy Price',
+          data: priceData,
+          borderColor: '#000000',
+          backgroundColor: 'transparent',
+          borderWidth: 1.5,
+          pointRadius: 1.5,
+          tension: 0.1,
+          yAxisID: 'yPrice',
+          spanGaps: true,
+
+          segment: {
+            borderDash: (ctx: any) =>
+              ctx.p0.skip || ctx.p1.skip //if previous point or next point is null - skip. if skip 6px draw, 6 px space. else normal line
+                ? [6, 6]
+                : []
+          }
         }
-      }
-    ]
-  };
+      ]
+    };
 
-});
+  });
 
   barChartType: ChartType = 'bar';
 
@@ -214,7 +213,7 @@ barChartData = computed<ChartData<any>>(() => {
           label: (context: TooltipItem<any>) => {
             const productionItem = this.solarPanelService.productionData()[context.dataIndex];
             const priceItem = this.solarPanelService.energyPriceData().find(p => p.hour === productionItem.hour)?.price;
-            return `${productionItem.type}: ${productionItem.production} MW : ${priceItem} $ pMWH` ;
+            return `${productionItem.type}: ${productionItem.production} MW : ${priceItem} $ pMWH`;
           },
         }
       },

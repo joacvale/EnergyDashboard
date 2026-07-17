@@ -56,7 +56,7 @@
       </mat-form-field>
     </div>
 
-    <mat-table [dataSource]="dataSource">
+    <mat-table [dataSource]="panelsDataSource">
       <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
       <mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></mat-row>
       <ng-container matColumnDef="id">

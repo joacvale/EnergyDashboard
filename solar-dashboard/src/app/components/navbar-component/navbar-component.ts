@@ -46,6 +46,6 @@ export class NavbarComponent {
   }
 
   updateCountry(country: string) {
-    this.solarPanelService.selectedCountry.set(country);
+    this.solarPanelService.setCountry(country);
   }
 }

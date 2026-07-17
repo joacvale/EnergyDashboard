@@ -10,6 +10,7 @@ export interface SolarPanel {
 export interface ProductionData {
     hour: number;
     production: number;
+    country: string;
     type: 'production' | 'limited' | 'idle';
 }
 
