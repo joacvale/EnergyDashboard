@@ -20,11 +20,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ViewMode, DialogMode } from '../../enums';
 
 import {
-  ChartConfiguration,
   ChartData,
   ChartType,
   TooltipItem
-
 } from 'chart.js';
 
 
@@ -138,6 +136,7 @@ export class ProductionComponent {
 
   filteredSolarPanels(location: string) {
     const panels = this.solarPanelService.panels();
+  
     const filteredPanels = panels.filter(panel => panel.location.toLowerCase().includes(location.toLowerCase()));
     this.dataSource.data = filteredPanels;
   }

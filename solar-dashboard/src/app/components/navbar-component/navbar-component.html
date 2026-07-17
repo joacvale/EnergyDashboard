@@ -13,11 +13,11 @@
   <mat-form-field class="country-selector" appearance="outline">
     <mat-label>Country</mat-label>
 
-    <mat-select [(ngModel)]="selectedCountry">
-      @for (country of countries; track country.code) {
-      <mat-option [value]="country.code">
-        {{ country.name }}
-      </mat-option>
+    <mat-select [ngModel]="selectedCountry" (ngModelChange)="updateCountry($event)">
+      @for (country of solarPanelService.countryData(); track country.code) {
+        <mat-option [value]="country.code">
+          {{ country.name }}
+        </mat-option>
       }
     </mat-select>
   </mat-form-field>

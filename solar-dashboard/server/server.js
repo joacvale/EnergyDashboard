@@ -102,14 +102,14 @@ const productionData = [
   { hour: 23, production: 7.5, type: 'idle' },
   { hour: 24, production: 21.25, type: 'production' },
 ];
-/*
-const countries = [
+
+const countryData = [
   { code: 'PT',name: 'Portugal'},
   { code: 'ES', name: 'Spain'},
   { code: 'FR', name: 'France'},
   { code: 'IT', name: 'Italy'}
 ];
-*/
+
 //mock energy price data
 const energyPriceData = [
   { hour: 1, country: 'PT',price: 28.50 },
@@ -273,23 +273,12 @@ app.get('/api/energy-prices', (req, res) => {
     data: energyPriceData,
   });
 });
-// GET /api/energy-prices/{hour}
-app.get('/api/energy-prices/:hour', (req, res) => {
 
-  const data = energyPriceData.find(
-    p => p.hour === Number(req.params.hour)
-  );
-
-  if (!data) {
-    return res.status(404).json({
-      success: false,
-      message: 'Hour not found'
-    });
-  }
-
+// GET /api/countries
+app.get('/api/countries', (req, res) => {
   res.json({
     success: true,
-    data
+    data: countryData,
   });
 });
 
