@@ -181,11 +181,25 @@
 
 </style>
 
-<app-navbar></app-navbar>
+<app-navbar
+  (menuClick)="sidenav.toggle()">
+</app-navbar>
 
-<main class="main">
-  <router-outlet />
-</main>
+<mat-sidenav-container class="layout-container">
+
+  <mat-sidenav
+    #sidenav
+    mode="over"
+    position="start"
+    class ="app-sidenav">
+    <app-sidepanel-component></app-sidepanel-component>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
@@ -194,6 +208,3 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
-<router-outlet />

@@ -1,0 +1,20 @@
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+app-root {
+  display: block;
+  height: 100%;
+}
+
+.layout-container {
+  background-color: var(--mat-card-elevated-container-color, var(--mat-sys-surface-container-low));
+  height: 100%;
+}
+
+.app-sidenav {
+  width: 220px;
+}
