@@ -6,33 +6,27 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ChangeDetectionStrategy } from '@angular/core';
-import { COUNTRIES, CountryCode } from '../../enums';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { SidepanelComponent } from "../sidepanel-component/sidepanel-component";
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { inject } from '@angular/core';
-
 import { output } from '@angular/core';
-
-
-
-
+import { SolarPanelService } from '../../services/solar-panel.service';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatSelectModule, FormsModule, RouterLink, MatSidenavModule, MatDialogModule],
+  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatSelectModule, FormsModule, RouterLink, MatSidenavModule],
   templateUrl: './navbar-component.html',
   styleUrl: './navbar-component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class NavbarComponent {
+  solarPanelService = inject(SolarPanelService);
+  menuClick = output<void>();
+
   title = 'Solar Energy Dashboard';
   icon = 'light_mode';
   isLogged = false;
-  selectedCountry = CountryCode.PORTUGAL;
-  countries = COUNTRIES
 
   login() {
     this.isLogged = true;
@@ -43,13 +37,15 @@ export class NavbarComponent {
   }
 
 
-
-
-  menuClick = output<void>();
-
   openSidepanel() {
     this.menuClick.emit();
   }
 
+  get selectedCountry() {
+    return this.solarPanelService.selectedCountry();
+  }
 
+  updateCountry(country: string) {
+    this.solarPanelService.setCountry(country);
+  }
 }

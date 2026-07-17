@@ -77,39 +77,39 @@ let panels = [
 
 // Mock production data
 const productionData = [
-  { hour: 1, production: 21.25, type: 'production' },
-  { hour: 2, production: 22.5, type: 'production' },
-  { hour: 3, production: 23.75, type: 'production' },
-  { hour: 4, production: 23.0, type: 'production' },
-  { hour: 5, production: 22.0, type: 'production' },
-  { hour: 6, production: 18.75, type: 'production' },
-  { hour: 7, production: 6.25, type: 'idle' },
-  { hour: 8, production: 7.5, type: 'idle' },
-  { hour: 9, production: 17.5, type: 'production' },
-  { hour: 10, production: 21.25, type: 'production' },
-  { hour: 11, production: 20.5, type: 'production' },
-  { hour: 12, production: 19.5, type: 'production' },
-  { hour: 13, production: 8.75, type: 'idle' },
-  { hour: 14, production: 22.0, type: 'production' },
-  { hour: 15, production: 23.0, type: 'production' },
-  { hour: 16, production: 16.25, type: 'limited' },
-  { hour: 17, production: 17.5, type: 'limited' },
-  { hour: 18, production: 17.0, type: 'limited' },
-  { hour: 19, production: 20.0, type: 'production' },
-  { hour: 20, production: 18.75, type: 'production' },
-  { hour: 21, production: 10.0, type: 'idle' },
-  { hour: 22, production: 8.75, type: 'idle' },
-  { hour: 23, production: 7.5, type: 'idle' },
-  { hour: 24, production: 21.25, type: 'production' },
+  { hour: 1, production: 21.25, country: 'PT', type: 'production' },
+  { hour: 2, production: 22.5, country: 'PT', type: 'production' },
+  { hour: 3, production: 23.75, country: 'PT', type: 'production' },
+  { hour: 4, production: 23.0, country: 'PT', type: 'production' },
+  { hour: 5, production: 22.0, country: 'PT', type: 'production' },
+  { hour: 6, production: 18.75, country: 'PT', type: 'production' },
+  { hour: 7, production: 6.25, country: 'PT', type: 'idle' },
+  { hour: 8, production: 7.5, country: 'PT', type: 'idle' },
+  { hour: 9, production: 17.5, country: 'PT', type: 'production' },
+  { hour: 10, production: 21.25, country: 'PT', type: 'production' },
+  { hour: 11, production: 20.5, country: 'ES', type: 'production' },
+  { hour: 12, production: 19.5, country: 'ES', type: 'production' },
+  { hour: 13, production: 8.75, country: 'PT', type: 'idle' },
+  { hour: 14, production: 22.0, country: 'PT', type: 'production' },
+  { hour: 15, production: 23.0, country: 'PT', type: 'production' },
+  { hour: 16, production: 16.25, country: 'PT', type: 'limited' },
+  { hour: 17, production: 17.5, country: 'PT', type: 'limited' },
+  { hour: 18, production: 17.0, country: 'PT', type: 'limited' },
+  { hour: 19, production: 20.0, country: 'PT', type: 'production' },
+  { hour: 20, production: 18.75, country: 'PT', type: 'production' },
+  { hour: 21, production: 10.0, country: 'PT', type: 'idle' },
+  { hour: 22, production: 8.75, country: 'PT', type: 'idle' },
+  { hour: 23, production: 7.5, country: 'PT', type: 'idle' },
+  { hour: 24, production: 21.25, country: 'PT', type: 'production' },
 ];
-/*
-const countries = [
+
+const countryData = [
   { code: 'PT',name: 'Portugal'},
   { code: 'ES', name: 'Spain'},
   { code: 'FR', name: 'France'},
   { code: 'IT', name: 'Italy'}
 ];
-*/
+
 //mock energy price data
 const energyPriceData = [
   { hour: 1, country: 'PT',price: 28.50 },
@@ -123,8 +123,8 @@ const energyPriceData = [
   { hour: 9, country: 'PT',price: 15.60 },
   { hour: 10, country: 'PT',price: 31.00 },
   { hour: 11, country: 'PT',price: 3.10 },
-  //{ hour: 12, country: 'PT',price: 24.00 },
-  //{ hour: 13, country: 'PT',price: 30.50 },
+  { hour: 12, country: 'ES',price: 24.00 },
+  { hour: 13, country: 'ES',price: 30.50 },
   { hour: 14, country: 'PT',price: 7.80 },
   { hour: 15, country: 'PT',price: 35.20 },
   { hour: 16, country: 'PT',price: 16.40 },
@@ -273,23 +273,12 @@ app.get('/api/energy-prices', (req, res) => {
     data: energyPriceData,
   });
 });
-// GET /api/energy-prices/{hour}
-app.get('/api/energy-prices/:hour', (req, res) => {
 
-  const data = energyPriceData.find(
-    p => p.hour === Number(req.params.hour)
-  );
-
-  if (!data) {
-    return res.status(404).json({
-      success: false,
-      message: 'Hour not found'
-    });
-  }
-
+// GET /api/countries
+app.get('/api/countries', (req, res) => {
   res.json({
     success: true,
-    data
+    data: countryData,
   });
 });
 
