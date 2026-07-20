@@ -87,7 +87,6 @@ mat-table {
     max-width: 100%;
   }
 }
-
 .table-header {
   display: flex;
   justify-content: space-between;
@@ -173,7 +172,6 @@ mat-icon.delete-icon {
 .filter-container {
   display: flex;
   gap: 12px;
-
   width: 80%;
   margin-left: 40px;
 }
@@ -184,10 +182,8 @@ mat-icon.delete-icon {
 
 .search-button {
   height: 56px;
-
   background-color: #1f3048 !important;
   color: white !important;
-
   border-radius: 6px;
   font-weight: 600;
 }

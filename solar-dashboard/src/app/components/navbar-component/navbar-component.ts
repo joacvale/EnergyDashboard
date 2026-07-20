@@ -35,7 +35,7 @@ export class NavbarComponent {
   logout() {
     this.authenticationService.logout().subscribe(data => {
       if (data.status === 200) {
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
       }
     })
   }

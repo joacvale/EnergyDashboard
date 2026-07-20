@@ -1,9 +1,15 @@
 <mat-toolbar>
+@if (!this.authenticationService.authenticated()) {
+  <div class="left-section">
+    <mat-icon>{{ icon }}</mat-icon>
+    <span>{{ title }}</span>
+  </div>
 
+} @else if (this.authenticationService.authenticated()){
   <div>
     <button mat-button (click)="openSidepanel()">
       <mat-icon>view_headline</mat-icon>
-    </button> 
+    </button>
   </div>
   <div class="left-section" routerLink="/">
     <mat-icon>{{ icon }}</mat-icon>
@@ -13,22 +19,18 @@
   <mat-form-field class="country-selector" appearance="outline">
     <mat-select [ngModel]="selectedCountry" (ngModelChange)="updateCountry($event)">
       @for (country of solarPanelService.countryData(); track country.code) {
-        <mat-option [value]="country.code">
-          {{ country.name }}
-        </mat-option>
+      <mat-option [value]="country.code">
+        {{ country.name }}
+      </mat-option>
       }
     </mat-select>
   </mat-form-field>
 
   <span class="spacer"></span>
-
-  @if (!this.authenticationService.authenticated()) {
-    <button mat-raised-button color="primary" routerLink="/login">Login</button>
-  } @else {
-    <button mat-button (click)="logout()">
-      <mat-icon>account_circle</mat-icon>
-      Logout
-    </button>
-  }
+  <button mat-button (click)="logout()" class="logout-button">
+    <mat-icon>account_circle</mat-icon>
+    Logout
+  </button>
+}
 
 </mat-toolbar>

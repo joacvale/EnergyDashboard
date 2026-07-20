@@ -17,7 +17,11 @@ export class AuthenticationService {
   private cookieService = inject(CookieService);
   authenticated=signal(false);
 
-  constructor() { }
+  constructor() { 
+    
+    this.authenticated.set(this.isAuthenticated());
+
+  }
 
   login(body: any) {
     return this.authenticate(body).pipe(map(user => {

@@ -1,7 +1,7 @@
 .login-container {
   display: flex;
   min-height: 100vh;
-  margin:0 auto;
+  margin: 0 auto;
 }
 
 .left-section {
@@ -13,20 +13,17 @@
   justify-content: center;
   padding: 4rem;
   margin-top: -150px;
-
 }
 
 .welcome-content {
   width: 100%;
 }
 
-
 .welcome-content h1 {
   color: #4cff78;
   font-size: 6rem;
   font-weight: 200;
-  margin-bottom:3rem;
-
+  margin-bottom: 3rem;
 }
 
 .welcome-content p {
@@ -34,19 +31,16 @@
   font-weight: 100;
   opacity: 0.9;
   line-height: 1;
-
 }
 
 .right-section {
   width: 50%;
   background: #f5f5f5;
-
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 3rem;
   margin-top: -100px;
-
 }
 
 .login-card {
