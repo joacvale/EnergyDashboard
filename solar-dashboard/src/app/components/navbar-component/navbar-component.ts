@@ -50,6 +50,7 @@ export class NavbarComponent {
   }
 
   updateCountry(country: string) {
+    localStorage.setItem('selectedCountry', country)
     this.solarPanelService.setCountry(country);
   }
 
@@ -68,13 +69,27 @@ export class NavbarComponent {
   constructor() {
     effect(() => {
       const countries = this.allowedCountries();
-      if (countries.length > 0 && !this.solarPanelService.selectedCountry()) {
-        this.solarPanelService.setCountry(
-          countries[0].code
-        );
+      if (countries.length === 0) {
+        return;
       }
+      const selectedCountry = this.solarPanelService.selectedCountry();
+      if (selectedCountry) {
+        return;
+      }
+      const savedCountry = localStorage.getItem('selectedCountry');
+
+      const hasAccessToSavedCountry = countries.some(country => country.code === savedCountry);
+
+      if (savedCountry && hasAccessToSavedCountry) {
+        this.solarPanelService.setCountry(savedCountry);
+        return;
+      }
+
+      this.solarPanelService.setCountry(
+        countries[0].code
+      );
+
     });
 
   }
-
 }

@@ -43,9 +43,20 @@ var NavbarComponent = /** @class */ (function () {
         });
         core_1.effect(function () {
             var countries = _this.allowedCountries();
-            if (countries.length > 0 && !_this.solarPanelService.selectedCountry()) {
-                _this.solarPanelService.setCountry(countries[0].code);
+            if (countries.length === 0) {
+                return;
             }
+            var selectedCountry = _this.solarPanelService.selectedCountry();
+            if (selectedCountry) {
+                return;
+            }
+            var savedCountry = localStorage.getItem('selectedCountry');
+            var hasAccessToSavedCountry = countries.some(function (country) { return country.code === savedCountry; });
+            if (savedCountry && hasAccessToSavedCountry) {
+                _this.solarPanelService.setCountry(savedCountry);
+                return;
+            }
+            _this.solarPanelService.setCountry(countries[0].code);
         });
     }
     NavbarComponent.prototype.logout = function () {
@@ -67,6 +78,7 @@ var NavbarComponent = /** @class */ (function () {
         configurable: true
     });
     NavbarComponent.prototype.updateCountry = function (country) {
+        localStorage.setItem('selectedCountry', country);
         this.solarPanelService.setCountry(country);
     };
     NavbarComponent = __decorate([

@@ -57,7 +57,7 @@ export class ProductionComponent {
     });
   }
 
-  
+
   showTable() {
     this.viewMode.set(ViewMode.TABLE);
   }
