@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +12,7 @@ import { SolarPanelService } from '../../services/solar-panel.service';
 import { inject } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -32,6 +33,7 @@ export class NavbarComponent {
   title = 'Solar Energy Dashboard';
   icon = 'light_mode';
 
+
   logout() {
     this.authenticationService.logout().subscribe(data => {
       if (data.status === 200) {
@@ -39,7 +41,6 @@ export class NavbarComponent {
       }
     })
   }
-
 
   openSidepanel() {
     this.menuClick.emit();
@@ -52,4 +53,26 @@ export class NavbarComponent {
   updateCountry(country: string) {
     this.solarPanelService.setCountry(country);
   }
+
+  allowedCountries = computed(() => {
+
+    const user = this.authenticationService.currentUser();
+
+    const countries = this.solarPanelService.countryData();
+
+    if (!user) {
+      return [];
+    }
+
+    if (user.countries.length === 0) {
+      return countries;
+    }
+
+    return countries.filter(country =>
+      user.countries.includes(country.code)
+    );
+  });
+
+
+
 }

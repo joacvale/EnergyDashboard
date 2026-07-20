@@ -18,7 +18,7 @@
 
   <mat-form-field class="country-selector" appearance="outline">
     <mat-select [ngModel]="selectedCountry" (ngModelChange)="updateCountry($event)">
-      @for (country of solarPanelService.countryData(); track country.code) {
+      @for (country of allowedCountries(); track country.code) {
       <mat-option [value]="country.code">
         {{ country.name }}
       </mat-option>
