@@ -15,5 +15,12 @@ export const routes: Routes = [
             return import('./pages/production-component/production-component').then(
                 (m) => m.ProductionComponent);
         }
+    },
+    {
+        path: 'login',
+        loadComponent: () => {
+            return import('./pages/login-component/login-component').then(
+                (m) => m.LoginComponent);
+        }
     }
 ];

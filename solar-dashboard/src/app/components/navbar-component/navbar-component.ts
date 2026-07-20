@@ -10,6 +10,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { output } from '@angular/core';
 import { SolarPanelService } from '../../services/solar-panel.service';
 import { inject } from '@angular/core';
+import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -22,18 +24,20 @@ import { inject } from '@angular/core';
 
 export class NavbarComponent {
   solarPanelService = inject(SolarPanelService);
+  authenticationService = inject(AuthenticationService);
+  router = inject(Router);
+
   menuClick = output<void>();
 
   title = 'Solar Energy Dashboard';
   icon = 'light_mode';
-  isLogged = false;
-
-  login() {
-    this.isLogged = true;
-  }
 
   logout() {
-    this.isLogged = false;
+    this.authenticationService.logout().subscribe(data => {
+      if (data.status === 200) {
+        this.router.navigate(['/']);
+      }
+    })
   }
 
 

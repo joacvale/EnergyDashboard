@@ -22,13 +22,13 @@
 
   <span class="spacer"></span>
 
-  @if (!isLogged) {
-  <button mat-raised-button color="primary" (click)="login()">Login</button>
+  @if (!this.authenticationService.authenticated()) {
+    <button mat-raised-button color="primary" routerLink="/login">Login</button>
   } @else {
-  <button mat-button (click)="logout()">
-    <mat-icon>account_circle</mat-icon>
-    Logout
-  </button>
+    <button mat-button (click)="logout()">
+      <mat-icon>account_circle</mat-icon>
+      Logout
+    </button>
   }
 
 </mat-toolbar>

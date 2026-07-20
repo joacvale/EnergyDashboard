@@ -67,8 +67,8 @@ describe('SolarPanelService', () => {
   describe('loadProductionData', () => {
     it('should load production data successfuly', async () => {
       const mockProductionData: ProductionData[] = [
-        { hour: 1, production: 21.25, type: 'production' },
-        { hour: 2, production: 22.5, type: 'production' },
+        { hour: 1, production: 21.25, country: 'ES', type: 'production' },
+        { hour: 2, production: 22.5, country: 'ES', type: 'production' },
       ]
       const loadPromise = service.loadProductionData();
       const req = httpMock.expectOne('http://localhost:3000/api/production');
