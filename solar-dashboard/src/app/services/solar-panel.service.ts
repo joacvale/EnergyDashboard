@@ -224,7 +224,6 @@ export class SolarPanelService {
     }
 
     constructor() {
-        //this.selectedCountry.set(this.authenticationService.getCurrentUser().countries[0]);
         this.loadPanels();
         this.loadProductionData();
         this.loadEnergyPriceData();

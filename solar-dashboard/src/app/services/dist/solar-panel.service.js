@@ -76,7 +76,6 @@ var SolarPanelService = /** @class */ (function () {
         this.getActivePanelsCount = core_1.computed(function () {
             return _this.panels().filter(function (panel) { return panel.status === 'Active'; }).length;
         });
-        //this.selectedCountry.set(this.authenticationService.getCurrentUser().countries[0]);
         this.loadPanels();
         this.loadProductionData();
         this.loadEnergyPriceData();

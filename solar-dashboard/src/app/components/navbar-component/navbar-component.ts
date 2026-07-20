@@ -1,4 +1,4 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, effect } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,7 +12,6 @@ import { SolarPanelService } from '../../services/solar-panel.service';
 import { inject } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
-import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -55,24 +54,27 @@ export class NavbarComponent {
   }
 
   allowedCountries = computed(() => {
-
     const user = this.authenticationService.currentUser();
-
     const countries = this.solarPanelService.countryData();
 
-    if (!user) {
-      return [];
-    }
+    if (!user) { return []; }
 
-    if (user.countries.length === 0) {
-      return countries;
-    }
+    if (user.countries.length === 0) { return countries; }
 
-    return countries.filter(country =>
-      user.countries.includes(country.code)
-    );
+    return countries.filter(country => user.countries.includes(country.code));
   });
 
 
+  constructor() {
+    effect(() => {
+      const countries = this.allowedCountries();
+      if (countries.length > 0 && !this.solarPanelService.selectedCountry()) {
+        this.solarPanelService.setCountry(
+          countries[0].code
+        );
+      }
+    });
+
+  }
 
 }

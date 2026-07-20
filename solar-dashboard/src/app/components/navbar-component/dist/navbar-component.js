@@ -39,9 +39,13 @@ var NavbarComponent = /** @class */ (function () {
             if (user.countries.length === 0) {
                 return countries;
             }
-            return countries.filter(function (country) {
-                return user.countries.includes(country.code);
-            });
+            return countries.filter(function (country) { return user.countries.includes(country.code); });
+        });
+        core_1.effect(function () {
+            var countries = _this.allowedCountries();
+            if (countries.length > 0 && !_this.solarPanelService.selectedCountry()) {
+                _this.solarPanelService.setCountry(countries[0].code);
+            }
         });
     }
     NavbarComponent.prototype.logout = function () {
