@@ -34,7 +34,7 @@ mat-table {
 
 .view-toggle {
   display: flex;
-  border: 1px solid #2398ba;
+  border: 1px solid #1f3048;
   border-radius: 6px;
   overflow: hidden;
   background: white;
@@ -44,13 +44,13 @@ mat-table {
   min-width: 120px;
   height: 42px;
   background: white;
-  color: #2398ba;
+  color: #1f3048;
   font-weight: 600;
   border-radius: 0;
 }
 
 .view-toggle button.view-active {
-  background: #2398ba;
+  background: #1f3048;
   color: white;
 }
 
@@ -100,7 +100,7 @@ mat-table {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #2398ba;
+  border: 1px solid #1f3048;
   border-radius: 6px;
   font-weight: 800;
 }
@@ -151,7 +151,7 @@ mat-table {
 }
 
 mat-chip.active-chip {
-  background: #2398ba;
+  background: #1f3048;
 }
 
 mat-chip.maintenance-chip {
@@ -163,7 +163,7 @@ mat-chip.inactive-chip {
 }
 
 mat-icon.update-icon {
-  color: #2398ba;
+  color: #1f3048;
 }
 
 mat-icon.delete-icon {
@@ -185,7 +185,7 @@ mat-icon.delete-icon {
 .search-button {
   height: 56px;
 
-  background-color: #2398ba !important;
+  background-color: #1f3048 !important;
   color: white !important;
 
   border-radius: 6px;

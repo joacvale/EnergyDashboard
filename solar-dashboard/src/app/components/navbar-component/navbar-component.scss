@@ -3,7 +3,7 @@ mat-toolbar {
   align-items: center;
   gap: 12px;
 
-  background-color: #2398BA;
+  background-color: #1f3048;
 
   mat-icon {
     color: #C9B412
@@ -13,6 +13,12 @@ mat-toolbar {
     color: white;
     font-weight: 500;
   }
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.50);
+}
+
+.logout-button {
+  color: white!important;
 }
 
 .spacer {

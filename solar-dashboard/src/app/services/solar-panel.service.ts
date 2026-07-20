@@ -3,6 +3,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { ProductionData, SolarPanel, EnergyPriceData, CountryData } from '../interfaces/solar-panel.interface';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthenticationService } from './authentication.service';
 
 interface ApiResponse<T> {
     success: boolean;
@@ -20,6 +21,8 @@ export class SolarPanelService {
     energyPriceData = signal<EnergyPriceData[]>([]); //list of energy price data - default empty array~
     countryData = signal<CountryData[]>([]);
     selectedCountry = signal<string>('');
+
+    authenticationService = inject(AuthenticationService);
 
     loading = signal<boolean>(false); //loading state - default false
     error = signal<string | null>(null); //error state - default null
@@ -221,7 +224,6 @@ export class SolarPanelService {
     }
 
     constructor() {
-        this.selectedCountry.set('ES');
         this.loadPanels();
         this.loadProductionData();
         this.loadEnergyPriceData();
