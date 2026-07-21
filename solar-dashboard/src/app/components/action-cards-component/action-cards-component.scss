@@ -1,9 +1,8 @@
 mat-card {
   width: 400px;
   min-height: 220px;
-
+  border-radius: 3px;
   padding: 20px;
-
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -27,11 +26,11 @@ mat-icon {
 
 .button-active {
   margin-top: 20px;
-  color: black !important;
+  color: whitesmoke !important;
   width: fit-content;
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 3px;
   cursor: pointer;
   background-color: #1f3048;
 
@@ -39,11 +38,11 @@ mat-icon {
 
 .button-inactive {
   margin-top: 20px;
-  color: black !important;
+  color: #1f3048 !important;
   width: fit-content;
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 3px;
   cursor: pointer;
   background-color: grey;
 
