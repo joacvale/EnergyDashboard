@@ -7,6 +7,7 @@ mat-card {
   margin: 0 auto;
   box-sizing: border-box;
   background: white;
+  border-radius: 3px;
 }
 
 mat-card-content {
@@ -161,7 +162,28 @@ mat-chip.maintenance-chip {
 mat-chip.inactive-chip {
   background: grey;
 }
+::ng-deep .active-chip .mdc-evolution-chip__text-label,
+::ng-deep .maintenance-chip .mdc-evolution-chip__text-label,
+::ng-deep .inactive-chip .mdc-evolution-chip__text-label {
+  color: white !important;
+}
 
+.chip-text{
+  color:white;
+  font-weight: 100;
+  font-size: smaller;
+}
+.active-chip,
+.maintenance-chip,
+.inactive-chip {
+  color: white !important;
+}
+
+.active-chip *,
+.maintenance-chip *,
+.inactive-chip * {
+  color: white !important;
+}
 mat-icon.update-icon {
   color: #1f3048;
 }
@@ -182,12 +204,3 @@ mat-icon.delete-icon {
   width: 300px;
 }
 
-.search-button {
-  height: 56px;
-
-  background-color: #1f3048 !important;
-  color: white !important;
-
-  border-radius: 6px;
-  font-weight: 600;
-}
