@@ -137,6 +137,93 @@ const energyPriceData = [
   { hour: 23, country: 'PT',price: 14.80 },
   { hour: 24, country: 'PT',price: 28.70 },
 ];
+
+const offerUnitData = [
+  {
+    id: 'OU-001',
+    name: 'Portugal Solar North',
+    country: 'PT',
+    quarters: Array.from({ length: 96 }, (_, i) => {
+      const quarter = i + 1;
+      const daytimeFactor = Math.max(0, Math.sin((quarter - 20) * Math.PI / 56));
+      const volume = Number((daytimeFactor * 65).toFixed(1));
+      const price = Number((55 + daytimeFactor * 15).toFixed(1));
+      const netPosition = Number((volume * 0.3).toFixed(1));
+      const damPrice = Number((price + 0.8).toFixed(1));
+
+      return volume < 8
+        ? {
+            quarter,
+            idle: true,
+          }
+        : {
+            quarter,
+            volume,
+            price,
+            netPosition,
+            damPrice,
+            idle: false,
+          };
+    })
+  },
+
+  {
+    id: 'OU-002',
+    name: 'Spain Wind South',
+    country: 'ES',
+    quarters: Array.from({ length: 96 }, (_, i) => {
+      const quarter = i + 1;
+      const daytimeFactor = Math.max(0, Math.sin((quarter - 16) * Math.PI / 60));
+      const volume = Number((daytimeFactor * 80).toFixed(1));
+      const price = Number((50 + daytimeFactor * 18).toFixed(1));
+      const netPosition = Number((volume * 0.35).toFixed(1));
+      const damPrice = Number((price + 1.2).toFixed(1));
+
+      return volume < 10
+        ? {
+            quarter,
+            idle: true,
+          }
+        : {
+            quarter,
+            volume,
+            price,
+            netPosition,
+            damPrice,
+            idle: false,
+          };
+    })
+  },
+
+  {
+    id: 'OU-003',
+    name: 'Italy Hybrid Asset',
+    country: 'IT',
+    quarters: Array.from({ length: 96 }, (_, i) => {
+      const quarter = i + 1;
+      const daytimeFactor =Math.max(0, Math.sin((quarter - 22) * Math.PI / 58));
+      const volume = Number((daytimeFactor * 55).toFixed(1));
+      const price = Number((58 + daytimeFactor * 12).toFixed(1));
+      const netPosition = Number((volume * 0.25).toFixed(1));
+      const damPrice = Number((price + 0.6).toFixed(1));
+
+      return volume < 7
+        ? {
+            quarter,
+            idle: true,
+          }
+        : {
+            quarter,
+            volume,
+            price,
+            netPosition,
+            damPrice,
+            idle: false,
+          };
+    })
+  }
+];
+
 // Helper function to generate ID
 function generateId() {
   const existingIds = panels.map((p) => parseInt(p.id.split('-')[1]));
