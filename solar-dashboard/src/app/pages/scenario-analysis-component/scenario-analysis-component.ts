@@ -1,25 +1,47 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, effect, inject, input, computed } from '@angular/core';
 import { ViewMode } from '../../enums';
+import { OfferUnit } from '../../interfaces/offer-unit.interface';
+import { MatTableDataSource } from '@angular/material/table';
+import { SolarPanelService } from '../../services/solar-panel.service';
+import { DynamicTableComponent } from '../../components/dynamic-table-component/dynamic-table-component';
+
 
 
 @Component({
   selector: 'app-scenario-analysis-component',
-  imports: [],
+  standalone: true,
+  imports: [DynamicTableComponent],
   templateUrl: './scenario-analysis-component.html',
   styleUrl: './scenario-analysis-component.scss',
 })
 export class ScenarioAnalysisComponent {
- viewMode = signal<ViewMode>(ViewMode.TABLE);
+  solarPanelService = inject(SolarPanelService);
 
+  viewMode = signal<ViewMode>(ViewMode.TABLE);
+  offerUnitsDataSource = new MatTableDataSource<OfferUnit>();
+
+
+  constructor() {
+
+    this.solarPanelService.loadOfferUnitsData();
+
+    effect(() => {
+      this.offerUnitsDataSource.data =
+        this.solarPanelService.offerUnitData();
+    })
+
+  }
   //showTable()
-    showTable() {
-      this.viewMode.set(ViewMode.TABLE);
-    }
-  
-    showChart() {
-      this.viewMode.set(ViewMode.CHART);
-    }
+  showTable() {
+    this.viewMode.set(ViewMode.TABLE);
+  }
   //showChart()
+
+  showChart() {
+    this.viewMode.set(ViewMode.CHART);
+  }
+
+
   //table
   //save()
   //update() 

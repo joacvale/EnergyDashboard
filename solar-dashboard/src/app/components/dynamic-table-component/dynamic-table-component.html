@@ -1,1 +1,14 @@
-<p>dynamic-table-component works!</p>
+@if (offerUnit()) {
+  <h1>
+    {{ offerUnit()?.id }} - {{ offerUnit()?.name }}
+  </h1>
+
+  @for (quarter of offerUnit()!.quarters; track quarter.quarter) {
+    <div>
+      <p>Quarter: {{ quarter.quarter }} + Volume: {{ quarter.volume }} + Price: {{ quarter.price }} + Net Position: {{ quarter.netPosition }} + DAM Price: {{ quarter.damPrice }} + Idle: {{ quarter.idle }}</p>
+    </div>
+    <hr>
+
+  }
+
+}

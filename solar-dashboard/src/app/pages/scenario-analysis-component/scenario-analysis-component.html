@@ -1,4 +1,3 @@
-
 <div class="page">
   <div class="title">
     <h2>Scenario Analysis</h2>
@@ -13,6 +12,9 @@
     </div>
   </div>
   <div>
-    
+    @for (ou of solarPanelService.offerUnitData(); track ou.id) {
+      <app-dynamic-table-component [offerUnit]="ou"/>
+    }
+  </div>
 
 </div>

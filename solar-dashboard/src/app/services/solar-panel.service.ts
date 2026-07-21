@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ProductionData, SolarPanel, EnergyPriceData, CountryData } from '../interfaces/solar-panel.interface';
+import { OfferUnit, OfferUnitQuarter } from '../interfaces/offer-unit.interface';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from './authentication.service';
@@ -21,6 +22,9 @@ export class SolarPanelService {
     energyPriceData = signal<EnergyPriceData[]>([]); //list of energy price data - default empty array~
     countryData = signal<CountryData[]>([]);
     selectedCountry = signal<string>('');
+
+    offerUnitData = signal<OfferUnit[]>([]);
+
 
     authenticationService = inject(AuthenticationService);
 
@@ -117,6 +121,28 @@ export class SolarPanelService {
         }
     }
 
+    async loadOfferUnitsData(){
+        this.error.set(null);
+        this.loading.set(true);
+        try {
+            const country=this.selectedCountry();
+            const response = await firstValueFrom(
+                this.http.get<ApiResponse<OfferUnit[]>>(`${this.apiUrl}/offerunits`)
+            );
+            const filteredData = response.data.filter(ou => ou.country === country);
+            this.offerUnitData.set(filteredData);
+        } catch (error) {
+            if (error instanceof HttpErrorResponse) {
+                this.error.set(`Server error: ${error.status} ${error.message}`);
+            } else if (error instanceof Error) {
+                this.error.set(`Error: ${error.message}`);
+            } else {
+                this.error.set('Unknown error occurred');
+            }
+        } finally {
+            this.loading.set(false);
+        }
+    }
     //get all countries
     async loadCountryData() {
         this.error.set(null);

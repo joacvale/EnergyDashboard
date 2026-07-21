@@ -369,6 +369,13 @@ app.get('/api/countries', (req, res) => {
   });
 });
 
+// GET /api/offerunits
+app.get('/api/offerunits', (req, res) => {
+  res.json({
+    success: true,
+    data: offerUnitData,
+  });
+});
 // GET /api/stats - Get statistics
 app.get('/api/stats', (req, res) => {
   const totalProduction = panels.reduce((sum, p) => sum + p.todayProduction, 0);
