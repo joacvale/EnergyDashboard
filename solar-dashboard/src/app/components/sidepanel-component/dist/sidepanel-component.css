@@ -1,6 +1,5 @@
 .sidepanel {
   background: white;
-
   display: flex;
   flex-direction: column;
   border-radius: 0px;
@@ -17,17 +16,13 @@
 
 .menu-item {
   height: 48px;
-
   display: flex;
   align-items: center;
   gap: 16px;
-
   padding: 0 24px;
-
   color: #1f3048;
   text-decoration: none;
-
-  transition: all .2s ease;
+  transition: all 0.2s ease;
 }
 
 .menu-item:hover {
