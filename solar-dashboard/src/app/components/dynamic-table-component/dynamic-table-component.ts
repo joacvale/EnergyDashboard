@@ -63,4 +63,6 @@ hours = Array.from(
   setValue(quarter: OfferUnitQuarter, field: 'volume' | 'price' | 'netPosition' | 'damPrice', value: number) {
     quarter[field] = value;
   }
+
+  save(){}
 }

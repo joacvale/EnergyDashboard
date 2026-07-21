@@ -9,7 +9,6 @@ h3{
   width: 80%;
   margin: 0 auto;
   background: white;
-  margin-bottom: 60px;
 }
 
 mat-table {
@@ -56,4 +55,23 @@ mat-header-cell:first-child {
   background: #1f3048 !important;
   color: white;
   font-weight: 600;
+}
+
+.button-div{
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10%;
+  margin-bottom:40px;
+}
+
+.button-save {
+  margin-top: 20px;
+  color: whitesmoke !important;
+  width: fit-content;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #1f3048;
+
 }
