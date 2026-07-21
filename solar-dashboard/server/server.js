@@ -138,91 +138,216 @@ const energyPriceData = [
   { hour: 24, country: 'PT',price: 28.70 },
 ];
 
+
 const offerUnitData = [
   {
     id: 'OU-001',
     name: 'Portugal Solar North',
     country: 'PT',
-    quarters: Array.from({ length: 96 }, (_, i) => {
-      const quarter = i + 1;
-      const daytimeFactor = Math.max(0, Math.sin((quarter - 20) * Math.PI / 56));
-      const volume = Number((daytimeFactor * 65).toFixed(1));
-      const price = Number((55 + daytimeFactor * 15).toFixed(1));
-      const netPosition = Number((volume * 0.3).toFixed(1));
-      const damPrice = Number((price + 0.8).toFixed(1));
-
-      return volume < 8
-        ? {
-            quarter,
-            idle: true,
-          }
-        : {
-            quarter,
-            volume,
-            price,
-            netPosition,
-            damPrice,
-            idle: false,
-          };
-    })
-  },
-
-  {
+quarters: [
+  { quarter: 1, volume: 42.5, price: 58.2, netPosition: 12.8, damPrice: 59.0, idle: false },
+  { quarter: 2, volume: 40.8, price: 57.9, idle: false },
+  { quarter: 3, volume: 44.1, damPrice: 58.8, idle: false },
+  { quarter: 4, idle: true },
+  { quarter: 5, volume: 39.2, price: 56.3, netPosition: 11.5, damPrice: 57.2, idle: false },
+  { quarter: 6, volume: 35.7, price: 55.8, idle: false },
+  { quarter: 7 },
+  { quarter: 8, volume: 32.4, netPosition: 9.1 },
+  { quarter: 9, price: 54.4, damPrice: 55.1 },
+  { quarter: 10, volume: 30.5, price: 54.1, netPosition: 8.8 },
+  { quarter: 11, idle: true },
+  { quarter: 12, volume: 29.7 },
+  { quarter: 13, volume: 31.3, price: 54.7, netPosition: 9.2, damPrice: 55.6 },
+  { quarter: 14, volume: 33.9, price: 55.0 },
+  { quarter: 15, damPrice: 56.0 },
+  { quarter: 16, volume: 38.1, idle: false },
+  { quarter: 17, volume: 40.2, price: 56.8, netPosition: 11.0, damPrice: 57.4 },
+  { quarter: 18 },
+  { quarter: 19, volume: 43.6, price: 58.2 },
+  { quarter: 20, idle: true },
+  { quarter: 21, volume: 47.3, price: 59.1, netPosition: 13.2 },
+  { quarter: 22, volume: 48.1, damPrice: 60.2 },
+  { quarter: 23, price: 60.1 },
+  { quarter: 24, volume: 49.5, price: 60.4, netPosition: 14.5, damPrice: 61.0 },
+  { quarter: 25, volume: 50.2 },
+  { quarter: 26, idle: true },
+  { quarter: 27, volume: 51.1, price: 61.0 },
+  { quarter: 28, volume: 52.4, price: 61.8, netPosition: 15.6 },
+  { quarter: 29, damPrice: 62.3 },
+  { quarter: 30, volume: 53.8, price: 62.4, netPosition: 16.0, damPrice: 63.0 },
+  { quarter: 31 },
+  { quarter: 32, volume: 54.1, idle: false },
+  { quarter: 33, volume: 53.5, price: 62.1 },
+  { quarter: 34, volume: 52.8, netPosition: 15.4 },
+  { quarter: 35, idle: true },
+  { quarter: 36, volume: 51.4, price: 61.0, damPrice: 61.8 },
+  { quarter: 37 },
+  { quarter: 38, volume: 49.2 },
+  { quarter: 39, price: 59.8 },
+  { quarter: 40, volume: 47.5, price: 59.1, netPosition: 13.3 },
+  { quarter: 41, idle: true },
+  { quarter: 42, volume: 29.7 },
+  { quarter: 43, volume: 31.3, price: 54.7, netPosition: 9.2, damPrice: 55.6 },
+  { quarter: 44, volume: 33.9, price: 55.0 },
+  { quarter: 45, damPrice: 56.0 },
+  { quarter: 46, volume: 38.1, idle: false },
+  { quarter: 47, volume: 40.2, price: 56.8, netPosition: 11.0, damPrice: 57.4 },
+  { quarter: 48 },
+  { quarter: 49, volume: 43.6, price: 58.2 },
+  { quarter: 50, idle: true },
+  { quarter: 51, volume: 42.5, price: 58.2, netPosition: 12.8, damPrice: 59.0, idle: false },
+  { quarter: 52, volume: 40.8, price: 57.9, idle: false },
+  { quarter: 53, volume: 44.1, damPrice: 58.8, idle: false },
+  { quarter: 54, idle: true },
+  { quarter: 55, volume: 39.2, price: 56.3, netPosition: 11.5, damPrice: 57.2, idle: false },
+  { quarter: 56, volume: 35.7, price: 55.8, idle: false },
+  { quarter: 57 },
+  { quarter: 58, volume: 32.4, netPosition: 9.1 },
+  { quarter: 59, price: 54.4, damPrice: 55.1 },
+  { quarter: 60, volume: 30.5, price: 54.1, netPosition: 8.8 },
+  { quarter: 61, idle: true },
+  { quarter: 62, volume: 29.7 },
+  { quarter: 63, volume: 31.3, price: 54.7, netPosition: 9.2, damPrice: 55.6 },
+  { quarter: 64, volume: 33.9, price: 55.0 },
+  { quarter: 65, damPrice: 56.0 },
+  { quarter: 66, volume: 38.1, idle: false },
+  { quarter: 67, volume: 40.2, price: 56.8, netPosition: 11.0, damPrice: 57.4 },
+  { quarter: 68 },
+  { quarter: 69, volume: 43.6, price: 58.2 },
+  { quarter: 70, idle: true },
+  { quarter: 71, volume: 47.3, price: 59.1, netPosition: 13.2 },
+  { quarter: 72, volume: 48.1, damPrice: 60.2 },
+  { quarter: 73, price: 60.1 },
+  { quarter: 74, volume: 49.5, price: 60.4, netPosition: 14.5, damPrice: 61.0 },
+  { quarter: 75, volume: 50.2 },
+  { quarter: 76, idle: true },
+  { quarter: 77, volume: 51.1, price: 61.0 },
+  { quarter: 78, volume: 52.4, price: 61.8, netPosition: 15.6 },
+  { quarter: 79, damPrice: 62.3 },
+  { quarter: 80, volume: 53.8, price: 62.4, netPosition: 16.0, damPrice: 63.0 },
+  { quarter: 81 },
+  { quarter: 82, volume: 54.1, idle: false },
+  { quarter: 83, volume: 53.5, price: 62.1 },
+  { quarter: 84, volume: 52.8, netPosition: 15.4 },
+  { quarter: 85, idle: true },
+  { quarter: 86, volume: 51.4, price: 61.0, damPrice: 61.8 },
+  { quarter: 87 },
+  { quarter: 88, volume: 49.2 },
+  { quarter: 89, price: 59.8 },
+  { quarter: 90, volume: 53.8, price: 62.4, netPosition: 16.0, damPrice: 63.0 },
+  { quarter: 91 },
+  { quarter: 92, volume: 54.1, idle: false },
+  { quarter: 93, volume: 53.5, price: 62.1 },
+  { quarter: 94, volume: 52.8, netPosition: 15.4 },
+  { quarter: 95, idle: true },
+  { quarter: 96, volume: 51.4, price: 61.0, damPrice: 61.8 },
+  
+]},
+ {
     id: 'OU-002',
-    name: 'Spain Wind South',
-    country: 'ES',
-    quarters: Array.from({ length: 96 }, (_, i) => {
-      const quarter = i + 1;
-      const daytimeFactor = Math.max(0, Math.sin((quarter - 16) * Math.PI / 60));
-      const volume = Number((daytimeFactor * 80).toFixed(1));
-      const price = Number((50 + daytimeFactor * 18).toFixed(1));
-      const netPosition = Number((volume * 0.35).toFixed(1));
-      const damPrice = Number((price + 1.2).toFixed(1));
+    name: 'Portugal Solar South',
+    country: 'PT',
+quarters: [
+  { quarter: 1, volume: 42.5, price: 58.2, netPosition: 12.8, damPrice: 59.0, idle: false },
+  { quarter: 2, volume: 40.8, price: 57.9, idle: false },
+  { quarter: 3, volume: 44.1, damPrice: 58.8, idle: false },
+  { quarter: 4, idle: true },
+  { quarter: 5, volume: 39.2, price: 56.3, netPosition: 11.5, damPrice: 57.2, idle: false },
+  { quarter: 6, volume: 35.7, price: 55.8, idle: false },
+  { quarter: 7 },
+  { quarter: 8, volume: 32.4, netPosition: 9.1 },
+  { quarter: 9, price: 54.4, damPrice: 55.1 },
+  { quarter: 10, volume: 30.5, price: 54.1, netPosition: 8.8 },
+  { quarter: 11, idle: true },
+  { quarter: 12, volume: 29.7 },
+  { quarter: 13, volume: 31.3, price: 54.7, netPosition: 9.2, damPrice: 55.6 },
+  { quarter: 14, volume: 33.9, price: 55.0 },
+  { quarter: 15, damPrice: 56.0 },
+  { quarter: 16, volume: 38.1, idle: false },
+  { quarter: 17, volume: 40.2, price: 56.8, netPosition: 11.0, damPrice: 57.4 },
+  { quarter: 18 },
+  { quarter: 19, volume: 43.6, price: 58.2 },
+  { quarter: 20, idle: true },
+  { quarter: 21, volume: 47.3, price: 59.1, netPosition: 13.2 },
+  { quarter: 22, volume: 48.1, damPrice: 60.2 },
+  { quarter: 23, price: 60.1 },
+  { quarter: 24, volume: 49.5, price: 60.4, netPosition: 14.5, damPrice: 61.0 },
+  { quarter: 25, volume: 50.2 },
+  { quarter: 26, idle: true },
+  { quarter: 27, volume: 51.1, price: 61.0 },
+  { quarter: 28, volume: 52.4, price: 61.8, netPosition: 15.6 },
+  { quarter: 29, damPrice: 62.3 },
+  { quarter: 30, volume: 53.8, price: 62.4, netPosition: 16.0, damPrice: 63.0 },
+  { quarter: 31 },
+  { quarter: 32, volume: 54.1, idle: false },
+  { quarter: 33, volume: 53.5, price: 62.1 },
+  { quarter: 34, volume: 52.8, netPosition: 15.4 },
+  { quarter: 35, idle: true },
+  { quarter: 36, volume: 51.4, price: 61.0, damPrice: 61.8 },
+  { quarter: 37 },
+  { quarter: 38, volume: 49.2 },
+  { quarter: 39, price: 59.8 },
+  { quarter: 40, volume: 47.5, price: 59.1, netPosition: 13.3 },
+  { quarter: 41, idle: true },
+  { quarter: 42, volume: 29.7 },
+  { quarter: 43, volume: 31.3, price: 54.7, netPosition: 9.2, damPrice: 55.6 },
+  { quarter: 44, volume: 33.9, price: 55.0 },
+  { quarter: 45, damPrice: 56.0 },
+  { quarter: 46, volume: 38.1, idle: false },
+  { quarter: 47, volume: 40.2, price: 56.8, netPosition: 11.0, damPrice: 57.4 },
+  { quarter: 48 },
+  { quarter: 49, volume: 43.6, price: 58.2 },
+  { quarter: 50, idle: true },
+  { quarter: 51, volume: 42.5, price: 58.2, netPosition: 12.8, damPrice: 59.0, idle: false },
+  { quarter: 52, volume: 40.8, price: 57.9, idle: false },
+  { quarter: 53, volume: 44.1, damPrice: 58.8, idle: false },
+  { quarter: 54, idle: true },
+  { quarter: 55, volume: 39.2, price: 56.3, netPosition: 11.5, damPrice: 57.2, idle: false },
+  { quarter: 56, volume: 35.7, price: 55.8, idle: false },
+  { quarter: 57 },
+  { quarter: 58, volume: 32.4, netPosition: 9.1 },
+  { quarter: 59, price: 54.4, damPrice: 55.1 },
+  { quarter: 60, volume: 30.5, price: 54.1, netPosition: 8.8 },
+  { quarter: 61, idle: true },
+  { quarter: 62, volume: 29.7 },
+  { quarter: 63, volume: 31.3, price: 54.7, netPosition: 9.2, damPrice: 55.6 },
+  { quarter: 64, volume: 33.9, price: 55.0 },
+  { quarter: 65, damPrice: 56.0 },
+  { quarter: 66, volume: 38.1, idle: false },
+  { quarter: 67, volume: 40.2, price: 56.8, netPosition: 11.0, damPrice: 57.4 },
+  { quarter: 68 },
+  { quarter: 69, volume: 43.6, price: 58.2 },
+  { quarter: 70, idle: true },
+  { quarter: 71, volume: 47.3, price: 59.1, netPosition: 13.2 },
+  { quarter: 72, volume: 48.1, damPrice: 60.2 },
+  { quarter: 73, price: 60.1 },
+  { quarter: 74, volume: 49.5, price: 60.4, netPosition: 14.5, damPrice: 61.0 },
+  { quarter: 75, volume: 50.2 },
+  { quarter: 76, idle: true },
+  { quarter: 77, volume: 51.1, price: 61.0 },
+  { quarter: 78, volume: 52.4, price: 61.8, netPosition: 15.6 },
+  { quarter: 79, damPrice: 62.3 },
+  { quarter: 80, volume: 53.8, price: 62.4, netPosition: 16.0, damPrice: 63.0 },
+  { quarter: 81 },
+  { quarter: 82, volume: 54.1, idle: false },
+  { quarter: 83, volume: 53.5, price: 62.1 },
+  { quarter: 84, volume: 52.8, netPosition: 15.4 },
+  { quarter: 85, idle: true },
+  { quarter: 86, volume: 51.4, price: 61.0, damPrice: 61.8 },
+  { quarter: 87 },
+  { quarter: 88, volume: 49.2 },
+  { quarter: 89, price: 59.8 },
+  { quarter: 90, volume: 53.8, price: 62.4, netPosition: 16.0, damPrice: 63.0 },
+  { quarter: 91 },
+  { quarter: 92, volume: 54.1, idle: false },
+  { quarter: 93, volume: 53.5, price: 62.1 },
+  { quarter: 94, volume: 52.8, netPosition: 15.4 },
+  { quarter: 95, idle: true },
+  { quarter: 96, volume: 51.4, price: 61.0, damPrice: 61.8 },
+  
+]}
+]
 
-      return volume < 10
-        ? {
-            quarter,
-            idle: true,
-          }
-        : {
-            quarter,
-            volume,
-            price,
-            netPosition,
-            damPrice,
-            idle: false,
-          };
-    })
-  },
-
-  {
-    id: 'OU-003',
-    name: 'Italy Hybrid Asset',
-    country: 'IT',
-    quarters: Array.from({ length: 96 }, (_, i) => {
-      const quarter = i + 1;
-      const daytimeFactor =Math.max(0, Math.sin((quarter - 22) * Math.PI / 58));
-      const volume = Number((daytimeFactor * 55).toFixed(1));
-      const price = Number((58 + daytimeFactor * 12).toFixed(1));
-      const netPosition = Number((volume * 0.25).toFixed(1));
-      const damPrice = Number((price + 0.6).toFixed(1));
-
-      return volume < 7
-        ? {
-            quarter,
-            idle: true,
-          }
-        : {
-            quarter,
-            volume,
-            price,
-            netPosition,
-            damPrice,
-            idle: false,
-          };
-    })
-  }
-];
 
 // Helper function to generate ID
 function generateId() {

@@ -1,14 +1,42 @@
 @if (offerUnit()) {
-  <h1>
-    {{ offerUnit()?.id }} - {{ offerUnit()?.name }}
-  </h1>
+<h3>
+  {{ offerUnit()?.id }} - {{ offerUnit()?.name }}
+</h3>
 
-  @for (quarter of offerUnit()!.quarters; track quarter.quarter) {
-    <div>
-      <p>Quarter: {{ quarter.quarter }} + Volume: {{ quarter.volume }} + Price: {{ quarter.price }} + Net Position: {{ quarter.netPosition }} + DAM Price: {{ quarter.damPrice }} + Idle: {{ quarter.idle }}</p>
-    </div>
-    <hr>
+<div class="table-container">
 
-  }
+  <mat-table [dataSource]="tableData">
+    <ng-container matColumnDef="field">
+      <mat-header-cell *matHeaderCellDef>
+        Volume buy
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" class="field-cell" >
+        {{ row.rowName }}
+      </mat-cell>
+    </ng-container>
 
+    @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
+    <ng-container [matColumnDef]="'q' + quarter.quarter">
+      <mat-header-cell *matHeaderCellDef>
+        Q {{ quarter.quarter }}
+      </mat-header-cell>
+      <mat-cell class="input-cell"*matCellDef="let row">
+        <input matInput type="number" [ngModel]="getValue(quarter, row.field)" (ngModelChange)="setValue(quarter, row.field, $event)">
+      </mat-cell>
+
+    </ng-container>
+
+    }
+
+    <mat-header-row *matHeaderRowDef="displayedColumns">
+    </mat-header-row>
+
+    <mat-row *matRowDef="
+      let row;
+      columns: displayedColumns
+    ">
+    </mat-row>
+
+  </mat-table>
+</div>
 }

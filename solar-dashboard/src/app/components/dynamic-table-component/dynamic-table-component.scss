@@ -1,0 +1,59 @@
+h3{
+    color: #1f3048;
+    size: 5rem;
+    margin-left: 10%;
+}
+
+.table-container {
+  overflow-x: auto;
+  width: 80%;
+  margin: 0 auto;
+  background: white;
+  margin-bottom: 60px;
+}
+
+mat-table {
+  min-width: max-content;
+  border: 1px solid #1f3048;
+}
+
+mat-header-cell {
+  font-weight: 500;
+  color: white;
+  background: #1f3048 !important;
+  justify-content: center;
+  min-width: 90px;
+}
+
+mat-cell {
+  background: white !important;
+  justify-content: center;
+  min-width: 90px;
+  border: 0.5px solid #1f3048
+}
+input {
+  width: 80px;
+  border: none;
+  text-align: center;
+  padding: 6px;
+  background: transparent;
+}
+
+mat-row:nth-child(even) {
+  background: #fafafa;
+}
+
+mat-row:hover {
+  background: #f5f7fa;
+}
+
+mat-cell:first-child,
+mat-header-cell:first-child {
+  font-weight: 600;
+  background: #f3f5f7;
+}
+.field-cell {
+  background: #1f3048 !important;
+  color: white;
+  font-weight: 600;
+}
