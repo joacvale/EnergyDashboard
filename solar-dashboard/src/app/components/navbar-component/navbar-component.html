@@ -20,7 +20,7 @@
   </mat-form-field>
 
   <span class="spacer"></span>
-  
+  <div class="user-menu">
   <div class="user-avatar">
     <mat-icon>person</mat-icon>
   </div>
@@ -33,8 +33,19 @@
   </div>
 
   
-  <button mat-button (click)="logout()" class="logout-button">
-    
+  <button mat-button [matMenuTriggerFor]="userMenu">
     <mat-icon>keyboard_arrow_down</mat-icon>
   </button>
+  </div>
+
+  
+<mat-menu #userMenu="matMenu" panelClass="user-menu-panel">
+  <button mat-menu-item
+    (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+
+</mat-menu>
+
 </mat-toolbar>

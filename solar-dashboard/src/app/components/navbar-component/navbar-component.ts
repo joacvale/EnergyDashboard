@@ -12,11 +12,12 @@ import { SolarPanelService } from '../../services/solar-panel.service';
 import { inject } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatSelectModule, FormsModule, RouterLink, MatSidenavModule],
+  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatSelectModule, FormsModule, RouterLink, MatSidenavModule, MatMenuModule],
   templateUrl: './navbar-component.html',
   styleUrl: './navbar-component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

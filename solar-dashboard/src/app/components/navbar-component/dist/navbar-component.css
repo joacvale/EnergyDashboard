@@ -13,10 +13,6 @@ mat-toolbar span {
   font-weight: 500;
 }
 
-.logout-button {
-  color: white !important;
-}
-
 .spacer {
   flex: 1;
 }
@@ -84,4 +80,24 @@ mat-toolbar span {
 
 .user-button {
   color: white;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.user-menu:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mat-menu {
+  background-color: white;
+  border: #1f3048;
+  margin-top: 20px;
 }

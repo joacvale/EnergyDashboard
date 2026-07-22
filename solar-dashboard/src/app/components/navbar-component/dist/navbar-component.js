@@ -21,6 +21,7 @@ var solar_panel_service_1 = require("../../services/solar-panel.service");
 var core_4 = require("@angular/core");
 var authentication_service_1 = require("../../services/authentication.service");
 var router_2 = require("@angular/router");
+var menu_1 = require("@angular/material/menu");
 var NavbarComponent = /** @class */ (function () {
     function NavbarComponent() {
         var _this = this;
@@ -85,7 +86,7 @@ var NavbarComponent = /** @class */ (function () {
         core_1.Component({
             selector: 'app-navbar',
             standalone: true,
-            imports: [toolbar_1.MatToolbarModule, icon_1.MatIconModule, button_1.MatButtonModule, select_1.MatSelectModule, forms_1.FormsModule, router_1.RouterLink, sidenav_1.MatSidenavModule],
+            imports: [toolbar_1.MatToolbarModule, icon_1.MatIconModule, button_1.MatButtonModule, select_1.MatSelectModule, forms_1.FormsModule, router_1.RouterLink, sidenav_1.MatSidenavModule, menu_1.MatMenuModule],
             templateUrl: './navbar-component.html',
             styleUrl: './navbar-component.scss',
             changeDetection: core_2.ChangeDetectionStrategy.OnPush
