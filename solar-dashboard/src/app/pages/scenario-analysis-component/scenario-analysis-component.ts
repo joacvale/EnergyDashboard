@@ -18,32 +18,30 @@ export class ScenarioAnalysisComponent {
   solarPanelService = inject(SolarPanelService);
 
   viewMode = signal<ViewMode>(ViewMode.TABLE);
-  offerUnitsDataSource = new MatTableDataSource<OfferUnit>();
 
 
+  
   constructor() {
 
+    effect(() => {
+    this.solarPanelService.selectedCountry();
     this.solarPanelService.loadOfferUnitsData();
 
-    effect(() => {
-      this.offerUnitsDataSource.data =
-        this.solarPanelService.offerUnitData();
-    })
+  });
 
-  }
+}
+
+
+  offerUnits = computed(() =>
+    this.solarPanelService.offerUnitData()
+  );
   //showTable()
   showTable() {
     this.viewMode.set(ViewMode.TABLE);
   }
   //showChart()
-
   showChart() {
     this.viewMode.set(ViewMode.CHART);
   }
 
-
-  //table
-  //save()
-  //update() 
-  //chart
 }

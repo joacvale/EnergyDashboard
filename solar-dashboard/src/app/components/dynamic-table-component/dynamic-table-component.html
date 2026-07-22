@@ -39,6 +39,7 @@
             <td>
               <input
                 type="number"
+                step="0.01"
                 [ngModel]="getValue(quarter, row.field)"
                 (ngModelChange)="setValue(quarter, row.field, $event)">
             </td>

@@ -12,7 +12,7 @@
     </div>
   </div>
   <div>
-    @for (ou of solarPanelService.offerUnitData(); track ou.id) {
+    @for (ou of offerUnits(); track ou.id) {
       <app-dynamic-table-component [offerUnit]="ou"/>
     }
   </div>

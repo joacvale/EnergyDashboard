@@ -1,6 +1,7 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OfferUnit, OfferUnitQuarter } from '../../interfaces/offer-unit.interface';
+import { MatTableDataSource } from '@angular/material/table';
 
 type QuarterField =
   | 'volume'
@@ -63,7 +64,8 @@ export class DynamicTableComponent {
   }
 
   setValue(quarter: OfferUnitQuarter, field: 'volume' | 'price' | 'netPosition' | 'damPrice', value: number) {
-    quarter[field] = value;
+
+    quarter[field] = Number(value.toFixed(2));
   }
 
   save() { }
