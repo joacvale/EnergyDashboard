@@ -1,49 +1,61 @@
-@if (offerUnit()) {
+
 <h3>
   {{ offerUnit()?.id }} - {{ offerUnit()?.name }}
 </h3>
 
 <div class="table-container">
+  <table class="offer-table">
+    <thead>
+      <tr>
+        <th rowspan="2">
+          Volume Buy
+        </th>
+        @for (hour of hours; track hour.label) {
+          <th
+            colspan="4"
+            class="hour-header">
+            {{ hour.label }}
+          </th>
+        }
+      </tr>
 
-  <mat-table [dataSource]="tableData">
-    <ng-container matColumnDef="field">
-      <mat-header-cell *matHeaderCellDef>
-        Volume buy
-      </mat-header-cell>
-      <mat-cell *matCellDef="let row" class="field-cell" >
-        {{ row.rowName }}
-      </mat-cell>
-    </ng-container>
+      <tr>
+        @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
+          <th>
+            Q{{ ($index % 4) + 1 }}
+          </th>
+        }
+      </tr>
+    </thead>
 
-    @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
-    <ng-container [matColumnDef]="'q' + quarter.quarter">
-      <mat-header-cell *matHeaderCellDef>
-        Q {{ quarter.quarter }}
-      </mat-header-cell>
-      <mat-cell class="input-cell"*matCellDef="let row">
-        <input matInput type="number" [ngModel]="getValue(quarter, row.field)" (ngModelChange)="setValue(quarter, row.field, $event)">
-      </mat-cell>
+    <tbody>
+      @for (row of tableData; track row.field) {
+        <tr>
+          <td class="field-cell">
+            {{ row.rowName }}
+          </td>
 
-    </ng-container>
+          @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
+            <td>
+              <input
+                type="number"
+                [ngModel]="getValue(quarter, row.field)"
+                (ngModelChange)="setValue(quarter, row.field, $event)">
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
 
-    }
-
-    <mat-header-row *matHeaderRowDef="displayedColumns">
-    </mat-header-row>
-
-    <mat-row *matRowDef="
-      let row;
-      columns: displayedColumns
-    ">
-    </mat-row>
-
-  </mat-table>
+  </table>
 </div>
-}
+
 <div class="button-div">
   <button mat-button class="button-save" (click)="save()">
     Save
   </button>
 
 </div>
+
+
   

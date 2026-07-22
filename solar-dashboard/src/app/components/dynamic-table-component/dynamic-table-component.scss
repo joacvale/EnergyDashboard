@@ -1,77 +1,81 @@
-h3{
-    color: #1f3048;
-    size: 5rem;
-    margin-left: 10%;
+h3 {
+  color: #1f3048;
+  font-size: 1rem;
+  margin-left: 10%;
 }
 
 .table-container {
-  overflow-x: auto;
   width: 80%;
   margin: 0 auto;
-  background: white;
+  overflow-x: auto;
 }
 
-mat-table {
+.offer-table {
+  border-collapse: collapse;
   min-width: max-content;
-  border: 1px solid #1f3048;
+
+  th,td {
+    border: 1px solid #d0d7de;
+  }
+
+  thead th {
+    background: #1f3048;
+    color: white;
+    min-width: 90px;
+    padding: 8px;
+  }
+
+  input {
+    width: 100px;
+    padding: 6px;
+    border: none;
+    text-align: right;
+    background: transparent;
+
+    &:focus {
+      outline: 1px solid #1f3048;
+    }
+  }
 }
 
-mat-header-cell {
-  font-weight: 500;
-  color: white;
-  background: #1f3048 !important;
-  justify-content: center;
-  min-width: 90px;
-}
-
-mat-cell {
-  background: white !important;
-  justify-content: center;
-  min-width: 90px;
-  border: 0.5px solid #1f3048
-}
-input {
-  width: 80px;
-  border: none;
-  text-align: center;
-  padding: 6px;
-  background: transparent;
-}
-
-mat-row:nth-child(even) {
-  background: #fafafa;
-}
-
-mat-row:hover {
-  background: #f5f7fa;
-}
-
-mat-cell:first-child,
-mat-header-cell:first-child {
-  font-weight: 600;
-  background: #f3f5f7;
-}
+.hour-header,
 .field-cell {
-  background: #1f3048 !important;
+  background: #1f3048;
   color: white;
+}
+
+.hour-header {
+  text-align: center;
+  height: 40px;
+}
+
+.field-cell {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  min-width: 100px;
   font-weight: 600;
 }
 
-.button-div{
+.offer-table thead tr:first-child th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 20;
+}
+
+.button-div {
   display: flex;
   justify-content: flex-end;
-  margin-right: 10%;
-  margin-bottom:40px;
+  margin: 0 10% 40px 0;
 }
 
 .button-save {
   margin-top: 20px;
-  color: whitesmoke !important;
-  width: fit-content;
   padding: 10px 20px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
-  background-color: #1f3048;
 
+  background: #1f3048;
+  color: white !important;
 }

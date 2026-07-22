@@ -1,26 +1,28 @@
 import { Component, computed, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OfferUnit, OfferUnitQuarter } from '../../interfaces/offer-unit.interface';
-import { MatTable, MatCell } from '@angular/material/table';
-import { MatHeaderCell } from '@angular/material/table';
-import { MatColumnDef, MatHeaderRow, MatRowDef, MatRow, MatCellDef, MatHeaderRowDef, MatHeaderCellDef } from '@angular/material/table';
+
+type QuarterField =
+  | 'volume'
+  | 'price'
+  | 'netPosition'
+  | 'damPrice';
+
 
 @Component({
   selector: 'app-dynamic-table-component',
-  imports: [FormsModule, MatTable, MatHeaderCell, MatCell, MatColumnDef, MatHeaderRow, MatRowDef, MatRow, MatCellDef, MatHeaderRowDef, MatHeaderCellDef],
+  imports: [FormsModule],
   standalone: true,
   templateUrl: './dynamic-table-component.html',
   styleUrl: './dynamic-table-component.scss',
 })
+
 export class DynamicTableComponent {
   offerUnit = input.required<OfferUnit>();
 
-
-
-
   tableData: {
-    field: string;
     rowName: string;
+    field: QuarterField;
   }[] = [
       {
         rowName: 'Volume',
@@ -47,13 +49,13 @@ export class DynamicTableComponent {
       (_, i) => `q${i + 1}`
     )
   ];
-  
-hours = Array.from(
-  { length: 24 },
-  (_, i) => ({
-    label: `H${i + 1}`
-  })
-);
+
+  hours = Array.from(
+    { length: 24 },
+    (_, i) => ({
+      label: `H${i + 1}`
+    })
+  );
 
 
   getValue(quarter: OfferUnitQuarter, field: 'volume' | 'price' | 'netPosition' | 'damPrice') {
@@ -64,5 +66,5 @@ hours = Array.from(
     quarter[field] = value;
   }
 
-  save(){}
+  save() { }
 }
