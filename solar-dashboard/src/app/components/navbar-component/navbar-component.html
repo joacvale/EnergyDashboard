@@ -20,8 +20,32 @@
   </mat-form-field>
 
   <span class="spacer"></span>
-  <button mat-button (click)="logout()" class="logout-button">
-    <mat-icon>account_circle</mat-icon>
-    Logout
+  <div class="user-menu">
+  <div class="user-avatar">
+    <mat-icon>person</mat-icon>
+  </div>
+
+  <div class="user-info">
+    <span class="user-greeting">Olá</span>
+    <span class="user-name">
+      {{ user.firstName }} {{user.lastName}}
+    </span>
+  </div>
+
+  
+  <button mat-button [matMenuTriggerFor]="userMenu">
+    <mat-icon>keyboard_arrow_down</mat-icon>
   </button>
+  </div>
+
+  
+<mat-menu #userMenu="matMenu" panelClass="user-menu-panel">
+  <button mat-menu-item
+    (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+
+</mat-menu>
+
 </mat-toolbar>

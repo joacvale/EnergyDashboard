@@ -34,3 +34,28 @@ body {
 }
 
 /* You can add global styles to this file, and also import other style files */
+.mat-mdc-menu-panel {
+  margin-top:12px;
+  border: 1px solid #d9dde5 !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.08),
+    0 2px 4px rgba(0,0,0,.04) !important;
+}
+
+.mat-mdc-menu-content {
+  padding: 8px !important;
+}
+
+.mat-mdc-menu-item {
+  color: #1f3048 !important;
+}
+
+.mat-mdc-menu-item:hover {
+  background: #f3f5f9 !important;
+}
+
+.mat-mdc-menu-item .mat-icon {
+  color: #1f3048 !important;
+}

@@ -12,11 +12,12 @@ import { SolarPanelService } from '../../services/solar-panel.service';
 import { inject } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatSelectModule, FormsModule, RouterLink, MatSidenavModule],
+  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatSelectModule, FormsModule, RouterLink, MatSidenavModule, MatMenuModule],
   templateUrl: './navbar-component.html',
   styleUrl: './navbar-component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,6 +27,7 @@ export class NavbarComponent {
   solarPanelService = inject(SolarPanelService);
   authenticationService = inject(AuthenticationService);
   router = inject(Router);
+  user = this.authenticationService.currentUser();
 
   menuClick = output<void>();
 
@@ -55,14 +57,13 @@ export class NavbarComponent {
   }
 
   allowedCountries = computed(() => {
-    const user = this.authenticationService.currentUser();
     const countries = this.solarPanelService.countryData();
 
-    if (!user) { return []; }
+    if (!this.user) { return []; }
 
-    if (user.countries.length === 0) { return countries; }
+    if (this.user.countries.length === 0) { return countries; }
 
-    return countries.filter(country => user.countries.includes(country.code));
+    return countries.filter(country => this.user.countries.includes(country.code));
   });
 
 
