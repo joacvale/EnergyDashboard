@@ -20,9 +20,21 @@
   </mat-form-field>
 
   <span class="spacer"></span>
+  
+  <div class="user-avatar">
+    <mat-icon>person</mat-icon>
+  </div>
+
+  <div class="user-info">
+    <span class="user-greeting">Olá</span>
+    <span class="user-name">
+      {{ user.firstName }} {{user.lastName}}
+    </span>
+  </div>
+
+  
   <button mat-button (click)="logout()" class="logout-button">
-    <mat-icon>account_circle</mat-icon>
-    Olá {{user.firstName}} {{user.lastName}}
-    Logout
+    
+    <mat-icon>keyboard_arrow_down</mat-icon>
   </button>
 </mat-toolbar>
