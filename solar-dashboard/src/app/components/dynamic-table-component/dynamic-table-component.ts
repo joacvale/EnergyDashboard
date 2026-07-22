@@ -60,7 +60,7 @@ export class DynamicTableComponent {
 
 
   getValue(quarter: OfferUnitQuarter, field: 'volume' | 'price' | 'netPosition' | 'damPrice') {
-    return quarter[field]?.toFixed(2);
+    return quarter[field]; //todo - add something to make trunc it to 2 decimal cases
   }
 
   setValue(quarter: OfferUnitQuarter, field: 'volume' | 'price' | 'netPosition' | 'damPrice', value: number) {

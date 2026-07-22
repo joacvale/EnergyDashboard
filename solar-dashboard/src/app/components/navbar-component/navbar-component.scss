@@ -48,9 +48,6 @@ mat-toolbar {
   padding: 6px 12px;
 
   border-radius: 999px;
-
-  background: rgba(255, 255, 255, 0.08);
-
   transition: background 0.2s ease;
 }
 
@@ -79,11 +76,6 @@ mat-toolbar {
   display: flex;
   flex-direction: column;
   line-height: 1.1;
-}
-
-.user-greeting {
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 0.75rem;
 }
 
 .user-name {
