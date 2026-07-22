@@ -180,10 +180,12 @@
   }
 
 </style>
-
+@if(this.authenticationService.authenticated()){
 <app-navbar
   (menuClick)="sidenav.toggle()">
 </app-navbar>
+}
+
 
 <mat-sidenav-container class="layout-container">
 
