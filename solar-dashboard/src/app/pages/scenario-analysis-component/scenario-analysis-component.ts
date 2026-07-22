@@ -22,11 +22,9 @@ export class ScenarioAnalysisComponent {
 
   
   constructor() {
-
     effect(() => {
     this.solarPanelService.selectedCountry();
     this.solarPanelService.loadOfferUnitsData();
-
   });
 
 }

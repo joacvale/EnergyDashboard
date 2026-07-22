@@ -60,11 +60,10 @@ export class DynamicTableComponent {
 
 
   getValue(quarter: OfferUnitQuarter, field: 'volume' | 'price' | 'netPosition' | 'damPrice') {
-    return quarter[field];
+    return quarter[field]?.toFixed(2);
   }
 
   setValue(quarter: OfferUnitQuarter, field: 'volume' | 'price' | 'netPosition' | 'damPrice', value: number) {
-
     quarter[field] = Number(value.toFixed(2));
   }
 

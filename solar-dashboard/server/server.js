@@ -248,7 +248,7 @@ quarters: [
     name: 'Portugal Solar South',
     country: 'PT',
 quarters: [
-  { quarter: 1, volume: 42.5, price: 58.2, netPosition: 12.8, damPrice: 59.0, idle: false },
+  { quarter: 1, volume: 42.5787, price: 58.2, netPosition: 12.8, damPrice: 59.0, idle: false },
   { quarter: 2, volume: 40.8, price: 57.9, idle: false },
   { quarter: 3, volume: 44.1, damPrice: 58.8, idle: false },
   { quarter: 4, idle: true },
