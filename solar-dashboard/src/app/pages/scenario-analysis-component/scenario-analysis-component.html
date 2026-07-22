@@ -1,0 +1,20 @@
+<div class="page">
+  <div class="title">
+    <h2>Scenario Analysis</h2>
+    <div class="view-toggle">
+      <button mat-button [class.view-active]="viewMode() === 'table'" (click)="showTable()">
+        Table View
+      </button>
+
+      <button mat-button [class.view-active]="viewMode() === 'chart'" (click)="showChart()">
+        Chart View
+      </button>
+    </div>
+  </div>
+  <div>
+    @for (ou of offerUnits(); track ou.id) {
+      <app-dynamic-table-component [offerUnit]="ou"/>
+    }
+  </div>
+
+</div>

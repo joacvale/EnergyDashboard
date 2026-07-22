@@ -1,0 +1,35 @@
+.page {
+  background-color: var(--mat-card-elevated-container-color, var(--mat-sys-surface-container-low));
+}
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
+  color: #1f3048;
+  padding: 24px 0px 24px;
+  box-sizing: border-box;
+}
+
+.view-toggle {
+  display: flex;
+  border: 1px solid #1f3048;
+  border-radius: 6px;
+  overflow: hidden;
+  background: white;
+}
+
+.view-toggle button {
+  min-width: 120px;
+  height: 42px;
+  background: white;
+  color: #1f3048;
+  font-weight: 600;
+  border-radius: 0;
+}
+
+.view-toggle button.view-active {
+  background: #1f3048;
+  color: white;
+}

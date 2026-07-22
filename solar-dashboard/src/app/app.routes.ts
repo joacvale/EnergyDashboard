@@ -20,6 +20,14 @@ export const routes: Routes = [
         }
     },
     {
+        path: 'analysis',
+        canActivate:[authGuard],
+        loadComponent: () => {
+            return import('./pages/scenario-analysis-component/scenario-analysis-component').then(
+                (m) => m.ScenarioAnalysisComponent);
+        }
+    },
+    {
         path: 'login',
         loadComponent: () => {
             return import('./pages/login-component/login-component').then(

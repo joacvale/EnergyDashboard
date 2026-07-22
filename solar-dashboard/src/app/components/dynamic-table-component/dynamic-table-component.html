@@ -1,0 +1,62 @@
+
+<h3>
+  {{ offerUnit()?.id }} - {{ offerUnit()?.name }}
+</h3>
+
+<div class="table-container">
+  <table class="offer-table">
+    <thead>
+      <tr>
+        <th rowspan="2">
+          Volume Buy
+        </th>
+        @for (hour of hours; track hour.label) {
+          <th
+            colspan="4"
+            class="hour-header">
+            {{ hour.label }}
+          </th>
+        }
+      </tr>
+
+      <tr>
+        @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
+          <th>
+            Q{{ ($index % 4) + 1 }}
+          </th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of tableData; track row.field) {
+        <tr>
+          <td class="field-cell">
+            {{ row.rowName }}
+          </td>
+
+          @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
+            <td>
+              <input
+                type="number"
+                step="0.01"
+                [ngModel]="getValue(quarter, row.field)"
+                (ngModelChange)="setValue(quarter, row.field, $event)">
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+
+  </table>
+</div>
+
+<div class="button-div">
+  <button mat-button class="button-save" (click)="save()">
+    Save
+  </button>
+
+</div>
+
+
+  
