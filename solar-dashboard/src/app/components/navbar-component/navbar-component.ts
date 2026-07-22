@@ -26,6 +26,7 @@ export class NavbarComponent {
   solarPanelService = inject(SolarPanelService);
   authenticationService = inject(AuthenticationService);
   router = inject(Router);
+  user = this.authenticationService.currentUser();
 
   menuClick = output<void>();
 
@@ -55,14 +56,13 @@ export class NavbarComponent {
   }
 
   allowedCountries = computed(() => {
-    const user = this.authenticationService.currentUser();
     const countries = this.solarPanelService.countryData();
 
-    if (!user) { return []; }
+    if (!this.user) { return []; }
 
-    if (user.countries.length === 0) { return countries; }
+    if (this.user.countries.length === 0) { return countries; }
 
-    return countries.filter(country => user.countries.includes(country.code));
+    return countries.filter(country => this.user.countries.includes(country.code));
   });
 
 
