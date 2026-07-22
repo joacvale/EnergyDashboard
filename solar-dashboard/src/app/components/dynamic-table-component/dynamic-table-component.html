@@ -38,7 +38,8 @@
           @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
             <td>
               <input
-                type="number"
+                appInputDirective
+                type="text"
                 step="0.01"
                 [ngModel]="getValue(quarter, row.field)"
                 (ngModelChange)="setValue(quarter, row.field, $event)">
