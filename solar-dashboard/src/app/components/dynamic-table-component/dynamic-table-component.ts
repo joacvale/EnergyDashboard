@@ -1,7 +1,7 @@
 import { Component, computed, input, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OfferUnit, OfferUnitQuarter } from '../../interfaces/offer-unit.interface';
-import { MatTableDataSource } from '@angular/material/table';
+import { InputDirective } from '../../directives/input-directive';
 
 type QuarterField =
   | 'volume'
@@ -12,7 +12,7 @@ type QuarterField =
 
 @Component({
   selector: 'app-dynamic-table-component',
-  imports: [FormsModule],
+  imports: [FormsModule, InputDirective],
   standalone: true,
   templateUrl: './dynamic-table-component.html',
   styleUrl: './dynamic-table-component.scss',
