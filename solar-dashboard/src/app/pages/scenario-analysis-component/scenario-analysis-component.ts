@@ -4,6 +4,7 @@ import { OfferUnit } from '../../interfaces/offer-unit.interface';
 import { MatTableDataSource } from '@angular/material/table';
 import { SolarPanelService } from '../../services/solar-panel.service';
 import { DynamicTableComponent } from '../../components/dynamic-table-component/dynamic-table-component';
+import { OfferUnitStore } from '../../stores/offer-unit.store';
 
 
 
@@ -16,23 +17,22 @@ import { DynamicTableComponent } from '../../components/dynamic-table-component/
 })
 export class ScenarioAnalysisComponent {
   solarPanelService = inject(SolarPanelService);
+  offerUnitStore = inject(OfferUnitStore);
 
   viewMode = signal<ViewMode>(ViewMode.TABLE);
+
+  offerUnits = this.offerUnitStore.tableData;
 
 
   
   constructor() {
     effect(() => {
     this.solarPanelService.selectedCountry();
-    this.solarPanelService.loadOfferUnitsData();
+    this.offerUnitStore.loadOfferUnits();
   });
 
 }
 
-
-  offerUnits = computed(() =>
-    this.solarPanelService.offerUnitData()
-  );
   //showTable()
   showTable() {
     this.viewMode.set(ViewMode.TABLE);

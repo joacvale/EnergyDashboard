@@ -23,9 +23,6 @@ export class SolarPanelService {
     countryData = signal<CountryData[]>([]);
     selectedCountry = signal<string>('');
 
-    offerUnitData = signal<OfferUnit[]>([]);
-
-
     authenticationService = inject(AuthenticationService);
 
     loading = signal<boolean>(false); //loading state - default false
@@ -46,7 +43,7 @@ export class SolarPanelService {
         this.loading.set(true);
 
         try {
-            const country=this.selectedCountry();
+            const country = this.selectedCountry();
 
             let params = new HttpParams();
             const response = await firstValueFrom(
@@ -77,7 +74,7 @@ export class SolarPanelService {
         this.loading.set(true);
 
         try {
-            const country=this.selectedCountry();
+            const country = this.selectedCountry();
             const response = await firstValueFrom(
                 this.http.get<ApiResponse<ProductionData[]>>(`${this.apiUrl}/production`)
             );
@@ -102,7 +99,7 @@ export class SolarPanelService {
         this.error.set(null);
         this.loading.set(true);
         try {
-            const country=this.selectedCountry();
+            const country = this.selectedCountry();
             const response = await firstValueFrom(
                 this.http.get<ApiResponse<EnergyPriceData[]>>(`${this.apiUrl}/energy-prices`)
             );
@@ -121,28 +118,10 @@ export class SolarPanelService {
         }
     }
 
-    async loadOfferUnitsData(){
-        this.error.set(null);
-        this.loading.set(true);
-        try {
-            const country=this.selectedCountry();
-            const response = await firstValueFrom(
-                this.http.get<ApiResponse<OfferUnit[]>>(`${this.apiUrl}/offerunits`)
-            );
-            const filteredData = response.data.filter(ou => ou.country === country);
-            this.offerUnitData.set(filteredData);
-        } catch (error) {
-            if (error instanceof HttpErrorResponse) {
-                this.error.set(`Server error: ${error.status} ${error.message}`);
-            } else if (error instanceof Error) {
-                this.error.set(`Error: ${error.message}`);
-            } else {
-                this.error.set('Unknown error occurred');
-            }
-        } finally {
-            this.loading.set(false);
-        }
+    getOfferUnits() {
+        return this.http.get<ApiResponse<OfferUnit[]>>(`${this.apiUrl}/offerunits`);
     }
+    
     //get all countries
     async loadCountryData() {
         this.error.set(null);
@@ -241,7 +220,7 @@ export class SolarPanelService {
         }
     }
 
-    async setCountry(countryId: string){
+    async setCountry(countryId: string) {
         this.selectedCountry.set(countryId);
         this.loadPanels();
         this.loadProductionData();
