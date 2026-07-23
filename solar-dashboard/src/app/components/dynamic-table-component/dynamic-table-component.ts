@@ -65,8 +65,11 @@ export class DynamicTableComponent {
     return quarter[field]; //todo - add something to make trunc it to 2 decimal cases
   }
 
-  setValue(quarter: OfferUnitQuarter, field: QuarterField, value: number) {
-    this.offerUnitStore.updateCell(this.offerUnit().id, quarter.quarter, field, value);
+  setValue(quarter: OfferUnitQuarter, field: QuarterField, value: string) {
+    if (!value.trim()) {
+      return;  
+    }
+    this.offerUnitStore.updateCell(this.offerUnit().id, quarter.quarter, field, Number(value));
   }
 
   save() { }

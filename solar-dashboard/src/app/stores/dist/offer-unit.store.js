@@ -91,7 +91,6 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
         }); },
         updateCell: function (offerUnitId, quarterNumber, field, value) {
             signals_1.patchState(store, {
-                loading: true,
                 error: null
             });
             try {
@@ -99,21 +98,50 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                 var offerUnit = updatedTableData.find(function (ou) { return ou.id === offerUnitId; });
                 var selectedQuarter = offerUnit === null || offerUnit === void 0 ? void 0 : offerUnit.quarters.find(function (q) { return q.quarter === quarterNumber; });
                 if (selectedQuarter) {
-                    selectedQuarter[field] = value;
+                    selectedQuarter[field] = Number(value);
                 }
                 signals_1.patchState(store, {
                     tableData: updatedTableData
                 });
-                console.log(updatedTableData);
+                this.updateEditedValues(offerUnitId, quarterNumber, field, Number(value));
             }
             catch (error) {
                 signals_1.patchState(store, {
                     error: 'Failed to update cell'
                 });
             }
-            finally {
+        },
+        updateEditedValues: function (offerUnitId, quarterNumber, field, value) {
+            signals_1.patchState(store, {
+                error: null
+            });
+            try {
+                var id = offerUnitId + '-' + quarterNumber + '-' + field;
+                var editedValues2 = structuredClone(store.editedValues());
+                var originalData = store.originalData();
+                var originalOu = originalData.find(function (ou) { return ou.id === offerUnitId; });
+                var originalQ = originalOu === null || originalOu === void 0 ? void 0 : originalOu.quarters.find(function (q) { return q.quarter === quarterNumber; });
+                console.log(originalQ);
+                console.log(value);
+                if (originalQ) {
+                    if (originalQ[field] === value) {
+                        delete editedValues2[id],
+                            signals_1.patchState(store, {
+                                editedValues: editedValues2
+                            });
+                    }
+                    else {
+                        editedValues2[id] = value;
+                        signals_1.patchState(store, {
+                            editedValues: editedValues2
+                        });
+                    }
+                }
+                console.log(editedValues2);
+            }
+            catch (error) {
                 signals_1.patchState(store, {
-                    loading: false
+                    error: 'Failed to update editedValues'
                 });
             }
         }

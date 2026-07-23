@@ -51,7 +51,10 @@ var DynamicTableComponent = /** @class */ (function () {
         return quarter[field]; //todo - add something to make trunc it to 2 decimal cases
     };
     DynamicTableComponent.prototype.setValue = function (quarter, field, value) {
-        this.offerUnitStore.updateCell(this.offerUnit().id, quarter.quarter, field, value);
+        if (!value.trim()) {
+            return;
+        }
+        this.offerUnitStore.updateCell(this.offerUnit().id, quarter.quarter, field, Number(value));
     };
     DynamicTableComponent.prototype.save = function () { };
     DynamicTableComponent = __decorate([
