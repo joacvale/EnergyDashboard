@@ -13,29 +13,25 @@ h3 {
 .offer-table {
   border-collapse: collapse;
   min-width: max-content;
-
-  th,td {
-    border: 1px solid #d0d7de;
-  }
-
-  thead th {
-    background: #1f3048;
-    color: white;
-    min-width: 90px;
-    padding: 8px;
-  }
-
-  input {
-    width: 100px;
-    padding: 6px;
-    border: none;
-    text-align: right;
-    background: transparent;
-
-    &:focus {
-      outline: 1px solid #1f3048;
-    }
-  }
+}
+.offer-table th, .offer-table td {
+  border: 1px solid #d0d7de;
+}
+.offer-table thead th {
+  background: #1f3048;
+  color: white;
+  min-width: 90px;
+  padding: 8px;
+}
+.offer-table input {
+  width: 100px;
+  padding: 6px;
+  border: none;
+  text-align: right;
+  background: transparent;
+}
+.offer-table input:focus {
+  outline: 1px solid #1f3048;
 }
 
 .hour-header,
@@ -67,7 +63,7 @@ h3 {
   display: flex;
   justify-content: flex-end;
   margin: 0 10% 40px 0;
-  gap:15px;
+  gap: 15px;
 }
 
 .buttons {
@@ -76,9 +72,10 @@ h3 {
   border: none;
   border-radius: 3px;
   cursor: pointer;
-
   background: #1f3048;
   color: white !important;
 }
 
-.edited-cell {background-color: #e8d4ff;}
+.edited-cell {
+  background-color: #e8d4ff;
+}

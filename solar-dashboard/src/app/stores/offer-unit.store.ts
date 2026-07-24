@@ -118,6 +118,23 @@ export const OfferUnitStore = signalStore(
         isCellEdited(offerUnitId:string, quarterNumber:number, field:QuarterField){
             const id = offerUnitId + '-' + quarterNumber + '-' + field;
             return id in store.editedValues();
+        },
+        clearChanges(){
+            patchState(store,{
+                error:null,
+            })
+            try{
+                patchState(store,{
+                    tableData: structuredClone(store.originalData()),
+                    editedValues:[],
+                    error:null,
+                    loading: false,
+                })
+            }catch(error){
+                patchState(store, {
+                    error:'Failed to clear changes',
+                })
+            }
         }
 
 

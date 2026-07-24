@@ -145,6 +145,24 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
         isCellEdited: function (offerUnitId, quarterNumber, field) {
             var id = offerUnitId + '-' + quarterNumber + '-' + field;
             return id in store.editedValues();
+        },
+        clearChanges: function () {
+            signals_1.patchState(store, {
+                error: null
+            });
+            try {
+                signals_1.patchState(store, {
+                    tableData: structuredClone(store.originalData()),
+                    editedValues: [],
+                    error: null,
+                    loading: false
+                });
+            }
+            catch (error) {
+                signals_1.patchState(store, {
+                    error: 'Failed to clear changes'
+                });
+            }
         }
     });
 }));
