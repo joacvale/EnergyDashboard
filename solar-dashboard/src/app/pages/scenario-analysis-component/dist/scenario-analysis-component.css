@@ -1,6 +1,7 @@
 .page {
   background-color: var(--mat-card-elevated-container-color, var(--mat-sys-surface-container-low));
 }
+
 .title {
   display: flex;
   justify-content: space-between;

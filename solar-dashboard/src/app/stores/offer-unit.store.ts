@@ -1,5 +1,5 @@
-import { inject } from '@angular/core';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { inject,computed } from '@angular/core';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { SolarPanelService } from '../services/solar-panel.service';
 import { OfferUnit } from '../interfaces/offer-unit.interface';
 import { firstValueFrom } from 'rxjs';
@@ -78,7 +78,7 @@ export const OfferUnitStore = signalStore(
                 patchState(store, {
                     error: 'Failed to update cell',
                 })
-            } 
+            }
         },
         updateEditedValues(offerUnitId: string, quarterNumber: number, field: QuarterField, value: number) {
             patchState(store, {
@@ -97,9 +97,9 @@ export const OfferUnitStore = signalStore(
                 if (originalQ) {
                     if (originalQ[field] === value) {
                         delete editedValues2[id],
-                        patchState(store, {
-                            editedValues: editedValues2,
-                        });
+                            patchState(store, {
+                                editedValues: editedValues2,
+                            });
                     } else {
                         editedValues2[id] = value
                         patchState(store, {
@@ -113,32 +113,38 @@ export const OfferUnitStore = signalStore(
                 patchState(store, {
                     error: 'Failed to update editedValues'
                 })
-            } 
+            }
         },
-        isCellEdited(offerUnitId:string, quarterNumber:number, field:QuarterField){
+        isCellEdited(offerUnitId: string, quarterNumber: number, field: QuarterField) {
             const id = offerUnitId + '-' + quarterNumber + '-' + field;
             return id in store.editedValues();
         },
-        clearChanges(){
-            patchState(store,{
-                error:null,
+        clearChanges() {
+            patchState(store, {
+                error: null,
             })
-            try{
-                patchState(store,{
+            try {
+                patchState(store, {
                     tableData: structuredClone(store.originalData()),
-                    editedValues:[],
-                    error:null,
+                    editedValues: [],
+                    error: null,
                     loading: false,
                 })
-            }catch(error){
+            } catch (error) {
                 patchState(store, {
-                    error:'Failed to clear changes',
+                    error: 'Failed to clear changes',
                 })
             }
         }
 
 
 
+    })),
+
+    withComputed((store) => ({
+        modifiedCellsCount: computed(() =>
+            Object.keys(store.editedValues()).length
+        ),
     }))
 
 

@@ -22,6 +22,7 @@ export class ScenarioAnalysisComponent {
   viewMode = signal<ViewMode>(ViewMode.TABLE);
 
   offerUnits = this.offerUnitStore.tableData;
+  modifiedCellsCount=this.offerUnitStore.modifiedCellsCount;
 
 
   
@@ -29,6 +30,7 @@ export class ScenarioAnalysisComponent {
     effect(() => {
     this.solarPanelService.selectedCountry();
     this.offerUnitStore.loadOfferUnits();
+
   });
 
 }
@@ -41,5 +43,7 @@ export class ScenarioAnalysisComponent {
   showChart() {
     this.viewMode.set(ViewMode.CHART);
   }
+
+  
 
 }

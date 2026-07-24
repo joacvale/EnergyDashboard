@@ -165,4 +165,8 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             }
         }
     });
-}));
+}), signals_1.withComputed(function (store) { return ({
+    modifiedCellsCount: core_1.computed(function () {
+        return Object.keys(store.editedValues()).length;
+    })
+}); }));
