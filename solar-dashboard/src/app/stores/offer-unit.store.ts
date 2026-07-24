@@ -93,8 +93,7 @@ export const OfferUnitStore = signalStore(
                 const originalOu = originalData.find(ou => ou.id === offerUnitId);
                 const originalQ = originalOu?.quarters.find(q => q.quarter === quarterNumber);
 
-                console.log(  originalQ);
-                console.log(  value);
+
                 if (originalQ) {
                     if (originalQ[field] === value) {
                         delete editedValues2[id],
@@ -109,13 +108,16 @@ export const OfferUnitStore = signalStore(
                     }
                 }
 
-                console.log(editedValues2)
 
             } catch (error) {
                 patchState(store, {
                     error: 'Failed to update editedValues'
                 })
             } 
+        },
+        isCellEdited(offerUnitId:string, quarterNumber:number, field:QuarterField){
+            const id = offerUnitId + '-' + quarterNumber + '-' + field;
+            return id in store.editedValues();
         }
 
 

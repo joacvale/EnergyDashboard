@@ -121,8 +121,6 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                 var originalData = store.originalData();
                 var originalOu = originalData.find(function (ou) { return ou.id === offerUnitId; });
                 var originalQ = originalOu === null || originalOu === void 0 ? void 0 : originalOu.quarters.find(function (q) { return q.quarter === quarterNumber; });
-                console.log(originalQ);
-                console.log(value);
                 if (originalQ) {
                     if (originalQ[field] === value) {
                         delete editedValues2[id],
@@ -137,13 +135,16 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                         });
                     }
                 }
-                console.log(editedValues2);
             }
             catch (error) {
                 signals_1.patchState(store, {
                     error: 'Failed to update editedValues'
                 });
             }
+        },
+        isCellEdited: function (offerUnitId, quarterNumber, field) {
+            var id = offerUnitId + '-' + quarterNumber + '-' + field;
+            return id in store.editedValues();
         }
     });
 }));

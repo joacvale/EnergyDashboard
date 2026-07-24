@@ -72,5 +72,9 @@ export class DynamicTableComponent {
     this.offerUnitStore.updateCell(this.offerUnit().id, quarter.quarter, field, Number(value));
   }
 
+  isCellEdited(quarter:OfferUnitQuarter, field:QuarterField){
+    return this.offerUnitStore.isCellEdited(this.offerUnit().id, quarter.quarter, field);
+  }
+
   save() { }
 }
