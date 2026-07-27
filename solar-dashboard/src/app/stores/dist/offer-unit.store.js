@@ -47,7 +47,7 @@ var initialState = {
     originalData: [],
     editedValues: {},
     errorValues: {},
-    loading: false,
+    loading: 'idle',
     error: null
 };
 exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1.withState(initialState), signals_1.withMethods(function (store, solarPanelService) {
@@ -59,7 +59,7 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                 switch (_a.label) {
                     case 0:
                         signals_1.patchState(store, {
-                            loading: true,
+                            loading: 'loading-offer-units',
                             error: null,
                             editedValues: {},
                             errorValues: {}
@@ -80,12 +80,15 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                     case 3:
                         error_1 = _a.sent();
                         signals_1.patchState(store, {
-                            error: 'Failed to load offer units'
+                            error: {
+                                id: "load",
+                                error: 'error loading data'
+                            }
                         });
                         return [3 /*break*/, 5];
                     case 4:
                         signals_1.patchState(store, {
-                            loading: false
+                            loading: 'idle'
                         });
                         return [7 /*endfinally*/];
                     case 5: return [2 /*return*/];
@@ -111,7 +114,10 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             }
             catch (error) {
                 signals_1.patchState(store, {
-                    error: 'Failed to update cell'
+                    error: {
+                        id: offerUnitId + '-' + quarterNumber + '-' + field,
+                        error: 'error updating data'
+                    }
                 });
             }
         },
@@ -121,28 +127,31 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             });
             try {
                 var id = offerUnitId + '-' + quarterNumber + '-' + field;
-                var editedValues2 = structuredClone(store.editedValues());
+                var editedValuesCopy = structuredClone(store.editedValues());
                 var originalData = store.originalData();
-                var originalOu = originalData.find(function (ou) { return ou.id === offerUnitId; });
-                var originalQ = originalOu === null || originalOu === void 0 ? void 0 : originalOu.quarters.find(function (q) { return q.quarter === quarterNumber; });
-                if (originalQ) {
-                    if (originalQ[field] === value) {
-                        delete editedValues2[id],
+                var originalOfferUnit = originalData.find(function (ou) { return ou.id === offerUnitId; });
+                var originalQuarter = originalOfferUnit === null || originalOfferUnit === void 0 ? void 0 : originalOfferUnit.quarters.find(function (q) { return q.quarter === quarterNumber; });
+                if (originalQuarter) {
+                    if (originalQuarter[field] === value) {
+                        delete editedValuesCopy[id],
                             signals_1.patchState(store, {
-                                editedValues: editedValues2
+                                editedValues: editedValuesCopy
                             });
                     }
                     else {
-                        editedValues2[id] = value;
+                        editedValuesCopy[id] = value;
                         signals_1.patchState(store, {
-                            editedValues: editedValues2
+                            editedValues: editedValuesCopy
                         });
                     }
                 }
             }
             catch (error) {
                 signals_1.patchState(store, {
-                    error: 'Failed to update editedValues'
+                    error: {
+                        id: offerUnitId + '-' + quarterNumber + '-' + field,
+                        error: 'error updating editedValues array'
+                    }
                 });
             }
         },
@@ -160,12 +169,15 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                     editedValues: {},
                     errorValues: {},
                     error: null,
-                    loading: false
+                    loading: 'idle'
                 });
             }
             catch (error) {
                 signals_1.patchState(store, {
-                    error: 'Failed to clear changes'
+                    error: {
+                        id: "clear",
+                        error: 'error cleaning data'
+                    }
                 });
             }
         },
@@ -173,23 +185,31 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             signals_1.patchState(store, {
                 error: null
             });
-            var id = offerUnitId + '-' + quarterNumber + '-' + field;
-            var updatedErrorValues = structuredClone(store.errorValues());
-            if (this.getError(value)) {
-                updatedErrorValues[id] = 'The value on ' + id + ' has: ' + this.getError(value);
-                console.log(updatedErrorValues);
-                signals_1.patchState(store, {
-                    errorValues: updatedErrorValues
-                });
-            }
-            else {
-                if (updatedErrorValues[id]) {
-                    delete updatedErrorValues[id];
-                    console.log(updatedErrorValues);
+            try {
+                var id = offerUnitId + '-' + quarterNumber + '-' + field;
+                var updatedErrorValues = structuredClone(store.errorValues());
+                if (this.getError(value)) {
+                    updatedErrorValues[id] = 'The value on ' + id + ' has: ' + this.getError(value);
                     signals_1.patchState(store, {
                         errorValues: updatedErrorValues
                     });
                 }
+                else {
+                    if (updatedErrorValues[id]) {
+                        delete updatedErrorValues[id];
+                        signals_1.patchState(store, {
+                            errorValues: updatedErrorValues
+                        });
+                    }
+                }
+            }
+            catch (error) {
+                signals_1.patchState(store, {
+                    error: {
+                        id: offerUnitId + '-' + quarterNumber + '-' + field,
+                        error: 'error updating errorValues array'
+                    }
+                });
             }
         },
         getError: function (value) {
