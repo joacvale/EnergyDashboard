@@ -11,12 +11,16 @@ type QuarterField =
     | 'netPosition'
     | 'damPrice';
 
+type loadingStatus=
+    | 'idle'
+    | 'loading-offer-units'
+
 export interface OfferUnitState {
     tableData: OfferUnit[];
     originalData: OfferUnit[];
     editedValues: Record<string, any>;
     errorValues: Record<string, any>;
-    loading: boolean;
+    loading: loadingStatus;
     error: string | null;
 };
 
@@ -25,7 +29,7 @@ const initialState: OfferUnitState = {
     originalData: [],
     editedValues: {},
     errorValues:{},
-    loading: false,
+    loading: 'idle',
     error: null,
 };
 
@@ -37,7 +41,7 @@ export const OfferUnitStore = signalStore(
     withMethods((store, solarPanelService = inject(SolarPanelService)) => ({
         loadOfferUnits: async () => {
             patchState(store, {
-                loading: true,
+                loading: 'loading-offer-units',
                 error: null,
                 editedValues:{},
                 errorValues:{},
@@ -59,7 +63,7 @@ export const OfferUnitStore = signalStore(
                 });
             } finally {
                 patchState(store, {
-                    loading: false,
+                    loading: 'idle',
                 });
             }
         },
@@ -130,7 +134,7 @@ export const OfferUnitStore = signalStore(
                     editedValues: {},
                     errorValues: {},
                     error: null,
-                    loading: false,
+                    loading: 'idle',
                 })
             } catch (error) {
                 patchState(store, {

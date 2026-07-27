@@ -47,7 +47,7 @@ var initialState = {
     originalData: [],
     editedValues: {},
     errorValues: {},
-    loading: false,
+    loading: 'idle',
     error: null
 };
 exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1.withState(initialState), signals_1.withMethods(function (store, solarPanelService) {
@@ -59,7 +59,7 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                 switch (_a.label) {
                     case 0:
                         signals_1.patchState(store, {
-                            loading: true,
+                            loading: 'loading-offer-units',
                             error: null,
                             editedValues: {},
                             errorValues: {}
@@ -85,7 +85,7 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                         return [3 /*break*/, 5];
                     case 4:
                         signals_1.patchState(store, {
-                            loading: false
+                            loading: 'idle'
                         });
                         return [7 /*endfinally*/];
                     case 5: return [2 /*return*/];
@@ -160,7 +160,7 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                     editedValues: {},
                     errorValues: {},
                     error: null,
-                    loading: false
+                    loading: 'idle'
                 });
             }
             catch (error) {
