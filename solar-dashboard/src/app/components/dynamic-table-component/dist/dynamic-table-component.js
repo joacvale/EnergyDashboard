@@ -59,8 +59,8 @@ var DynamicTableComponent = /** @class */ (function () {
     DynamicTableComponent.prototype.isCellEdited = function (quarter, field) {
         return this.offerUnitStore.isCellEdited(this.offerUnit().id, quarter.quarter, field);
     };
-    DynamicTableComponent.prototype.clear = function () {
-        this.offerUnitStore.clearChanges();
+    DynamicTableComponent.prototype.clear = function (offerUnitId) {
+        this.offerUnitStore.clearChanges(offerUnitId);
     };
     DynamicTableComponent.prototype.save = function () { };
     DynamicTableComponent = __decorate([

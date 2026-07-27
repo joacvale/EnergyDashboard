@@ -148,25 +148,42 @@ export const OfferUnitStore = signalStore(
             const id = offerUnitId + '-' + quarterNumber + '-' + field;
             return id in store.editedValues();
         },
-        clearChanges() {
-            patchState(store, {
-                error: null,
-            })
+        clearChanges(offerUnitId: string) {
             try {
+                const updatedTableData =structuredClone(store.tableData());
+                const originalOfferUnit =store.originalData().find(ou => ou.id === offerUnitId);
+                
+                const index = updatedTableData.findIndex(ou => ou.id === offerUnitId);
+                if (index >= 0 && originalOfferUnit) {
+                    updatedTableData[index] = structuredClone(originalOfferUnit);
+                }
+
+                const editedValuesCopy = structuredClone(store.editedValues());
+                Object.keys(editedValuesCopy).forEach(key => {
+                        if (key.startsWith(`${offerUnitId}-`)) {
+                            delete editedValuesCopy[key];
+                        }
+                    });
+
+                const errorValuesCopy = structuredClone(store.errorValues());
+                Object.keys(errorValuesCopy).forEach(key => {
+                        if (key.startsWith(`${offerUnitId}-`)) {
+                            delete errorValuesCopy[key];
+                        }
+                    });
+
                 patchState(store, {
-                    tableData: structuredClone(store.originalData()),
-                    editedValues: {},
-                    errorValues: {},
-                    error: null,
-                    loading: 'idle',
-                })
-            } catch (error) {
+                    tableData: updatedTableData,
+                    editedValues: editedValuesCopy,
+                    errorValues: errorValuesCopy
+                });
+            } catch {
                 patchState(store, {
                     error: {
-                        id: "clear",
-                        error: 'error cleaning data',
+                        id: 'clear',
+                        error: 'error cleaning data'
                     }
-                })
+                });
             }
         },
         updateErrorValues(offerUnitId: string, quarterNumber: number, field: QuarterField, value: number) {
@@ -189,7 +206,7 @@ export const OfferUnitStore = signalStore(
                         });
                     }
                 }
-            } catch(error){
+            } catch (error) {
                 patchState(store, {
                     error: {
                         id: offerUnitId + '-' + quarterNumber + '-' + field,
@@ -197,7 +214,7 @@ export const OfferUnitStore = signalStore(
                     }
                 })
             }
-            
+
 
         },
         getError(value: number) {

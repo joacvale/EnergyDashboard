@@ -159,23 +159,36 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             var id = offerUnitId + '-' + quarterNumber + '-' + field;
             return id in store.editedValues();
         },
-        clearChanges: function () {
-            signals_1.patchState(store, {
-                error: null
-            });
+        clearChanges: function (offerUnitId) {
             try {
+                var updatedTableData = structuredClone(store.tableData());
+                var originalOfferUnit = store.originalData().find(function (ou) { return ou.id === offerUnitId; });
+                var index = updatedTableData.findIndex(function (ou) { return ou.id === offerUnitId; });
+                if (index >= 0 && originalOfferUnit) {
+                    updatedTableData[index] = structuredClone(originalOfferUnit);
+                }
+                var editedValuesCopy_1 = structuredClone(store.editedValues());
+                Object.keys(editedValuesCopy_1).forEach(function (key) {
+                    if (key.startsWith(offerUnitId + "-")) {
+                        delete editedValuesCopy_1[key];
+                    }
+                });
+                var errorValuesCopy_1 = structuredClone(store.errorValues());
+                Object.keys(errorValuesCopy_1).forEach(function (key) {
+                    if (key.startsWith(offerUnitId + "-")) {
+                        delete errorValuesCopy_1[key];
+                    }
+                });
                 signals_1.patchState(store, {
-                    tableData: structuredClone(store.originalData()),
-                    editedValues: {},
-                    errorValues: {},
-                    error: null,
-                    loading: 'idle'
+                    tableData: updatedTableData,
+                    editedValues: editedValuesCopy_1,
+                    errorValues: errorValuesCopy_1
                 });
             }
-            catch (error) {
+            catch (_a) {
                 signals_1.patchState(store, {
                     error: {
-                        id: "clear",
+                        id: 'clear',
                         error: 'error cleaning data'
                     }
                 });
