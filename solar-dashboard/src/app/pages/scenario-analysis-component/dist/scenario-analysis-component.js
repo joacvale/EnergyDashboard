@@ -20,7 +20,7 @@ var ScenarioAnalysisComponent = /** @class */ (function () {
         this.viewMode = core_1.signal(enums_1.ViewMode.TABLE);
         this.offerUnits = this.offerUnitStore.tableData;
         this.modifiedCellsCount = this.offerUnitStore.modifiedCellsCount;
-        this.errorCellsCount = this.offerUnitStore.errorCellsCount;
+        this.errorMessages = this.offerUnitStore.getErrorMessages;
         core_1.effect(function () {
             _this.solarPanelService.selectedCountry();
             _this.offerUnitStore.loadOfferUnits();

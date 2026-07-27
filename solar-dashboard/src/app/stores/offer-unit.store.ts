@@ -127,8 +127,8 @@ export const OfferUnitStore = signalStore(
             try {
                 patchState(store, {
                     tableData: structuredClone(store.originalData()),
-                    editedValues: [],
-                    errorValues: [],
+                    editedValues: {},
+                    errorValues: {},
                     error: null,
                     loading: false,
                 })
@@ -144,8 +144,8 @@ export const OfferUnitStore = signalStore(
             });
             const id= offerUnitId+'-'+quarterNumber+'-'+field;
             const updatedErrorValues = structuredClone(store.errorValues())
-            if(this.hasError(value)){
-                updatedErrorValues[id]=value;
+            if(this.getError(value)){
+                updatedErrorValues[id]='The value on '+id+' has: '+ this.getError(value);
 
                 console.log(updatedErrorValues);
                 patchState(store,{
@@ -162,11 +162,9 @@ export const OfferUnitStore = signalStore(
             }
 
         },
-        hasError(value:number){
-            console.log('hasError -'+ value);
-            console.log(value>99999.99);
+        getError(value:number){
             if(value>99999.99){
-                return true;
+                return "6 or more characters";
             }
             return false;
         }
@@ -176,8 +174,8 @@ export const OfferUnitStore = signalStore(
         modifiedCellsCount: computed(() =>
             Object.keys(store.editedValues()).length
         ),
-        errorCellsCount: computed(()=>
-            Object.keys(store.errorValues()).length
+        getErrorMessages: computed(()=>
+            Object.values(store.errorValues())
         ),
     }))
 

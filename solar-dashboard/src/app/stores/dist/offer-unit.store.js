@@ -157,8 +157,8 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             try {
                 signals_1.patchState(store, {
                     tableData: structuredClone(store.originalData()),
-                    editedValues: [],
-                    errorValues: [],
+                    editedValues: {},
+                    errorValues: {},
                     error: null,
                     loading: false
                 });
@@ -175,8 +175,8 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             });
             var id = offerUnitId + '-' + quarterNumber + '-' + field;
             var updatedErrorValues = structuredClone(store.errorValues());
-            if (this.hasError(value)) {
-                updatedErrorValues[id] = value;
+            if (this.getError(value)) {
+                updatedErrorValues[id] = 'The value on ' + id + ' has: ' + this.getError(value);
                 console.log(updatedErrorValues);
                 signals_1.patchState(store, {
                     errorValues: updatedErrorValues
@@ -192,11 +192,9 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                 }
             }
         },
-        hasError: function (value) {
-            console.log('hasError -' + value);
-            console.log(value > 99999.99);
+        getError: function (value) {
             if (value > 99999.99) {
-                return true;
+                return "6 or more characters";
             }
             return false;
         }
@@ -205,7 +203,7 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
     modifiedCellsCount: core_1.computed(function () {
         return Object.keys(store.editedValues()).length;
     }),
-    errorCellsCount: core_1.computed(function () {
-        return Object.keys(store.errorValues()).length;
+    getErrorMessages: core_1.computed(function () {
+        return Object.values(store.errorValues());
     })
 }); }));

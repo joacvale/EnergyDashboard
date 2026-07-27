@@ -22,8 +22,9 @@ export class ScenarioAnalysisComponent {
   viewMode = signal<ViewMode>(ViewMode.TABLE);
 
   offerUnits = this.offerUnitStore.tableData;
-  modifiedCellsCount=this.offerUnitStore.modifiedCellsCount;
-  errorCellsCount=this.offerUnitStore.errorCellsCount;
+  modifiedCellsCount = this.offerUnitStore.modifiedCellsCount;
+  errorMessages = this.offerUnitStore.getErrorMessages;
+
 
 
   

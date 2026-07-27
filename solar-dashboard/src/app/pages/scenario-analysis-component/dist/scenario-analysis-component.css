@@ -52,3 +52,19 @@
   background-color: #f44336;
   color: white;
 }
+
+.status-title {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.error-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.error-list li {
+  margin: 4px 0;
+}
