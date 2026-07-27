@@ -46,6 +46,7 @@ var initialState = {
     tableData: [],
     originalData: [],
     editedValues: {},
+    errorValues: {},
     loading: false,
     error: null
 };
@@ -59,7 +60,9 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                     case 0:
                         signals_1.patchState(store, {
                             loading: true,
-                            error: null
+                            error: null,
+                            editedValues: {},
+                            errorValues: {}
                         });
                         _a.label = 1;
                     case 1:
@@ -104,6 +107,7 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                     tableData: updatedTableData
                 });
                 this.updateEditedValues(offerUnitId, quarterNumber, field, Number(value));
+                this.updateErrorValues(offerUnitId, quarterNumber, field, value);
             }
             catch (error) {
                 signals_1.patchState(store, {
@@ -154,6 +158,7 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                 signals_1.patchState(store, {
                     tableData: structuredClone(store.originalData()),
                     editedValues: [],
+                    errorValues: [],
                     error: null,
                     loading: false
                 });
@@ -163,10 +168,44 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                     error: 'Failed to clear changes'
                 });
             }
+        },
+        updateErrorValues: function (offerUnitId, quarterNumber, field, value) {
+            signals_1.patchState(store, {
+                error: null
+            });
+            var id = offerUnitId + '-' + quarterNumber + '-' + field;
+            var updatedErrorValues = structuredClone(store.errorValues());
+            if (this.hasError(value)) {
+                updatedErrorValues[id] = value;
+                console.log(updatedErrorValues);
+                signals_1.patchState(store, {
+                    errorValues: updatedErrorValues
+                });
+            }
+            else {
+                if (updatedErrorValues[id]) {
+                    delete updatedErrorValues[id];
+                    console.log(updatedErrorValues);
+                    signals_1.patchState(store, {
+                        errorValues: updatedErrorValues
+                    });
+                }
+            }
+        },
+        hasError: function (value) {
+            console.log('hasError -' + value);
+            console.log(value > 99999.99);
+            if (value > 99999.99) {
+                return true;
+            }
+            return false;
         }
     });
 }), signals_1.withComputed(function (store) { return ({
     modifiedCellsCount: core_1.computed(function () {
         return Object.keys(store.editedValues()).length;
+    }),
+    errorCellsCount: core_1.computed(function () {
+        return Object.keys(store.errorValues()).length;
     })
 }); }));

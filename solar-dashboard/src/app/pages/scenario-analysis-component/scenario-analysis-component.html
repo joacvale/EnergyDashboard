@@ -1,9 +1,16 @@
 @if (this.modifiedCellsCount() > 0) {
-  <div class="status-bar success">
-    <span>Fez {{this.modifiedCellsCount()}} alterações - clique no botão salvar para guardar</span>
-  </div>
+  @if(this.errorCellsCount()===0){
+    <div class="status-bar success">
+      <span>Fez {{this.modifiedCellsCount()}} alterações - clique no botão salvar para guardar</span>
+    </div>
+  }@else{
+    <div class="status-bar error">
+      <span>Fez {{this.modifiedCellsCount()}} alterações - corrija os erros para guardar</span>
+      <span>Tem {{this.errorCellsCount()}} erros</span>
+    </div>
+  }
 
-  
+
 }
 
 <div class="page">
@@ -21,7 +28,7 @@
   </div>
   <div>
     @for (ou of offerUnits() ; track ou.id) {
-      <app-dynamic-table-component [offerUnit]="ou"/>
+    <app-dynamic-table-component [offerUnit]="ou" />
     }
   </div>
 

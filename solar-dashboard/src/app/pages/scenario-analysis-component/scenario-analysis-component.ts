@@ -23,6 +23,7 @@ export class ScenarioAnalysisComponent {
 
   offerUnits = this.offerUnitStore.tableData;
   modifiedCellsCount=this.offerUnitStore.modifiedCellsCount;
+  errorCellsCount=this.offerUnitStore.errorCellsCount;
 
 
   

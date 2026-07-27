@@ -15,6 +15,7 @@ export interface OfferUnitState {
     tableData: OfferUnit[];
     originalData: OfferUnit[];
     editedValues: Record<string, any>;
+    errorValues: Record<string, any>;
     loading: boolean;
     error: string | null;
 };
@@ -23,6 +24,7 @@ const initialState: OfferUnitState = {
     tableData: [],
     originalData: [],
     editedValues: {},
+    errorValues:{},
     loading: false,
     error: null,
 };
@@ -36,7 +38,9 @@ export const OfferUnitStore = signalStore(
         loadOfferUnits: async () => {
             patchState(store, {
                 loading: true,
-                error: null
+                error: null,
+                editedValues:{},
+                errorValues:{},
             });
 
             try {
@@ -74,6 +78,7 @@ export const OfferUnitStore = signalStore(
                     tableData: updatedTableData
                 });
                 this.updateEditedValues(offerUnitId, quarterNumber, field, Number(value));
+                this.updateErrorValues(offerUnitId,quarterNumber, field,value);
             } catch (error) {
                 patchState(store, {
                     error: 'Failed to update cell',
@@ -88,18 +93,16 @@ export const OfferUnitStore = signalStore(
                 const id = offerUnitId + '-' + quarterNumber + '-' + field;
                 const editedValues2 = structuredClone(store.editedValues());
 
-
                 const originalData = store.originalData();
                 const originalOu = originalData.find(ou => ou.id === offerUnitId);
                 const originalQ = originalOu?.quarters.find(q => q.quarter === quarterNumber);
 
-
                 if (originalQ) {
                     if (originalQ[field] === value) {
                         delete editedValues2[id],
-                            patchState(store, {
-                                editedValues: editedValues2,
-                            });
+                        patchState(store, {
+                            editedValues: editedValues2,
+                        });
                     } else {
                         editedValues2[id] = value
                         patchState(store, {
@@ -107,8 +110,6 @@ export const OfferUnitStore = signalStore(
                         });
                     }
                 }
-
-
             } catch (error) {
                 patchState(store, {
                     error: 'Failed to update editedValues'
@@ -127,6 +128,7 @@ export const OfferUnitStore = signalStore(
                 patchState(store, {
                     tableData: structuredClone(store.originalData()),
                     editedValues: [],
+                    errorValues: [],
                     error: null,
                     loading: false,
                 })
@@ -135,15 +137,47 @@ export const OfferUnitStore = signalStore(
                     error: 'Failed to clear changes',
                 })
             }
+        },
+        updateErrorValues(offerUnitId: string, quarterNumber: number, field: QuarterField, value: number){
+            patchState(store,{
+                error:null,
+            });
+            const id= offerUnitId+'-'+quarterNumber+'-'+field;
+            const updatedErrorValues = structuredClone(store.errorValues())
+            if(this.hasError(value)){
+                updatedErrorValues[id]=value;
+
+                console.log(updatedErrorValues);
+                patchState(store,{
+                    errorValues:updatedErrorValues
+                })
+            }else{
+                if(updatedErrorValues[id]){
+                    delete updatedErrorValues[id];
+                    console.log(updatedErrorValues);
+                    patchState(store, {
+                        errorValues:updatedErrorValues,
+                    });
+                }
+            }
+
+        },
+        hasError(value:number){
+            console.log('hasError -'+ value);
+            console.log(value>99999.99);
+            if(value>99999.99){
+                return true;
+            }
+            return false;
         }
-
-
-
     })),
 
     withComputed((store) => ({
         modifiedCellsCount: computed(() =>
             Object.keys(store.editedValues()).length
+        ),
+        errorCellsCount: computed(()=>
+            Object.keys(store.errorValues()).length
         ),
     }))
 
