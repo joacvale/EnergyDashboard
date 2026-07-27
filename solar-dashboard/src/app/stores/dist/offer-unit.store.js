@@ -121,21 +121,21 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             });
             try {
                 var id = offerUnitId + '-' + quarterNumber + '-' + field;
-                var editedValues2 = structuredClone(store.editedValues());
+                var editedValuesCopy = structuredClone(store.editedValues());
                 var originalData = store.originalData();
-                var originalOu = originalData.find(function (ou) { return ou.id === offerUnitId; });
-                var originalQ = originalOu === null || originalOu === void 0 ? void 0 : originalOu.quarters.find(function (q) { return q.quarter === quarterNumber; });
-                if (originalQ) {
-                    if (originalQ[field] === value) {
-                        delete editedValues2[id],
+                var originalOfferUnit = originalData.find(function (ou) { return ou.id === offerUnitId; });
+                var originalQuarter = originalOfferUnit === null || originalOfferUnit === void 0 ? void 0 : originalOfferUnit.quarters.find(function (q) { return q.quarter === quarterNumber; });
+                if (originalQuarter) {
+                    if (originalQuarter[field] === value) {
+                        delete editedValuesCopy[id],
                             signals_1.patchState(store, {
-                                editedValues: editedValues2
+                                editedValues: editedValuesCopy
                             });
                     }
                     else {
-                        editedValues2[id] = value;
+                        editedValuesCopy[id] = value;
                         signals_1.patchState(store, {
-                            editedValues: editedValues2
+                            editedValues: editedValuesCopy
                         });
                     }
                 }
@@ -177,7 +177,6 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             var updatedErrorValues = structuredClone(store.errorValues());
             if (this.getError(value)) {
                 updatedErrorValues[id] = 'The value on ' + id + ' has: ' + this.getError(value);
-                console.log(updatedErrorValues);
                 signals_1.patchState(store, {
                     errorValues: updatedErrorValues
                 });
@@ -185,7 +184,6 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             else {
                 if (updatedErrorValues[id]) {
                     delete updatedErrorValues[id];
-                    console.log(updatedErrorValues);
                     signals_1.patchState(store, {
                         errorValues: updatedErrorValues
                     });

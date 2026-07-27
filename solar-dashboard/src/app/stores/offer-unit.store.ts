@@ -91,22 +91,22 @@ export const OfferUnitStore = signalStore(
             })
             try {
                 const id = offerUnitId + '-' + quarterNumber + '-' + field;
-                const editedValues2 = structuredClone(store.editedValues());
+                const editedValuesCopy = structuredClone(store.editedValues());
 
                 const originalData = store.originalData();
-                const originalOu = originalData.find(ou => ou.id === offerUnitId);
-                const originalQ = originalOu?.quarters.find(q => q.quarter === quarterNumber);
+                const originalOfferUnit = originalData.find(ou => ou.id === offerUnitId);
+                const originalQuarter = originalOfferUnit?.quarters.find(q => q.quarter === quarterNumber);
 
-                if (originalQ) {
-                    if (originalQ[field] === value) {
-                        delete editedValues2[id],
+                if (originalQuarter) {
+                    if (originalQuarter[field] === value) {
+                        delete editedValuesCopy[id],
                         patchState(store, {
-                            editedValues: editedValues2,
+                            editedValues: editedValuesCopy,
                         });
                     } else {
-                        editedValues2[id] = value
+                        editedValuesCopy[id] = value
                         patchState(store, {
-                            editedValues: editedValues2,
+                            editedValues: editedValuesCopy,
                         });
                     }
                 }
@@ -146,15 +146,12 @@ export const OfferUnitStore = signalStore(
             const updatedErrorValues = structuredClone(store.errorValues())
             if(this.getError(value)){
                 updatedErrorValues[id]='The value on '+id+' has: '+ this.getError(value);
-
-                console.log(updatedErrorValues);
                 patchState(store,{
                     errorValues:updatedErrorValues
                 })
             }else{
                 if(updatedErrorValues[id]){
                     delete updatedErrorValues[id];
-                    console.log(updatedErrorValues);
                     patchState(store, {
                         errorValues:updatedErrorValues,
                     });
