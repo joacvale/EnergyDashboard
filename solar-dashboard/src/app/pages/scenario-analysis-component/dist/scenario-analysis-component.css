@@ -1,6 +1,7 @@
 .page {
   background-color: var(--mat-card-elevated-container-color, var(--mat-sys-surface-container-low));
 }
+
 .title {
   display: flex;
   justify-content: space-between;
@@ -51,6 +52,7 @@
   background-color: #f44336;
   color: white;
 }
+
 .status-title {
   display: block;
   margin-bottom: 8px;

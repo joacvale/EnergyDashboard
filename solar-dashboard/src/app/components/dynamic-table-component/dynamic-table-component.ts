@@ -1,7 +1,8 @@
-import { Component, computed, input, effect } from '@angular/core';
+import { Component, computed, input, effect, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OfferUnit, OfferUnitQuarter } from '../../interfaces/offer-unit.interface';
 import { InputDirective } from '../../directives/input-directive';
+import { OfferUnitStore } from '../../stores/offer-unit.store';
 
 type QuarterField =
   | 'volume'
@@ -20,6 +21,7 @@ type QuarterField =
 
 export class DynamicTableComponent {
   offerUnit = input.required<OfferUnit>();
+  offerUnitStore = inject(OfferUnitStore);
 
   tableData: {
     rowName: string;
@@ -59,13 +61,23 @@ export class DynamicTableComponent {
   );
 
 
-  getValue(quarter: OfferUnitQuarter, field: 'volume' | 'price' | 'netPosition' | 'damPrice') {
+  getValue(quarter: OfferUnitQuarter, field: QuarterField) {
     return quarter[field]; //todo - add something to make trunc it to 2 decimal cases
   }
 
-  setValue(quarter: OfferUnitQuarter, field: 'volume' | 'price' | 'netPosition' | 'damPrice', value: number) {
-    quarter[field] = Number(value.toFixed(2));
+  setValue(quarter: OfferUnitQuarter, field: QuarterField, value: string) {
+    if (!value.trim()) {
+      return;  
+    }
+    this.offerUnitStore.updateCell(this.offerUnit().id, quarter.quarter, field, Number(value));
   }
 
+  isCellEdited(quarter:OfferUnitQuarter, field:QuarterField){
+    return this.offerUnitStore.isCellEdited(this.offerUnit().id, quarter.quarter, field);
+  }
+
+  clear(){
+    this.offerUnitStore.clearChanges();
+  }
   save() { }
 }

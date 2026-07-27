@@ -1,3 +1,28 @@
+@if (this.modifiedCellsCount() > 0) {
+@if(this.errorMessages().length===0){
+<div class="status-bar success">
+  <span>You made {{this.modifiedCellsCount()}} changes - click on save in order to don't loose anything</span>
+</div>
+}@else{
+<div class="status-bar error">
+
+  <span class="status-title">
+    You have {{ modifiedCellsCount() }} unsaved changes.
+    Please resolve the following validation errors:
+  </span>
+
+  <ul class="error-list">
+    @for (er of errorMessages(); track er) {
+    <li>{{ er }}</li>
+    }
+  </ul>
+
+</div>
+}
+
+
+}
+
 <div class="page">
   <div class="title">
     <h2>Scenario Analysis</h2>
@@ -12,8 +37,8 @@
     </div>
   </div>
   <div>
-    @for (ou of offerUnits(); track ou.id) {
-      <app-dynamic-table-component [offerUnit]="ou"/>
+    @for (ou of offerUnits() ; track ou.id) {
+    <app-dynamic-table-component [offerUnit]="ou" />
     }
   </div>
 
