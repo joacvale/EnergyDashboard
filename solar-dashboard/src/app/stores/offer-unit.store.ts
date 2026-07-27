@@ -1,4 +1,4 @@
-import { inject,computed } from '@angular/core';
+import { inject, computed } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { SolarPanelService } from '../services/solar-panel.service';
 import { OfferUnit } from '../interfaces/offer-unit.interface';
@@ -11,9 +11,23 @@ type QuarterField =
     | 'netPosition'
     | 'damPrice';
 
-type loadingStatus=
+type loadingStatus =
     | 'idle'
-    | 'loading-offer-units'
+    | 'loading-offer-units';
+
+type errorType =
+    | 'error loading data'
+    | 'error updating data'
+    | 'error cleaning data'
+    | 'error updating editedValues array'
+    | 'error updating errorValues array'
+    | 'error unknown'
+
+export interface error {
+    id: string;
+    error: errorType;
+}
+
 
 export interface OfferUnitState {
     tableData: OfferUnit[];
@@ -21,14 +35,14 @@ export interface OfferUnitState {
     editedValues: Record<string, any>;
     errorValues: Record<string, any>;
     loading: loadingStatus;
-    error: string | null;
+    error: error | null;
 };
 
 const initialState: OfferUnitState = {
     tableData: [],
     originalData: [],
     editedValues: {},
-    errorValues:{},
+    errorValues: {},
     loading: 'idle',
     error: null,
 };
@@ -43,8 +57,8 @@ export const OfferUnitStore = signalStore(
             patchState(store, {
                 loading: 'loading-offer-units',
                 error: null,
-                editedValues:{},
-                errorValues:{},
+                editedValues: {},
+                errorValues: {},
             });
 
             try {
@@ -59,7 +73,10 @@ export const OfferUnitStore = signalStore(
                 });
             } catch (error) {
                 patchState(store, {
-                    error: 'Failed to load offer units',
+                    error: {
+                        id: "load",
+                        error: 'error loading data',
+                    }
                 });
             } finally {
                 patchState(store, {
@@ -82,10 +99,14 @@ export const OfferUnitStore = signalStore(
                     tableData: updatedTableData
                 });
                 this.updateEditedValues(offerUnitId, quarterNumber, field, Number(value));
-                this.updateErrorValues(offerUnitId,quarterNumber, field,value);
+                this.updateErrorValues(offerUnitId, quarterNumber, field, value);
             } catch (error) {
                 patchState(store, {
-                    error: 'Failed to update cell',
+                    error: {
+                        id: offerUnitId + '-' + quarterNumber + '-' + field,
+                        error: 'error updating data',
+
+                    }
                 })
             }
         },
@@ -104,9 +125,9 @@ export const OfferUnitStore = signalStore(
                 if (originalQuarter) {
                     if (originalQuarter[field] === value) {
                         delete editedValuesCopy[id],
-                        patchState(store, {
-                            editedValues: editedValuesCopy,
-                        });
+                            patchState(store, {
+                                editedValues: editedValuesCopy,
+                            });
                     } else {
                         editedValuesCopy[id] = value
                         patchState(store, {
@@ -116,7 +137,10 @@ export const OfferUnitStore = signalStore(
                 }
             } catch (error) {
                 patchState(store, {
-                    error: 'Failed to update editedValues'
+                    error: {
+                        id: offerUnitId + '-' + quarterNumber + '-' + field,
+                        error: 'error updating editedValues array'
+                    }
                 })
             }
         },
@@ -138,33 +162,46 @@ export const OfferUnitStore = signalStore(
                 })
             } catch (error) {
                 patchState(store, {
-                    error: 'Failed to clear changes',
+                    error: {
+                        id: "clear",
+                        error: 'error cleaning data',
+                    }
                 })
             }
         },
-        updateErrorValues(offerUnitId: string, quarterNumber: number, field: QuarterField, value: number){
-            patchState(store,{
-                error:null,
+        updateErrorValues(offerUnitId: string, quarterNumber: number, field: QuarterField, value: number) {
+            patchState(store, {
+                error: null,
             });
-            const id= offerUnitId+'-'+quarterNumber+'-'+field;
-            const updatedErrorValues = structuredClone(store.errorValues())
-            if(this.getError(value)){
-                updatedErrorValues[id]='The value on '+id+' has: '+ this.getError(value);
-                patchState(store,{
-                    errorValues:updatedErrorValues
-                })
-            }else{
-                if(updatedErrorValues[id]){
-                    delete updatedErrorValues[id];
+            try {
+                const id = offerUnitId + '-' + quarterNumber + '-' + field;
+                const updatedErrorValues = structuredClone(store.errorValues())
+                if (this.getError(value)) {
+                    updatedErrorValues[id] = 'The value on ' + id + ' has: ' + this.getError(value);
                     patchState(store, {
-                        errorValues:updatedErrorValues,
-                    });
+                        errorValues: updatedErrorValues
+                    })
+                } else {
+                    if (updatedErrorValues[id]) {
+                        delete updatedErrorValues[id];
+                        patchState(store, {
+                            errorValues: updatedErrorValues,
+                        });
+                    }
                 }
+            } catch(error){
+                patchState(store, {
+                    error: {
+                        id: offerUnitId + '-' + quarterNumber + '-' + field,
+                        error: 'error updating errorValues array',
+                    }
+                })
             }
+            
 
         },
-        getError(value:number){
-            if(value>99999.99){
+        getError(value: number) {
+            if (value > 99999.99) {
                 return "6 or more characters";
             }
             return false;
@@ -175,7 +212,7 @@ export const OfferUnitStore = signalStore(
         modifiedCellsCount: computed(() =>
             Object.keys(store.editedValues()).length
         ),
-        getErrorMessages: computed(()=>
+        getErrorMessages: computed(() =>
             Object.values(store.errorValues())
         ),
     }))

@@ -80,7 +80,10 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
                     case 3:
                         error_1 = _a.sent();
                         signals_1.patchState(store, {
-                            error: 'Failed to load offer units'
+                            error: {
+                                id: "load",
+                                error: 'error loading data'
+                            }
                         });
                         return [3 /*break*/, 5];
                     case 4:
@@ -111,7 +114,10 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             }
             catch (error) {
                 signals_1.patchState(store, {
-                    error: 'Failed to update cell'
+                    error: {
+                        id: offerUnitId + '-' + quarterNumber + '-' + field,
+                        error: 'error updating data'
+                    }
                 });
             }
         },
@@ -142,7 +148,10 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             }
             catch (error) {
                 signals_1.patchState(store, {
-                    error: 'Failed to update editedValues'
+                    error: {
+                        id: offerUnitId + '-' + quarterNumber + '-' + field,
+                        error: 'error updating editedValues array'
+                    }
                 });
             }
         },
@@ -165,7 +174,10 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             }
             catch (error) {
                 signals_1.patchState(store, {
-                    error: 'Failed to clear changes'
+                    error: {
+                        id: "clear",
+                        error: 'error cleaning data'
+                    }
                 });
             }
         },
@@ -173,21 +185,31 @@ exports.OfferUnitStore = signals_1.signalStore({ providedIn: 'root' }, signals_1
             signals_1.patchState(store, {
                 error: null
             });
-            var id = offerUnitId + '-' + quarterNumber + '-' + field;
-            var updatedErrorValues = structuredClone(store.errorValues());
-            if (this.getError(value)) {
-                updatedErrorValues[id] = 'The value on ' + id + ' has: ' + this.getError(value);
-                signals_1.patchState(store, {
-                    errorValues: updatedErrorValues
-                });
-            }
-            else {
-                if (updatedErrorValues[id]) {
-                    delete updatedErrorValues[id];
+            try {
+                var id = offerUnitId + '-' + quarterNumber + '-' + field;
+                var updatedErrorValues = structuredClone(store.errorValues());
+                if (this.getError(value)) {
+                    updatedErrorValues[id] = 'The value on ' + id + ' has: ' + this.getError(value);
                     signals_1.patchState(store, {
                         errorValues: updatedErrorValues
                     });
                 }
+                else {
+                    if (updatedErrorValues[id]) {
+                        delete updatedErrorValues[id];
+                        signals_1.patchState(store, {
+                            errorValues: updatedErrorValues
+                        });
+                    }
+                }
+            }
+            catch (error) {
+                signals_1.patchState(store, {
+                    error: {
+                        id: offerUnitId + '-' + quarterNumber + '-' + field,
+                        error: 'error updating errorValues array'
+                    }
+                });
             }
         },
         getError: function (value) {
