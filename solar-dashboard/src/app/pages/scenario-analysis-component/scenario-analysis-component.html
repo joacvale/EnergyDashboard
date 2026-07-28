@@ -13,7 +13,14 @@
 
   <ul class="error-list">
     @for (er of errorMessages(); track er) {
-    <li>{{ er }}</li>
+      <div class="error-line">
+        <li>{{ er.message }}</li>
+        <button mat-button (click)="showError(er.id)">
+          <mat-icon>
+            visibility
+          </mat-icon>
+        </button>
+      </div>
     }
   </ul>
 

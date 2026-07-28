@@ -29,7 +29,7 @@ export interface OfferUnitState {
     tableData: OfferUnit[];
     originalData: OfferUnit[];
     editedValues: Record<string, any>;
-    errorValues: Record<string, any>;
+    errorValues: Record<string, {id: string; message: string;}>;
     selectedCells: Cell[];
     loading: loadingStatus;
     error: error | null;
@@ -191,16 +191,16 @@ export const OfferUnitStore = signalStore(
                 error: null,
             });
             try {
-                const id = cell.id;
                 const updatedErrorValues = structuredClone(store.errorValues())
                 if (this.getError(Number(cell.value))) {
-                    updatedErrorValues[id] = 'The value on ' + id + ' has: ' + this.getError(Number(cell.value));
-                    patchState(store, {
+                    updatedErrorValues[cell.id] = {
+                        id: cell.id,
+                        message: 'In ' + cell.offerUnitId +' the value of ' + cell.field +' on H' + (Math.floor((cell.quarterNumber - 1) / 4) + 1) +' Q' + cell.quarterNumber +' has: ' +this.getError(Number(cell.value))};                    patchState(store, {
                         errorValues: updatedErrorValues
                     })
                 } else {
-                    if (updatedErrorValues[id]) {
-                        delete updatedErrorValues[id];
+                    if (updatedErrorValues[cell.id]) {
+                        delete updatedErrorValues[cell.id];
                         patchState(store, {
                             errorValues: updatedErrorValues,
                         });
@@ -263,6 +263,9 @@ export const OfferUnitStore = signalStore(
             patchState(store,{
                 selectedCells:[],
             })
+        },
+        getCellById(id:string){
+            return store.tableData().filter(cell=>cell.id===id);
         }
     })),
 

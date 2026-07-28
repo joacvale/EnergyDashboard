@@ -73,6 +73,7 @@ export class DynamicTableComponent {
         field: field,
       };
       this.offerUnitStore.updateEditedValues(cell);
+      this.offerUnitStore.updateErrorValues(cell);
       return;
     }
     const cell: Cell = {

@@ -36,7 +36,10 @@
           </td>
 
           @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
-            <td [class.edited-cell]="isCellEdited(quarter, row.field)" [class.selected-cell]="isCellSelected(quarter, row.field)" (click)="onCellClick($event, quarter, row.field, inputElement.value)">
+            <td [class.edited-cell]="isCellEdited(quarter, row.field)" 
+            [class.selected-cell]="isCellSelected(quarter, row.field)" 
+            [id]="offerUnit().id + '-' + quarter.quarter + '-' + row.field"
+            (click)="onCellClick($event, quarter, row.field, inputElement.value)">
               <input
                 #inputElement
                 appInputDirective
