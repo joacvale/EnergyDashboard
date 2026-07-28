@@ -22,7 +22,7 @@
       <tr>
         @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
           <th>
-            Q{{ ($index % 4) + 1 }}
+            Q{{ $index + 1 }}
           </th>
         }
       </tr>
