@@ -1,14 +1,8 @@
 import { Component, computed, input, effect, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { OfferUnit, OfferUnitQuarter } from '../../interfaces/offer-unit.interface';
+import { OfferUnit, OfferUnitQuarter, Cell, QuarterField } from '../../interfaces/offer-unit.interface';
 import { InputDirective } from '../../directives/input-directive';
 import { OfferUnitStore } from '../../stores/offer-unit.store';
-
-type QuarterField =
-  | 'volume'
-  | 'price'
-  | 'netPosition'
-  | 'damPrice';
 
 
 @Component({
@@ -67,17 +61,54 @@ export class DynamicTableComponent {
 
   setValue(quarter: OfferUnitQuarter, field: QuarterField, value: string) {
     if (!value.trim()) {
-      return;  
+      const cell: Cell = {
+        id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
+        offerUnitId: this.offerUnit().id,
+        quarterNumber: quarter.quarter,
+        field: field,
+      };
+      this.offerUnitStore.updateEditedValues(cell);
+      return;
     }
-    this.offerUnitStore.updateCell(this.offerUnit().id, quarter.quarter, field, Number(value));
+    const cell: Cell = {
+      id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
+      offerUnitId: this.offerUnit().id,
+      quarterNumber: quarter.quarter,
+      field: field,
+      value: Number(value)
+    };
+    this.offerUnitStore.updateCell(cell);
   }
 
-  isCellEdited(quarter:OfferUnitQuarter, field:QuarterField){
-    return this.offerUnitStore.isCellEdited(this.offerUnit().id, quarter.quarter, field);
+  isCellEdited(quarter: OfferUnitQuarter, field: QuarterField) {
+    const cellId = this.offerUnit().id + '-' + quarter.quarter + '-' + field;
+    return this.offerUnitStore.isCellEdited(cellId);
   }
 
-  clear(offerUnitId:string){
+  clear(offerUnitId: string) {
     this.offerUnitStore.clearChanges(offerUnitId);
   }
+
+  onCellClick(event: MouseEvent,quarter: OfferUnitQuarter,field: QuarterField, value:string) {
+    const cell: Cell = {
+      id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
+      offerUnitId: this.offerUnit().id,
+      quarterNumber: quarter.quarter,
+      field: field,
+    };
+    if (event.ctrlKey) {
+      this.offerUnitStore.toggleSelectedCell(cell);
+    }else{
+      this.offerUnitStore.clearSelectedCells();
+    }
+
+  };
+
+  isCellSelected(quarter: OfferUnitQuarter, field: QuarterField) {
+    const cellId = this.offerUnit().id + '-' + quarter.quarter + '-' + field;
+    return this.offerUnitStore.isCellSelected(cellId);
+  }
+
+
   save() { }
 }

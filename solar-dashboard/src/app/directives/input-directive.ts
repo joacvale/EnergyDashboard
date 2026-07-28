@@ -1,9 +1,12 @@
 import {
   Directive,
   ElementRef,
+  EventEmitter,
   HostListener,
   inject,
+  Output,
 } from '@angular/core';
+import { OfferUnitStore } from '../stores/offer-unit.store';
 
 @Directive({
   selector: '[appInputDirective]',
@@ -11,8 +14,13 @@ import {
 })
 export class InputDirective {
   private elementRef = inject(ElementRef<HTMLInputElement>)
-
+  offerUnitStore = inject(OfferUnitStore);
   input = this.elementRef.nativeElement;
+
+  @Output()
+  ctrlEnter = new EventEmitter<number>();
+
+
 
   @HostListener('blur')
   onBlur() {
@@ -31,7 +39,21 @@ export class InputDirective {
 
   @HostListener('input')
   onInput() {
-    this.input.value = this.input.value.replace(/[^0-9,.]/g,'');
+    this.input.value = this.input.value.replace(/[^0-9,.]/g, '');
   }
+
+  @HostListener('keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key === 'Enter') {
+      const value = Number(
+        this.input.value.replace(',', '.')
+      );
+
+      this.ctrlEnter.emit(value);
+    }
+
+  }
+
+
 
 }

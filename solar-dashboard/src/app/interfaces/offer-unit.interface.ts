@@ -1,3 +1,9 @@
+export type QuarterField =
+    | 'volume'
+    | 'price'
+    | 'netPosition'
+    | 'damPrice';
+
 export interface OfferUnit{
   id: string;
   name: string;
@@ -13,3 +19,12 @@ export interface OfferUnitQuarter{
   damPrice?: number;
   idle?: boolean;
 }
+
+export interface Cell{
+    id:string,
+    offerUnitId:string,
+    quarterNumber:number,
+    field: QuarterField,
+    value?: number,
+}
+
