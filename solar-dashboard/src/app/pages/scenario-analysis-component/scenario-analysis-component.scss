@@ -66,3 +66,20 @@
 .error-list li {
   margin: 4px 0;
 }
+
+.error-line{
+  display: flex;
+  align-items: center;  
+  gap: 50px;
+}
+
+.error-line button {
+  color: white;
+  min-width: auto;
+  padding: 10;
+}
+
+.focused-error {
+  outline: 3px solid yellow !important;
+  outline-offset: -2px;
+}
