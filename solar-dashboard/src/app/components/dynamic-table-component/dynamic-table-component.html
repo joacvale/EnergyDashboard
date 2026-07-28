@@ -36,10 +36,11 @@
           </td>
 
           @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
-            <td [class.edited-cell]="isCellEdited(quarter, row.field)">
+            <td [class.edited-cell]="isCellEdited(quarter, row.field)" [class.selected-cell]="isCellSelected(quarter, row.field)" (click)="onCellClick($event, quarter, row.field, inputElement.value)">
               <input
                 #inputElement
                 appInputDirective
+                (ctrlEnter)="offerUnitStore.updateSelectedCells($event)"
                 type="text"
                 step="0.01"
                 [ngModel]="getValue(quarter, row.field)"
