@@ -85,6 +85,8 @@ h3 {
 
 .selected-cell {  outline: 1px solid blue;}
 
+.highlight-cross-cells{background-color: rgba(200, 200, 200, 0.3);}
+
 .focused-error {
   outline: 3px solid yellow !important;
   outline-offset: -2px;
