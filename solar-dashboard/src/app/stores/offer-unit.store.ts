@@ -1,7 +1,7 @@
 import { inject, computed } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { SolarPanelService } from '../services/solar-panel.service';
-import { OfferUnit, Cell, QuarterField } from '../interfaces/offer-unit.interface';
+import { OfferUnit, Cell, QuarterField, OfferUnitQuarter } from '../interfaces/offer-unit.interface';
 import { firstValueFrom } from 'rxjs';
 
 
@@ -16,6 +16,7 @@ type errorType =
     | 'error updating editedValues array'
     | 'error updating errorValues array'
     | 'error updating selected cells'
+    | 'error activating cells'
     | 'error unknown'
 
 export interface error {
@@ -31,6 +32,7 @@ export interface OfferUnitState {
     editedValues: Record<string, any>;
     errorValues: Record<string, {id: string; message: string;}>;
     selectedCells: Cell[];
+    activeCell: Cell | null;
     loading: loadingStatus;
     error: error | null;
 };
@@ -41,6 +43,7 @@ const initialState: OfferUnitState = {
     editedValues: {},
     errorValues: {},
     selectedCells: [],
+    activeCell: null,
     loading: 'idle',
     error: null,
 };
@@ -58,6 +61,7 @@ export const OfferUnitStore = signalStore(
                 editedValues: {},
                 errorValues: {},
                 selectedCells:[],
+                activeCell:null,
             });
 
             try {
@@ -147,6 +151,17 @@ export const OfferUnitStore = signalStore(
         isCellEdited(cellId: string) {
             const id = cellId;
             return id in store.editedValues();
+        },
+        isInCross(cell: Cell){
+            const selectedCell = store.activeCell();
+
+            if(!selectedCell){
+                return false;
+            }
+            if(selectedCell.offerUnitId===cell.offerUnitId && (selectedCell.quarterNumber===cell.quarterNumber || selectedCell.field===cell.field)){
+                return true;
+            }
+            return false;
         },
         clearChanges(offerUnitId: string) {
             try {
@@ -266,7 +281,21 @@ export const OfferUnitStore = signalStore(
         },
         getCellById(id:string){
             return store.tableData().filter(cell=>cell.id===id);
-        }
+        },
+        setCellActive(cell:Cell){
+            try{
+                patchState(store, {
+                    activeCell:cell,
+                })
+            }catch(error){
+                patchState(store,{
+                    error: {
+                        id: cell.id,
+                        error: 'error activating cells',
+                    }
+                })
+            }
+        },
     })),
 
     withComputed((store) => ({

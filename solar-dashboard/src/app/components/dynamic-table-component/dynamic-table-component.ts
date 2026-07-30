@@ -102,6 +102,19 @@ export class DynamicTableComponent {
     return this.offerUnitStore.isCellSelected(cellId);
   }
 
+  isInCross(quarter:OfferUnitQuarter, field:QuarterField){
+    const cell: Cell = {
+      id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
+      offerUnitId: this.offerUnit().id,
+      quarterNumber: quarter.quarter,
+      field: field,
+    };
+    if(this.isCellEdited(quarter,field)){
+      return false;
+    }
+    return this.offerUnitStore.isInCross(cell);
+  }
+
 
   onMouseDown(event: MouseEvent, quarter: OfferUnitQuarter,field: QuarterField) {
     const cell: Cell = {
@@ -110,6 +123,7 @@ export class DynamicTableComponent {
       quarterNumber: quarter.quarter,
       field: field,
     };
+    this.offerUnitStore.setCellActive(cell);
 
 
     if (event.ctrlKey) {

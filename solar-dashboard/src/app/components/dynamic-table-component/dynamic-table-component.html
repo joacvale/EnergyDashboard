@@ -38,6 +38,7 @@
           @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
             <td [class.edited-cell]="isCellEdited(quarter, row.field)" 
             [class.selected-cell]="isCellSelected(quarter, row.field)" 
+            [class.highlight-cross-cells]="isInCross(quarter,row.field)"
             [id]="offerUnit().id + '-' + quarter.quarter + '-' + row.field"
             (mousedown)="onMouseDown($event,quarter, row.field)"
             (mouseenter)="onMouseEnter(quarter,row.field)"
