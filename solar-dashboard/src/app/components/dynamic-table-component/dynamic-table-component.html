@@ -39,7 +39,9 @@
             <td [class.edited-cell]="isCellEdited(quarter, row.field)" 
             [class.selected-cell]="isCellSelected(quarter, row.field)" 
             [id]="offerUnit().id + '-' + quarter.quarter + '-' + row.field"
-            (click)="onCellClick($event, quarter, row.field, inputElement.value)">
+            (mousedown)="onMouseDown($event,quarter, row.field)"
+            (mouseenter)="onMouseEnter(quarter,row.field)"
+            (mouseup)="onMouseUp()">
               <input
                 #inputElement
                 appInputDirective

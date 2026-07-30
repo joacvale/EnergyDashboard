@@ -17,6 +17,8 @@ export class DynamicTableComponent {
   offerUnit = input.required<OfferUnit>();
   offerUnitStore = inject(OfferUnitStore);
 
+  isDragging = false;
+
   tableData: {
     rowName: string;
     field: QuarterField;
@@ -55,14 +57,14 @@ export class DynamicTableComponent {
   );
 
 
- getValue(quarter: OfferUnitQuarter,field: QuarterField) {
-  const value = quarter[field];
-  if (value == null) {
-    return '';
-  }
+  getValue(quarter: OfferUnitQuarter, field: QuarterField) {
+    const value = quarter[field];
+    if (value == null) {
+      return '';
+    }
 
-  return value.toFixed(2);
-}
+    return value.toFixed(2);
+  }
 
   setValue(quarter: OfferUnitQuarter, field: QuarterField, value: string) {
     if (!value.trim()) {
@@ -95,26 +97,48 @@ export class DynamicTableComponent {
     this.offerUnitStore.clearChanges(offerUnitId);
   }
 
-  onCellClick(event: MouseEvent,quarter: OfferUnitQuarter,field: QuarterField, value:string) {
+  isCellSelected(quarter: OfferUnitQuarter, field: QuarterField) {
+    const cellId = this.offerUnit().id + '-' + quarter.quarter + '-' + field;
+    return this.offerUnitStore.isCellSelected(cellId);
+  }
+
+
+  onMouseDown(event: MouseEvent, quarter: OfferUnitQuarter,field: QuarterField) {
     const cell: Cell = {
       id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
       offerUnitId: this.offerUnit().id,
       quarterNumber: quarter.quarter,
       field: field,
     };
+
+
     if (event.ctrlKey) {
+      this.isDragging = true;
       this.offerUnitStore.toggleSelectedCell(cell);
-    }else{
-      this.offerUnitStore.clearSelectedCells();
+      return;
     }
 
-  };
-
-  isCellSelected(quarter: OfferUnitQuarter, field: QuarterField) {
-    const cellId = this.offerUnit().id + '-' + quarter.quarter + '-' + field;
-    return this.offerUnitStore.isCellSelected(cellId);
+    this.offerUnitStore.clearSelectedCells();
   }
 
+  onMouseEnter(quarter: OfferUnitQuarter, field: QuarterField) {
+    if (!this.isDragging) {
+      return;
+    }
+
+    const cell: Cell = {
+      id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
+      offerUnitId: this.offerUnit().id,
+      quarterNumber: quarter.quarter,
+      field: field,
+    };
+
+    this.offerUnitStore.toggleSelectedCell(cell);
+  }
+
+  onMouseUp() {
+    this.isDragging = false;
+  }
 
   save() { }
 }
