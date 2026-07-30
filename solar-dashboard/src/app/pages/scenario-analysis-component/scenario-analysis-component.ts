@@ -49,9 +49,7 @@ export class ScenarioAnalysisComponent {
   }
 
 showError(cellId: string) {
-  console.log(cellId);
-  const element =
-    document.getElementById(cellId);
+  const element = document.getElementById(cellId);
 
   if (!element) {
     return;
@@ -66,6 +64,7 @@ showError(cellId: string) {
 
   setTimeout(() => {
     element.classList.remove('focused-error');
+
   }, 3000);
 }
 
