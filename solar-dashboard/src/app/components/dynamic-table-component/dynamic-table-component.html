@@ -41,8 +41,7 @@
             [class.highlight-cross-cells]="isInCross(quarter,row.field)"
             [id]="offerUnit().id + '-' + quarter.quarter + '-' + row.field"
             (mousedown)="onMouseDown($event,quarter, row.field)"
-            (mouseenter)="onMouseEnter(quarter,row.field)"
-            (mouseup)="onMouseUp()">
+            (mouseup)="onMouseUp(quarter,row.field)">
               <input
                 #inputElement
                 appInputDirective
