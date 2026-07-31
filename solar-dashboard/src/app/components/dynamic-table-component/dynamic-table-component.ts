@@ -69,7 +69,7 @@ export class DynamicTableComponent {
   setValue(quarter: OfferUnitQuarter, field: QuarterField, value: string) {
     if (!value.trim()) {
       const cell: Cell = {
-        id: this.offerUnit().id+'-'+quarter.quarter+'-'+field,
+        id: this.offerUnit().id + '-' + quarter.quarter + '-' + field,
         offerUnitId: this.offerUnit().id,
         quarterNumber: quarter.quarter,
         field: field,
@@ -102,21 +102,22 @@ export class DynamicTableComponent {
     return this.offerUnitStore.isCellSelected(cellId);
   }
 
-  isInCross(quarter:OfferUnitQuarter, field:QuarterField){
+  isInCross(quarter: OfferUnitQuarter, field: QuarterField) {
     const cell: Cell = {
       id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
       offerUnitId: this.offerUnit().id,
       quarterNumber: quarter.quarter,
       field: field,
     };
-    if(this.isCellEdited(quarter,field)){
+    if (this.isCellEdited(quarter, field)) {
       return false;
     }
     return this.offerUnitStore.isInCross(cell);
   }
 
 
-  onMouseDown(event: MouseEvent, quarter: OfferUnitQuarter,field: QuarterField) {
+  onMouseDown(event: MouseEvent, quarter: OfferUnitQuarter, field: QuarterField) {
+    this.isDragging=false;
     const cell: Cell = {
       id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
       offerUnitId: this.offerUnit().id,
@@ -124,22 +125,21 @@ export class DynamicTableComponent {
       field: field,
     };
 
-    if(event.shiftKey){
+    if (event.shiftKey) {
       const firstClickCell = this.offerUnitStore.activeCell();
-      if(firstClickCell){
+      if (firstClickCell) {
         this.offerUnitStore.selectManyCells(firstClickCell, cell)
-      } 
+      }
       return;
-      
     }
 
     this.offerUnitStore.setCellActive(cell);
+
     if (event.ctrlKey) {
-      this.isDragging = true;
       this.offerUnitStore.toggleSelectedCell(cell);
       return;
     }
-
+    this.isDragging=true;
     this.offerUnitStore.clearSelectedCells();
   }
 
@@ -158,8 +158,23 @@ export class DynamicTableComponent {
     this.offerUnitStore.toggleSelectedCell(cell);
   }
 
-  onMouseUp() {
+  onMouseUp(quarter: OfferUnitQuarter, field: QuarterField) {
+    if (this.isDragging) {
+      const firstClickCell = this.offerUnitStore.activeCell();
+      if (firstClickCell) {
+        const cell: Cell = {
+          id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
+          offerUnitId: this.offerUnit().id,
+          quarterNumber: quarter.quarter,
+          field: field,
+        };
+        this.offerUnitStore.selectManyCells(firstClickCell, cell)
+      }
+    }
+
     this.isDragging = false;
+
+    return;
   }
 
   save() { }
