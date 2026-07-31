@@ -69,7 +69,7 @@ export class DynamicTableComponent {
   setValue(quarter: OfferUnitQuarter, field: QuarterField, value: string) {
     if (!value.trim()) {
       const cell: Cell = {
-        id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
+        id: this.offerUnit().id+'-'+quarter.quarter+'-'+field,
         offerUnitId: this.offerUnit().id,
         quarterNumber: quarter.quarter,
         field: field,
@@ -123,9 +123,17 @@ export class DynamicTableComponent {
       quarterNumber: quarter.quarter,
       field: field,
     };
+
+    if(event.shiftKey){
+      const firstClickCell = this.offerUnitStore.activeCell();
+      if(firstClickCell){
+        this.offerUnitStore.selectManyCells(firstClickCell, cell)
+      } 
+      return;
+      
+    }
+
     this.offerUnitStore.setCellActive(cell);
-
-
     if (event.ctrlKey) {
       this.isDragging = true;
       this.offerUnitStore.toggleSelectedCell(cell);
