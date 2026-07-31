@@ -2,7 +2,7 @@ import { inject, computed } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { SolarPanelService } from '../services/solar-panel.service';
 import { OfferUnit, Cell, QuarterField, OfferUnitQuarter } from '../interfaces/offer-unit.interface';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, last } from 'rxjs';
 
 
 type loadingStatus =
@@ -30,7 +30,7 @@ export interface OfferUnitState {
     tableData: OfferUnit[];
     originalData: OfferUnit[];
     editedValues: Record<string, any>;
-    errorValues: Record<string, {id: string; message: string;}>;
+    errorValues: Record<string, { id: string; message: string; }>;
     selectedCells: Cell[];
     activeCell: Cell | null;
     loading: loadingStatus;
@@ -60,8 +60,8 @@ export const OfferUnitStore = signalStore(
                 error: null,
                 editedValues: {},
                 errorValues: {},
-                selectedCells:[],
-                activeCell:null,
+                selectedCells: [],
+                activeCell: null,
             });
 
             try {
@@ -152,13 +152,13 @@ export const OfferUnitStore = signalStore(
             const id = cellId;
             return id in store.editedValues();
         },
-        isInCross(cell: Cell){
+        isInCross(cell: Cell) {
             const selectedCell = store.activeCell();
 
-            if(!selectedCell){
+            if (!selectedCell) {
                 return false;
             }
-            if(selectedCell.offerUnitId===cell.offerUnitId && (selectedCell.quarterNumber===cell.quarterNumber || selectedCell.field===cell.field)){
+            if (selectedCell.offerUnitId === cell.offerUnitId && (selectedCell.quarterNumber === cell.quarterNumber || selectedCell.field === cell.field)) {
                 return true;
             }
             return false;
@@ -210,7 +210,8 @@ export const OfferUnitStore = signalStore(
                 if (this.getError(Number(cell.value))) {
                     updatedErrorValues[cell.id] = {
                         id: cell.id,
-                        message: 'In ' + cell.offerUnitId +' the value of ' + cell.field +' on H' + (Math.floor((cell.quarterNumber - 1) / 4) + 1) +' Q' + cell.quarterNumber +' has: ' +this.getError(Number(cell.value))};                    patchState(store, {
+                        message: 'In ' + cell.offerUnitId + ' the value of ' + cell.field + ' on H' + (Math.floor((cell.quarterNumber - 1) / 4) + 1) + ' Q' + cell.quarterNumber + ' has: ' + this.getError(Number(cell.value))
+                    }; patchState(store, {
                         errorValues: updatedErrorValues
                     })
                 } else {
@@ -227,7 +228,7 @@ export const OfferUnitStore = signalStore(
                 })
             }
         },
-        updateSelectedCells(value:number) {
+        updateSelectedCells(value: number) {
             patchState(store, {
                 error: null,
             })
@@ -268,27 +269,56 @@ export const OfferUnitStore = signalStore(
                 selectedCells: selectedArray
             });
         },
-        isCellSelected(id:string){
-            if(store.selectedCells().findIndex(c=>c.id === id)>=0){
+        selectManyCells(initialCell: Cell, lastCell: Cell) {
+            if (initialCell.offerUnitId !== lastCell.offerUnitId) {
+                return;
+            }
+            
+            this.clearSelectedCells();
+            const offerUnitId = initialCell.offerUnitId;
+
+            const fieldOrder: QuarterField[] = [
+                'volume',
+                'price',
+                'netPosition',
+                'damPrice'
+            ];
+
+            const startQuarter = Math.min(initialCell.quarterNumber, lastCell.quarterNumber);
+            const endQuarter = Math.max(initialCell.quarterNumber, lastCell.quarterNumber);
+            const startField = Math.min(fieldOrder.indexOf(initialCell.field), fieldOrder.indexOf(lastCell.field));
+            const endField = Math.max(fieldOrder.indexOf(initialCell.field), fieldOrder.indexOf(lastCell.field));
+
+            for (let quarterIndex = startQuarter; quarterIndex <= endQuarter; quarterIndex++) {
+                for (let fieldIndex = startField; fieldIndex <= endField; fieldIndex++) {
+                    const cell: Cell = {
+                        id: offerUnitId+'-'+quarterIndex+'-'+fieldOrder[fieldIndex],
+                        offerUnitId: offerUnitId,
+                        quarterNumber: quarterIndex,
+                        field: fieldOrder[fieldIndex],
+                    };
+                    this.toggleSelectedCell(cell);
+                }
+            }
+        },
+        isCellSelected(id: string) {
+            if (store.selectedCells().findIndex(c => c.id === id) >= 0) {
                 return true;
             }
             return false;
         },
-        clearSelectedCells(){
-            patchState(store,{
-                selectedCells:[],
+        clearSelectedCells() {
+            patchState(store, {
+                selectedCells: [],
             })
         },
-        getCellById(id:string){
-            return store.tableData().filter(cell=>cell.id===id);
-        },
-        setCellActive(cell:Cell){
-            try{
+        setCellActive(cell: Cell) {
+            try {
                 patchState(store, {
-                    activeCell:cell,
+                    activeCell: cell,
                 })
-            }catch(error){
-                patchState(store,{
+            } catch (error) {
+                patchState(store, {
                     error: {
                         id: cell.id,
                         error: 'error activating cells',
