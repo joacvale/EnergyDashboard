@@ -337,6 +337,15 @@ export const OfferUnitStore = signalStore(
             }); 
             return volumeData;
         },
+        getPriceDataPerQuarter(offerUnit: OfferUnit): (number|null)[] {
+            const priceData: (number|null)[] = [];
+            offerUnit.quarters.forEach((quarter: OfferUnitQuarter) => {
+
+                priceData[quarter.quarter] = quarter.price || null;
+                
+            });
+            return priceData;
+        }
     })),
 
     withComputed((store) => ({
