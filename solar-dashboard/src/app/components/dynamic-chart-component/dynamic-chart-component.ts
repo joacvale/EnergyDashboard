@@ -141,7 +141,7 @@ export class DynamicChartComponent {
           maxRotation: 0,
           minRotation: 0,
 
-          callback: (value: string | number, index: number) => {
+          callback: (index: number) => {
             return index % 4 === 0
               ? `H${index / 4 + 1}`
               : '';
