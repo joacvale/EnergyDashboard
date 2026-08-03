@@ -20,6 +20,13 @@ export class DynamicChartComponent {
 
   priceData: (number | null)[] = [];
 
+  maxHeightVolume = computed(() => {
+    return Math.max(...this.volumeData.filter((v): v is number => !!v)) + 5;
+  });
+
+  maxHeightPrice = computed(() => {
+    return Math.max(...this.priceData.filter((v): v is number => !!v)) + 5;
+  });
 
   barChartData(offerUnit: OfferUnit): ChartData<'bar' | 'line'> {
 
@@ -108,7 +115,7 @@ export class DynamicChartComponent {
     scales: {
       y: {
         min: 0,
-        max: 60,
+        max: this.maxHeightVolume,
         title: {
           display: true,
           text: 'MW',
@@ -120,7 +127,7 @@ export class DynamicChartComponent {
       yPrice: {
         position: 'right',
         min: 0,
-        max: 70,
+        max: this.maxHeightPrice,
 
         title: {
           display: true,
