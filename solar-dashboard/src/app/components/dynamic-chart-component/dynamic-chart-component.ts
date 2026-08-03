@@ -16,11 +16,13 @@ export class DynamicChartComponent {
   offerUnitStore = inject(OfferUnitStore);
   offerUnit = input.required<OfferUnit>();
 
-  volumeData: (number|null)[] = [];
+  volumeData: (number | null)[] = [];
 
   priceData: (number | null)[] = [];
 
   message = '';
+
+
 
   maxHeightVolume = computed(() => {
     return Math.max(...this.volumeData.filter((v): v is number => !!v)) + 5;
@@ -42,19 +44,19 @@ export class DynamicChartComponent {
     const chartValues = offerUnit.quarters.map(q => {
       if (q.idle) {
         return maxVolume;
-      }else if (q.volume === undefined) {
+      } else if (q.volume === undefined) {
         return maxVolume;
       }
       return q.volume ?? 0;
     });
     const backgroundColors = offerUnit.quarters.map(q => {
       if (q.idle) {
-        return 'rgba(0,255,0,0.2)';
+        return 'rgba(0,255,0,0.5)';
 
-      }else if (q.volume === undefined) {
-        return 'rgba(54,162,235,0.2)';
+      } else if (q.volume === undefined) {
+        return 'rgba(54,162,235,0.5)';
       }
-      return 'rgba(128,128,128,0.2)';
+      return 'rgba(128,128,128,0.5)';
     });
     const borderColors = offerUnit.quarters.map(q => {
       if (q.idle) {
@@ -64,8 +66,9 @@ export class DynamicChartComponent {
       }
       return 'black';
     });
+
     return {
-      labels: offerUnit.quarters.map(q => `Q${q.quarter}`),
+      labels: offerUnit.quarters.map(q => q.quarter.toString()),
       datasets: [
         {
           label: 'Volume (MW)',
@@ -106,31 +109,49 @@ export class DynamicChartComponent {
       tooltip: {
         callbacks: {
           label: (context: TooltipItem<any>) => {
-            const productionItem = this.volumeData[context.dataIndex+1];
-            const priceItem = this.priceData[context.dataIndex+1];
+            const productionItem = this.volumeData[context.dataIndex + 1];
+            const priceItem = this.priceData[context.dataIndex + 1];
             const idle = this.offerUnitStore.getIsIdle(this.offerUnit(), context.dataIndex + 1);
             this.message = `€/MWh: ${priceItem}`;
             if (idle) {
               this.message = `Idle is true`;
-            }else{
-              if(priceItem === null && (productionItem === null||productionItem === undefined)){
+            } else {
+              if (priceItem === null && (productionItem === null || productionItem === undefined)) {
                 this.message = `No data available`;
-              }else if(priceItem === null){
+              } else if (priceItem === null) {
                 this.message = `MW: ${productionItem}, No price data`;
-              }else if(productionItem === null){
+              } else if (productionItem === null) {
                 this.message = `No production data, €/MWh: ${priceItem}`;
-              }else {
+              } else {
                 this.message = `MW: ${productionItem}, €/MWh: ${priceItem}`;
               }
             }
             return this.message;
-            
+
           },
         }
       },
     },
 
     scales: {
+      x: {
+
+        ticks: {
+          autoSkip: false,
+          maxRotation: 0,
+          minRotation: 0,
+
+          callback: (value: string | number, index: number) => {
+            return index % 4 === 0
+              ? `H${index / 4 + 1}`
+              : '';
+          }
+        },
+
+        grid: {
+          drawTicks: false
+        }
+      },
       y: {
         min: 0,
         max: this.maxHeightVolume,

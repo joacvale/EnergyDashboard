@@ -1,6 +1,6 @@
 <div class="chart-container">
 
-  <h3>{{ offerUnit().name }}</h3>
+  <h3 class="h3">{{ offerUnit().name }}</h3>
   <mat-card class="chart-header">
     <canvas baseChart [data]="barChartData(offerUnit())" [options]="barChartOptions" [type]="barChartType">
     </canvas>
