@@ -326,14 +326,12 @@ export const OfferUnitStore = signalStore(
                 })
             }
         },
-        getVolumeDataPerQuarter(offerUnit: OfferUnit): number[] {
-            const volumeData: number[] = [];
+        getVolumeDataPerQuarter(offerUnit: OfferUnit): (number|null)[] {
+            const volumeData: (number|null)[] = [];
             offerUnit.quarters.forEach((quarter: OfferUnitQuarter) => {
-                if (quarter.volume === undefined || quarter.volume === null) {
-                    volumeData[quarter.quarter] = 0;
-                }else{
-                    volumeData[quarter.quarter] = quarter.volume;
-                }
+                
+                volumeData[quarter.quarter] = quarter.volume || null;
+                
             }); 
             return volumeData;
         },
@@ -345,6 +343,10 @@ export const OfferUnitStore = signalStore(
                 
             });
             return priceData;
+        },
+        getIsIdle(offerUnit: OfferUnit, quarterNumber: number): boolean {
+            const quarter = offerUnit.quarters.find(q => q.quarter === quarterNumber);
+            return quarter?.idle || false;
         }
     })),
 

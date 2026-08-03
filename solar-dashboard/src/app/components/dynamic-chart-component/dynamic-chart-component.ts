@@ -16,9 +16,11 @@ export class DynamicChartComponent {
   offerUnitStore = inject(OfferUnitStore);
   offerUnit = input.required<OfferUnit>();
 
-  volumeData: number[] = [];
+  volumeData: (number|null)[] = [];
 
   priceData: (number | null)[] = [];
+
+  message = '';
 
   maxHeightVolume = computed(() => {
     return Math.max(...this.volumeData.filter((v): v is number => !!v)) + 5;
@@ -104,9 +106,25 @@ export class DynamicChartComponent {
       tooltip: {
         callbacks: {
           label: (context: TooltipItem<any>) => {
-            const productionItem = this.volumeData[context.dataIndex];
-            const priceItem = this.priceData[context.dataIndex];
-            return `MW: ${productionItem}, €/MWh: ${priceItem}`;
+            const productionItem = this.volumeData[context.dataIndex+1];
+            const priceItem = this.priceData[context.dataIndex+1];
+            const idle = this.offerUnitStore.getIsIdle(this.offerUnit(), context.dataIndex + 1);
+            this.message = `€/MWh: ${priceItem}`;
+            if (idle) {
+              this.message = `Idle is true`;
+            }else{
+              if(priceItem === null && (productionItem === null||productionItem === undefined)){
+                this.message = `No data available`;
+              }else if(priceItem === null){
+                this.message = `MW: ${productionItem}, No price data`;
+              }else if(productionItem === null){
+                this.message = `No production data, €/MWh: ${priceItem}`;
+              }else {
+                this.message = `MW: ${productionItem}, €/MWh: ${priceItem}`;
+              }
+            }
+            return this.message;
+            
           },
         }
       },
