@@ -326,6 +326,28 @@ export const OfferUnitStore = signalStore(
                 })
             }
         },
+        getVolumeDataPerQuarter(offerUnit: OfferUnit): (number|null)[] {
+            const volumeData: (number|null)[] = [];
+            offerUnit.quarters.forEach((quarter: OfferUnitQuarter) => {
+                
+                volumeData[quarter.quarter] = quarter.volume || null;
+                
+            }); 
+            return volumeData;
+        },
+        getPriceDataPerQuarter(offerUnit: OfferUnit): (number|null)[] {
+            const priceData: (number|null)[] = [];
+            offerUnit.quarters.forEach((quarter: OfferUnitQuarter) => {
+
+                priceData[quarter.quarter] = quarter.price || null;
+                
+            });
+            return priceData;
+        },
+        getIsIdle(offerUnit: OfferUnit, quarterNumber: number): boolean {
+            const quarter = offerUnit.quarters.find(q => q.quarter === quarterNumber);
+            return quarter?.idle || false;
+        }
     })),
 
     withComputed((store) => ({

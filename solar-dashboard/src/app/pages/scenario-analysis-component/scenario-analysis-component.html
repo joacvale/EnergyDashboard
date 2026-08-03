@@ -13,14 +13,14 @@
 
   <ul class="error-list">
     @for (er of errorMessages(); track er) {
-      <div class="error-line">
-        <li>{{ er.message }}</li>
-        <button mat-button (click)="showError(er.id)">
-          <mat-icon>
-            visibility
-          </mat-icon>
-        </button>
-      </div>
+    <div class="error-line">
+      <li>{{ er.message }}</li>
+      <button mat-button (click)="showError(er.id)">
+        <mat-icon>
+          visibility
+        </mat-icon>
+      </button>
+    </div>
     }
   </ul>
 
@@ -43,10 +43,20 @@
       </button>
     </div>
   </div>
+  @if(viewMode() === 'table'){
   <div>
     @for (ou of offerUnits() ; track ou.id) {
     <app-dynamic-table-component [offerUnit]="ou" />
     }
   </div>
+  }
+  @else if(viewMode() === 'chart'){
+  <div>
+    @for (ou of offerUnits() ; track ou.id) {
+    <app-dynamic-chart-component [offerUnit]="ou" />
+    }
+  </div>
+  }
+
 
 </div>
