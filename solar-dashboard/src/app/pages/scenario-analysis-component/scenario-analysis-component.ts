@@ -5,15 +5,17 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatIcon } from '@angular/material/icon';
 import { SolarPanelService } from '../../services/solar-panel.service';
 import { DynamicTableComponent } from '../../components/dynamic-table-component/dynamic-table-component';
+import { DynamicChartComponent } from '../../components/dynamic-chart-component/dynamic-chart-component';
 import { OfferUnitStore } from '../../stores/offer-unit.store';
 import { MatAnchor } from "@angular/material/button";
+import {MatCardModule} from "@angular/material/card"; 
 
 
 
 @Component({
   selector: 'app-scenario-analysis-component',
   standalone: true,
-  imports: [DynamicTableComponent, MatAnchor, MatIcon],
+  imports: [DynamicTableComponent, DynamicChartComponent, MatAnchor, MatIcon, MatCardModule],
   templateUrl: './scenario-analysis-component.html',
   styleUrl: './scenario-analysis-component.scss',
 })
@@ -29,15 +31,13 @@ export class ScenarioAnalysisComponent {
 
 
 
-  
+
   constructor() {
     effect(() => {
-    this.solarPanelService.selectedCountry();
-    this.offerUnitStore.loadOfferUnits();
-
-  });
-
-}
+      this.solarPanelService.selectedCountry();
+      this.offerUnitStore.loadOfferUnits();
+    });
+  }
 
   //showTable()
   showTable() {
@@ -48,26 +48,20 @@ export class ScenarioAnalysisComponent {
     this.viewMode.set(ViewMode.CHART);
   }
 
-showError(cellId: string) {
-  const element = document.getElementById(cellId);
-
-  if (!element) {
-    return;
+  showError(cellId: string) {
+    const element = document.getElementById(cellId);
+    if (!element) {
+      return;
+    }
+    element.classList.add('focused-error');
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center'
+    });
+    setTimeout(() => { element.classList.remove('focused-error'); }, 3000);
   }
 
-  element.classList.add('focused-error');
-  element.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-    inline: 'center'
-  });
-
-  setTimeout(() => {
-    element.classList.remove('focused-error');
-
-  }, 3000);
-}
-
-
+  
 
 }

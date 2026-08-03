@@ -23,7 +23,6 @@ export class PanelDialogComponent {
   isEdit: boolean = false;
   isDelete: boolean = false;
 
-
   formData : SolarPanel = {
     id:'',
     location: '',

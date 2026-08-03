@@ -326,6 +326,17 @@ export const OfferUnitStore = signalStore(
                 })
             }
         },
+        getVolumeDataPerQuarter(offerUnit: OfferUnit): number[] {
+            const volumeData: number[] = [];
+            offerUnit.quarters.forEach((quarter: OfferUnitQuarter) => {
+                if (quarter.volume === undefined || quarter.volume === null) {
+                    volumeData[quarter.quarter] = 0;
+                }else{
+                    volumeData[quarter.quarter] = quarter.volume;
+                }
+            }); 
+            return volumeData;
+        },
     })),
 
     withComputed((store) => ({
