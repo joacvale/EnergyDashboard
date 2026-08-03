@@ -1,9 +1,10 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, computed } from '@angular/core';
 import { OfferUnit } from '../../interfaces/offer-unit.interface';
 import { OfferUnitStore } from '../../stores/offer-unit.store';
 import { ChartData, ChartType, TooltipItem, ChartOptions } from 'chart.js';
 import { MatCardModule } from '@angular/material/card';
 import { BaseChartDirective } from 'ng2-charts';
+import { max } from 'rxjs/internal/operators/max';
 @Component({
   selector: 'app-dynamic-chart-component',
   imports: [MatCardModule, BaseChartDirective],
@@ -16,19 +17,52 @@ export class DynamicChartComponent {
   offerUnit = input.required<OfferUnit>();
 
   volumeData: number[] = [];
-  priceData: (number|null)[] = [];
 
-  barChartData(offerUnit: OfferUnit): ChartData<'bar'|'line'> {
+  priceData: (number | null)[] = [];
+
+
+  barChartData(offerUnit: OfferUnit): ChartData<'bar' | 'line'> {
+
     this.volumeData = this.offerUnitStore.getVolumeDataPerQuarter(offerUnit);
     this.priceData = this.offerUnitStore.getPriceDataPerQuarter(offerUnit);
+    const maxVolume = Math.max(
+      ...this.volumeData.filter(
+        (v): v is number => v != null && !isNaN(v)
+      )
+    );
+    const chartValues = offerUnit.quarters.map(q => {
+      if (q.idle) {
+        return maxVolume;
+      }else if (q.volume === undefined) {
+        return maxVolume;
+      }
+      return q.volume ?? 0;
+    });
+    const backgroundColors = offerUnit.quarters.map(q => {
+      if (q.idle) {
+        return 'rgba(0,255,0,0.2)';
+
+      }else if (q.volume === undefined) {
+        return 'rgba(54,162,235,0.2)';
+      }
+      return 'rgba(128,128,128,0.2)';
+    });
+    const borderColors = offerUnit.quarters.map(q => {
+      if (q.idle) {
+        return 'green';
+      } else if (q.volume === undefined) {
+        return 'blue';
+      }
+      return 'black';
+    });
     return {
       labels: offerUnit.quarters.map(q => `Q${q.quarter}`),
       datasets: [
         {
           label: 'Volume (MW)',
-          data: this.volumeData,
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
+          data: chartValues,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
           borderWidth: 1
         },
         {
@@ -73,8 +107,8 @@ export class DynamicChartComponent {
 
     scales: {
       y: {
-        min: 25,
-        max: 55,
+        min: 0,
+        max: 60,
         title: {
           display: true,
           text: 'MW',
@@ -85,7 +119,7 @@ export class DynamicChartComponent {
       },
       yPrice: {
         position: 'right',
-        min: 50,
+        min: 0,
         max: 70,
 
         title: {
