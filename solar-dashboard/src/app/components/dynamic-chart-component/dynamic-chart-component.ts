@@ -41,6 +41,7 @@ export class DynamicChartComponent {
         (v): v is number => v != null && !isNaN(v)
       )
     );
+    
     const chartValues = offerUnit.quarters.map(q => {
       if (q.idle) {
         return maxVolume;
