@@ -163,7 +163,7 @@ export class DynamicChartComponent {
 
           callback: (index: number) => {
             return (index - 1) % 4 === 0
-              ? `H${(index - 1) / 4 + 1}`
+              ? `    H${(index - 1) / 4 + 1}`
               : '';
           }
         },
