@@ -187,7 +187,7 @@ export class DynamicChartComponent {
           text: 'MW',
         },
         grid: {
-          color: 'rgba(0,0,0,0.1)'
+          lineWidth: 0,
         }
       },
       yPrice: {
@@ -199,6 +199,9 @@ export class DynamicChartComponent {
           display: true,
           text: '€ / MWH'
         },
+        grid: {
+          lineWidth: 0,
+        }
       }
     }
   };
