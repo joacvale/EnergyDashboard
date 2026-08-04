@@ -24,6 +24,7 @@
     "@ngrx/signals": "^21.1.1",
     "@ngrx/store": "^21.1.1",
     "chart.js": "^4.5.1",
+    "chartjs-plugin-annotation": "^3.1.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "ng2-charts": "^10.0.0",

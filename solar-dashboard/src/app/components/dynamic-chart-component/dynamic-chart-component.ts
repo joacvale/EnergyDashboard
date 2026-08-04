@@ -3,8 +3,13 @@ import { OfferUnit } from '../../interfaces/offer-unit.interface';
 import { OfferUnitStore } from '../../stores/offer-unit.store';
 import { ChartData, ChartType, TooltipItem, ChartOptions } from 'chart.js';
 import { MatCardModule } from '@angular/material/card';
-import { BaseChartDirective } from 'ng2-charts';
-import { max } from 'rxjs/internal/operators/max';
+import { BaseChartDirective } from 'ng2-charts';import annotationPlugin from 'chartjs-plugin-annotation';
+import { Chart } from 'chart.js';
+import { max } from 'rxjs';
+
+
+Chart.register(annotationPlugin);
+
 @Component({
   selector: 'app-dynamic-chart-component',
   imports: [MatCardModule, BaseChartDirective],
@@ -12,6 +17,8 @@ import { max } from 'rxjs/internal/operators/max';
   templateUrl: './dynamic-chart-component.html',
   styleUrl: './dynamic-chart-component.scss',
 })
+
+
 export class DynamicChartComponent {
   offerUnitStore = inject(OfferUnitStore);
   offerUnit = input.required<OfferUnit>();
@@ -19,6 +26,7 @@ export class DynamicChartComponent {
   volumeData: (number | null)[] = [];
   priceData: (number | null)[] = [];
   message = '';
+
 
   maxHeightVolume = computed(() => {
     return Math.max(...this.volumeData.filter((v): v is number => !!v)) + 5;
@@ -31,6 +39,8 @@ export class DynamicChartComponent {
   barChartData(offerUnit: OfferUnit): ChartData<'bar' | 'line'> {
     this.volumeData = this.offerUnitStore.getVolumeDataPerQuarter(offerUnit);
     this.priceData = this.offerUnitStore.getPriceDataPerQuarter(offerUnit);
+
+    this.barChartOptions.plugins!.annotation = {annotations: this.getIdleAnnotations(offerUnit)};
     const maxVolume = Math.max(
       ...this.volumeData.filter(
         (v): v is number => v != null && !isNaN(v)
@@ -103,7 +113,7 @@ export class DynamicChartComponent {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,        
+        display: false,
       },
       tooltip: {
         callbacks: {
@@ -137,52 +147,77 @@ export class DynamicChartComponent {
             return this.message;
 
           },
+        },
+
       },
-        
     },
-  },
 
-  scales: {
-    x: {
-      position: 'top',
+    scales: {
+      x: {
+        position: 'top',
 
-      ticks: {
-        autoSkip: false,
-        maxRotation: 0,
-        minRotation: 0,
+        ticks: {
+          autoSkip: false,
+          maxRotation: 0,
+          minRotation: 0,
 
-        callback: (index: number) => {
+          callback: (index: number) => {
             return index % 4 === 0
-  ? `H${index / 4 + 1}`
-  : '';
+              ? `H${index / 4 + 1}`
+              : '';
           }
         },
 
-grid: {
-  drawTicks: false
-}
+        grid: {
+          drawTicks: false
+        }
       },
-y: {
-  min: 0,
-    max: this.maxHeightVolume,
-      title: {
-    display: true,
-      text: 'MW',
+      y: {
+        min: 0,
+        max: this.maxHeightVolume,
+        title: {
+          display: true,
+          text: 'MW',
         },
-  grid: {
-    color: 'rgba(0,0,0,0.1)'
-  }
-},
-yPrice: {
-  position: 'right',
-    min: 0,
-      max: this.maxHeightPrice,
+        grid: {
+          color: 'rgba(0,0,0,0.1)'
+        }
+      },
+      yPrice: {
+        position: 'right',
+        min: 0,
+        max: this.maxHeightPrice,
 
         title: {
-    display: true,
-      text: '€ / MWH'
-  },
-}
+          display: true,
+          text: '€ / MWH'
+        },
+      }
     }
   };
+
+getIdleAnnotations(offerUnit: OfferUnit) {
+  const annotations: any = {};
+  offerUnit.quarters.forEach((q, index) => {
+    if (q.idle) {
+      annotations[`idle-${index}`] = {
+        type: 'label',
+        xValue: index,
+        yValue: this.maxHeightVolume()-3,
+        content: ['i'],
+        color: 'green',
+        padding: 4,
+        font: {
+          size: 20,
+          weight: 'bold'
+        }
+      };
+    }
+  });
+
+  return annotations;
 }
+  
+}
+
+
