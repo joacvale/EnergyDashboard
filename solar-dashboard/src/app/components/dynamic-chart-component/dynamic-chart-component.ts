@@ -56,7 +56,7 @@ export class DynamicChartComponent {
       } else if (q.volume === undefined) {
         return 'rgba(54,162,235,0)';
       }
-      return 'rgba(128,128,128,0.5)';
+      return 'rgba(128,128,128,1)';
     });
     const borderColors = offerUnit.quarters.map(q => {
       if (q.idle) {
@@ -108,72 +108,81 @@ export class DynamicChartComponent {
     plugins: {
       tooltip: {
         callbacks: {
-          label: (context: TooltipItem<any>) => {
-            const productionItem = this.volumeData[context.dataIndex + 1];
-            const priceItem = this.priceData[context.dataIndex + 1];
-            const idle = this.offerUnitStore.getIsIdle(this.offerUnit(), context.dataIndex + 1);
-            this.message = `€/MWh: ${priceItem}`;
-            if (idle) {
-              this.message = `Idle is true`;
-            } else {
-              if (priceItem === null && (productionItem === null || productionItem === undefined)) {
-                this.message = `No data available`;
-              } else if (priceItem === null) {
-                this.message = `MW: ${productionItem}, No price data`;
-              } else if (productionItem === null) {
-                this.message = `No production data, €/MWh: ${priceItem}`;
-              } else {
-                this.message = `MW: ${productionItem}, €/MWh: ${priceItem}`;
-              }
-            }
-            return this.message;
+          title: (tooltipItems: TooltipItem<any>[]) => {
+            const quarterIndex = tooltipItems[0].dataIndex + 1;
 
+            const hour = Math.ceil(quarterIndex / 4);
+            const quarter = ((quarterIndex - 1) % 4) + 1;
+
+            return `${quarterIndex} / Q${quarter}H${hour}`;
           },
-        }
-      },
+          label: (context: TooltipItem<any>) => {
+          const productionItem = this.volumeData[context.dataIndex + 1];
+          const priceItem = this.priceData[context.dataIndex + 1];
+          const idle = this.offerUnitStore.getIsIdle(this.offerUnit(), context.dataIndex + 1);
+          this.message = `€/MWh: ${priceItem}`;
+          if (idle && priceItem === null) {
+            this.message = `Idle is true`;
+          } else if (idle && priceItem !== null) {
+            this.message = `Idle is true, €/MWh: ${priceItem}`;
+          }
+          else if (!idle && priceItem === null && (productionItem === null || productionItem === undefined)) {
+            this.message = `MW: StartAppShutdown; €/MWh: No data for price`;
+          } else if (!idle && priceItem !== null && (productionItem === null || productionItem === undefined)) {
+            this.message = `MW:StartAppShutdown; €/MWh: ${priceItem}`;
+          } else if (!idle && priceItem === null && productionItem !== null && productionItem !== undefined) {
+            this.message = `MW: ${productionItem}, €/MWh: No data for price`;
+          } else {
+            this.message = `MW: ${productionItem}, €/MWh: ${priceItem}`;
+          }
+          return this.message;
+
+        },
+      }
     },
+  },
 
-    scales: {
-      x: {
-        position: 'top',
+  scales: {
+    x: {
+      position: 'top',
 
-        ticks: {
-          autoSkip: false,
-          maxRotation: 0,
-          minRotation: 0,
+      ticks: {
+        autoSkip: false,
+        maxRotation: 0,
+        minRotation: 0,
 
-          callback: (index: number) => {
+        callback: (index: number) => {
             return index % 4 === 0
-              ? `H${index / 4 + 1}`
-              : '';
+  ? `H${index / 4 + 1}`
+  : '';
           }
         },
 
-        grid: {
-          drawTicks: false
-        }
+grid: {
+  drawTicks: false
+}
       },
-      y: {
-        min: 0,
-        max: this.maxHeightVolume,
-        title: {
-          display: true,
-          text: 'MW',
+y: {
+  min: 0,
+    max: this.maxHeightVolume,
+      title: {
+    display: true,
+      text: 'MW',
         },
-        grid: {
-          color: 'rgba(0,0,0,0.1)'
-        }
-      },
-      yPrice: {
-        position: 'right',
-        min: 0,
-        max: this.maxHeightPrice,
+  grid: {
+    color: 'rgba(0,0,0,0.1)'
+  }
+},
+yPrice: {
+  position: 'right',
+    min: 0,
+      max: this.maxHeightPrice,
 
         title: {
-          display: true,
-          text: '€ / MWH'
-        },
-      }
+    display: true,
+      text: '€ / MWH'
+  },
+}
     }
   };
 }
