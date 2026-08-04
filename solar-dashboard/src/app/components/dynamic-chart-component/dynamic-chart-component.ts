@@ -33,7 +33,6 @@ export class DynamicChartComponent {
   });
 
   barChartData(offerUnit: OfferUnit): ChartData<'bar' | 'line'> {
-
     this.volumeData = this.offerUnitStore.getVolumeDataPerQuarter(offerUnit);
     this.priceData = this.offerUnitStore.getPriceDataPerQuarter(offerUnit);
     const maxVolume = Math.max(
@@ -41,7 +40,7 @@ export class DynamicChartComponent {
         (v): v is number => v != null && !isNaN(v)
       )
     );
-    
+
     const chartValues = offerUnit.quarters.map(q => {
       if (q.idle) {
         return maxVolume;
