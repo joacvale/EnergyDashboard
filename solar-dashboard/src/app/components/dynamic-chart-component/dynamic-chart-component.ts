@@ -3,7 +3,7 @@ import { OfferUnit } from '../../interfaces/offer-unit.interface';
 import { OfferUnitStore } from '../../stores/offer-unit.store';
 import { ChartData, ChartType, TooltipItem, ChartOptions } from 'chart.js';
 import { MatCardModule } from '@angular/material/card';
-import { BaseChartDirective } from 'ng2-charts';import annotationPlugin from 'chartjs-plugin-annotation';
+import { BaseChartDirective } from 'ng2-charts'; import annotationPlugin from 'chartjs-plugin-annotation';
 import { Chart } from 'chart.js';
 import { max } from 'rxjs';
 
@@ -40,7 +40,7 @@ export class DynamicChartComponent {
     this.volumeData = this.offerUnitStore.getVolumeDataPerQuarter(offerUnit);
     this.priceData = this.offerUnitStore.getPriceDataPerQuarter(offerUnit);
 
-    this.barChartOptions.plugins!.annotation = {annotations: this.getIdleAnnotations(offerUnit)};
+    this.barChartOptions.plugins!.annotation = { annotations: this.getIdleAnnotations(offerUnit) };
     const maxVolume = Math.max(
       ...this.volumeData.filter(
         (v): v is number => v != null && !isNaN(v)
@@ -162,14 +162,22 @@ export class DynamicChartComponent {
           minRotation: 0,
 
           callback: (index: number) => {
-            return index % 4 === 0
-              ? `H${index / 4 + 1}`
+            return (index - 1) % 4 === 0
+              ? `H${(index - 1) / 4 + 1}`
               : '';
           }
         },
 
         grid: {
-          drawTicks: false
+          drawTicks: false,
+
+          color: (ctx:any) => {
+            return ctx.index % 4 === 0
+              ? '#999'
+              : 'transparent';
+          },
+
+          lineWidth: 1.5
         }
       },
       y: {
@@ -196,28 +204,28 @@ export class DynamicChartComponent {
     }
   };
 
-getIdleAnnotations(offerUnit: OfferUnit) {
-  const annotations: any = {};
-  offerUnit.quarters.forEach((q, index) => {
-    if (q.idle) {
-      annotations[`idle-${index}`] = {
-        type: 'label',
-        xValue: index,
-        yValue: this.maxHeightVolume()-3,
-        content: ['i'],
-        color: 'green',
-        padding: 4,
-        font: {
-          size: 20,
-          weight: 'bold'
-        }
-      };
-    }
-  });
+  getIdleAnnotations(offerUnit: OfferUnit) {
+    const annotations: any = {};
+    offerUnit.quarters.forEach((q, index) => {
+      if (q.idle) {
+        annotations[`idle-${index}`] = {
+          type: 'label',
+          xValue: index,
+          yValue: this.maxHeightVolume() - 3,
+          content: ['i'],
+          color: 'green',
+          padding: 4,
+          font: {
+            size: 20,
+            weight: 'bold'
+          }
+        };
+      }
+    });
 
-  return annotations;
-}
-  
+    return annotations;
+  }
+
 }
 
 
