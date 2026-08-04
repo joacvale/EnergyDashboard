@@ -135,6 +135,8 @@ export class DynamicChartComponent {
 
     scales: {
       x: {
+        position: 'top',
+
         ticks: {
           autoSkip: false,
           maxRotation: 0,
