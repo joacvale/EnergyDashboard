@@ -51,10 +51,10 @@ export class DynamicChartComponent {
     });
     const backgroundColors = offerUnit.quarters.map(q => {
       if (q.idle) {
-        return 'rgba(0,255,0,0.5)';
+        return 'rgba(0,255,0,0)';
 
       } else if (q.volume === undefined) {
-        return 'rgba(54,162,235,0.5)';
+        return 'rgba(54,162,235,0)';
       }
       return 'rgba(128,128,128,0.5)';
     });
@@ -135,7 +135,6 @@ export class DynamicChartComponent {
 
     scales: {
       x: {
-
         ticks: {
           autoSkip: false,
           maxRotation: 0,
