@@ -17,12 +17,8 @@ export class DynamicChartComponent {
   offerUnit = input.required<OfferUnit>();
 
   volumeData: (number | null)[] = [];
-
   priceData: (number | null)[] = [];
-
   message = '';
-
-
 
   maxHeightVolume = computed(() => {
     return Math.max(...this.volumeData.filter((v): v is number => !!v)) + 5;
@@ -51,10 +47,10 @@ export class DynamicChartComponent {
     });
     const backgroundColors = offerUnit.quarters.map(q => {
       if (q.idle) {
-        return 'rgba(0,255,0,0)';
+        return 'transparent';
 
       } else if (q.volume === undefined) {
-        return 'rgba(54,162,235,0)';
+        return 'transparent';
       }
       return 'rgba(128,128,128,1)';
     });
@@ -106,6 +102,9 @@ export class DynamicChartComponent {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+      legend: {
+        display: false,        
+      },
       tooltip: {
         callbacks: {
           title: (tooltipItems: TooltipItem<any>[]) => {
@@ -117,28 +116,29 @@ export class DynamicChartComponent {
             return `${quarterIndex} / Q${quarter}H${hour}`;
           },
           label: (context: TooltipItem<any>) => {
-          const productionItem = this.volumeData[context.dataIndex + 1];
-          const priceItem = this.priceData[context.dataIndex + 1];
-          const idle = this.offerUnitStore.getIsIdle(this.offerUnit(), context.dataIndex + 1);
-          this.message = `€/MWh: ${priceItem}`;
-          if (idle && priceItem === null) {
-            this.message = `Idle is true`;
-          } else if (idle && priceItem !== null) {
-            this.message = `Idle is true, €/MWh: ${priceItem}`;
-          }
-          else if (!idle && priceItem === null && (productionItem === null || productionItem === undefined)) {
-            this.message = `MW: StartAppShutdown; €/MWh: No data for price`;
-          } else if (!idle && priceItem !== null && (productionItem === null || productionItem === undefined)) {
-            this.message = `MW:StartAppShutdown; €/MWh: ${priceItem}`;
-          } else if (!idle && priceItem === null && productionItem !== null && productionItem !== undefined) {
-            this.message = `MW: ${productionItem}, €/MWh: No data for price`;
-          } else {
-            this.message = `MW: ${productionItem}, €/MWh: ${priceItem}`;
-          }
-          return this.message;
+            const productionItem = this.volumeData[context.dataIndex + 1];
+            const priceItem = this.priceData[context.dataIndex + 1];
+            const idle = this.offerUnitStore.getIsIdle(this.offerUnit(), context.dataIndex + 1);
+            this.message = `€/MWh: ${priceItem}`;
+            if (idle && priceItem === null) {
+              this.message = `Idle is true`;
+            } else if (idle && priceItem !== null) {
+              this.message = `Idle is true, €/MWh: ${priceItem}`;
+            }
+            else if (!idle && priceItem === null && (productionItem === null || productionItem === undefined)) {
+              this.message = `MW: StartAppShutdown; €/MWh: No data for price`;
+            } else if (!idle && priceItem !== null && (productionItem === null || productionItem === undefined)) {
+              this.message = `MW:StartAppShutdown; €/MWh: ${priceItem}`;
+            } else if (!idle && priceItem === null && productionItem !== null && productionItem !== undefined) {
+              this.message = `MW: ${productionItem}, €/MWh: No data for price`;
+            } else {
+              this.message = `MW: ${productionItem}, €/MWh: ${priceItem}`;
+            }
+            return this.message;
 
-        },
-      }
+          },
+      },
+        
     },
   },
 

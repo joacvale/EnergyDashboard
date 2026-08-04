@@ -5,4 +5,29 @@
     <canvas baseChart [data]="barChartData(offerUnit())" [options]="barChartOptions" [type]="barChartType">
     </canvas>
   </mat-card>
+  <div class="custom-legend">
+    <span class="legend-item">
+      <i class="columns"></i>
+      Volume
+    </span>
+    <span class="legend-item">
+      <i class="price"></i>
+      Price
+    </span>
+
+    <span class="legend-item">
+      <i class="price-dashed"></i>
+      No Price
+    </span>
+
+    <span class="legend-item">
+      <i class="idle"></i>
+      Idle
+    </span>
+
+    <span class="legend-item">
+      <i class="shutdown"></i>
+      StartApp Shutdown
+    </span>
+  </div>
 </div>
