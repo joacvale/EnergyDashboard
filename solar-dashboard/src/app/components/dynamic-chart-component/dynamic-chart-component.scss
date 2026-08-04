@@ -1,9 +1,70 @@
 .chart-container{
     width: 80%;
-    margin: 0 auto
+    margin: 0 auto;
+    margin-bottom: 100px;
 }
 
 .h3{
     margin-bottom: 20px;
     color: #1f3048;
+}
+
+.chart-header{
+    max-height: 350px;
+
+}
+
+.custom-legend {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  margin-top: 30px; 
+  margin-left: 20px;
+  justify-content: flex-start;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.columns {
+  width: 14px;
+  height: 14px;
+  background: gray;
+  border: 1px solid black;
+  display: inline-block;
+}
+
+.price {
+  width: 24px;
+  height: 0;
+  border-top: 2px solid black;
+  display: inline-block;
+}
+
+.price-dashed {
+  width: 24px;
+  height: 0;
+  border-top: 2px dashed black;
+  display: inline-block;
+}
+
+.idle {
+  width: 14px;
+  height: 14px;
+  border: 2px solid green;
+  background: transparent;
+  display: inline-block;
+}
+
+.shutdown {
+  width: 14px;
+  height: 14px;
+  border: 2px solid blue;
+  background: transparent;
+  display: inline-block;
 }
