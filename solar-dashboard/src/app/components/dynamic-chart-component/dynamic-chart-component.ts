@@ -5,7 +5,6 @@ import { ChartData, ChartType, TooltipItem, ChartOptions } from 'chart.js';
 import { MatCardModule } from '@angular/material/card';
 import { BaseChartDirective } from 'ng2-charts'; import annotationPlugin from 'chartjs-plugin-annotation';
 import { Chart } from 'chart.js';
-import { max } from 'rxjs';
 
 
 Chart.register(annotationPlugin);
@@ -171,13 +170,13 @@ export class DynamicChartComponent {
         grid: {
           drawTicks: false,
 
-          color: (ctx:any) => {
-            return ctx.index % 4 === 0
-              ? '#999'
-              : 'transparent';
-          },
+          color: (ctx:any) =>  '#999',
 
-          lineWidth: 1.5
+          lineWidth: (ctx:any) => {
+            return ctx.index % 4 === 0
+              ? 2
+              : 0.5;
+          }
         }
       },
       y: {
