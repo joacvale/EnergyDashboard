@@ -80,7 +80,9 @@ export class DynamicChartComponent {
           data: chartValues,
           backgroundColor: backgroundColors,
           borderColor: borderColors,
-          borderWidth: 1
+          borderWidth: 1,
+          categoryPercentage: 1,
+          barPercentage: 1
         },
         {
           type: 'line',
