@@ -134,6 +134,14 @@ export class DynamicTableComponent {
     return this.offerUnitStore.isInCross(cell);
   }
 
+  isIdle(quarter:OfferUnitQuarter){
+    return this.offerUnitStore.getIsIdle(this.offerUnit(),quarter.quarter);
+  }
+
+  isBlocked(quarter:OfferUnitQuarter){
+    return this.offerUnitStore.isCellBlocked(this.offerUnit().id, quarter)
+  }
+
 
   onMouseDown(event: MouseEvent, quarter: OfferUnitQuarter, field: QuarterField) {
     this.isDragging = false;

@@ -170,6 +170,16 @@ export const OfferUnitStore = signalStore(
             }
             return false;
         },
+        isCellBlocked(offerUnitId: string, quarter:OfferUnitQuarter): boolean{
+            const tableData = store.tableData();
+            const idle = tableData.find(ou => ou.id === offerUnitId)?.quarters.find(q => q.quarter === quarter.quarter)?.idle
+            if(idle){
+                console.log('primeiro if');
+                console.log(idle);
+                return idle;
+            }
+            return false;
+        },
         clearChanges(offerUnitId: string) {
             try {
                 const updatedTableData = structuredClone(store.tableData());
