@@ -3,11 +3,8 @@ import { OfferUnit } from '../../interfaces/offer-unit.interface';
 import { OfferUnitStore } from '../../stores/offer-unit.store';
 import { ChartData, ChartType, TooltipItem, ChartOptions } from 'chart.js';
 import { MatCardModule } from '@angular/material/card';
-import { BaseChartDirective } from 'ng2-charts'; import annotationPlugin from 'chartjs-plugin-annotation';
+import { BaseChartDirective } from 'ng2-charts'; 
 import { Chart } from 'chart.js';
-
-
-Chart.register(annotationPlugin);
 
 @Component({
   selector: 'app-dynamic-chart-component',
@@ -16,7 +13,6 @@ Chart.register(annotationPlugin);
   templateUrl: './dynamic-chart-component.html',
   styleUrl: './dynamic-chart-component.scss',
 })
-
 
 export class DynamicChartComponent {
   offerUnitStore = inject(OfferUnitStore);
@@ -39,7 +35,6 @@ export class DynamicChartComponent {
     this.volumeData = this.offerUnitStore.getVolumeDataPerQuarter(offerUnit);
     this.priceData = this.offerUnitStore.getPriceDataPerQuarter(offerUnit);
 
-    this.barChartOptions.plugins!.annotation = { annotations: this.getIdleAnnotations(offerUnit) };
     const maxVolume = Math.max(
       ...this.volumeData.filter(
         (v): v is number => v != null && !isNaN(v)
@@ -112,6 +107,14 @@ export class DynamicChartComponent {
   barChartOptions: ChartOptions<any> = {
     responsive: true,
     maintainAspectRatio: false,
+    layout:{
+      padding: {
+        bottom: 20,
+        top:10,
+        left:10,
+        right:10,
+      }
+    },
     plugins: {
       legend: {
         display: false,
@@ -120,10 +123,8 @@ export class DynamicChartComponent {
         callbacks: {
           title: (tooltipItems: TooltipItem<any>[]) => {
             const quarterIndex = tooltipItems[0].dataIndex + 1;
-
             const hour = Math.ceil(quarterIndex / 4);
             const quarter = ((quarterIndex - 1) % 4) + 1;
-
             return `${quarterIndex} / Q${quarter}H${hour}`;
           },
           label: (context: TooltipItem<any>) => {
@@ -146,10 +147,8 @@ export class DynamicChartComponent {
               this.message = `MW: ${productionItem}, €/MWh: ${priceItem}`;
             }
             return this.message;
-
           },
         },
-
       },
     },
 
@@ -171,13 +170,9 @@ export class DynamicChartComponent {
 
         grid: {
           drawTicks: false,
-
           color: (ctx:any) =>  '#999',
-
           lineWidth: (ctx:any) => {
-            return ctx.index % 4 === 0
-              ? 2
-              : 0.5;
+            return ctx.index % 4 === 0 ? 2: 0.5;
           }
         }
       },
@@ -196,7 +191,6 @@ export class DynamicChartComponent {
         position: 'right',
         min: 0,
         max: this.maxHeightPrice,
-
         title: {
           display: true,
           text: '€ / MWH'
@@ -208,28 +202,31 @@ export class DynamicChartComponent {
     }
   };
 
-  getIdleAnnotations(offerUnit: OfferUnit) {
-    const annotations: any = {};
-    offerUnit.quarters.forEach((q, index) => {
-      if (q.idle) {
-        annotations[`idle-${index}`] = {
-          type: 'label',
-          xValue: index,
-          yValue: this.maxHeightVolume() - 3,
-          content: ['i'],
-          color: 'green',
-          padding: 4,
-          font: {
-            size: 20,
-            weight: 'bold'
-          }
-        };
-      }
-    });
+constructor() {
+  Chart.register({
+    id: 'idleLabels',
+    afterDraw: (chart: any) => {
+      const ctx = chart.ctx;
+      const bars = chart.getDatasetMeta(0).data;
+      bars.forEach((bar: any, index: number) => {
+        const quarter = this.offerUnit().quarters[index];
+        if (!quarter?.idle) {
+          return;
+        }
 
-    return annotations;
-  }
+        ctx.save();
+        ctx.fillStyle = 'green';
+        ctx.font = 'bold 12px';
+        ctx.textAlign = 'center';
 
+        ctx.fillText('i', bar.x, chart.chartArea.bottom + 15);
+
+        ctx.restore();
+      });
+    }
+  });
+}
+   
 }
 
 
