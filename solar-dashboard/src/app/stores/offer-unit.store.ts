@@ -144,6 +144,12 @@ export const OfferUnitStore = signalStore(
                         patchState(store, {
                             editedValues: editedValuesCopy,
                         });
+                        if(cell.field==='idle' && cell.value===false){
+                            delete editedValuesCopy[id],
+                            patchState(store, {
+                                editedValues: editedValuesCopy,
+                            });
+                        }
                     }
                 }
             } catch (error) {
