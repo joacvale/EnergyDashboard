@@ -139,7 +139,7 @@ export class DynamicTableComponent {
   }
 
   isBlocked(quarter:OfferUnitQuarter){
-    return this.offerUnitStore.isCellBlocked(this.offerUnit().id, quarter)
+    return this.offerUnitStore.isCellBlocked(this.offerUnit().id, quarter.quarter)
   }
 
 

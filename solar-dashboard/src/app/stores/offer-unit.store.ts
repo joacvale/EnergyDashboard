@@ -170,12 +170,10 @@ export const OfferUnitStore = signalStore(
             }
             return false;
         },
-        isCellBlocked(offerUnitId: string, quarter:OfferUnitQuarter): boolean{
+        isCellBlocked(offerUnitId: string, quarter:number): boolean{
             const tableData = store.tableData();
-            const idle = tableData.find(ou => ou.id === offerUnitId)?.quarters.find(q => q.quarter === quarter.quarter)?.idle
+            const idle = tableData.find(ou => ou.id === offerUnitId)?.quarters.find(q => q.quarter === quarter)?.idle
             if(idle){
-                console.log('primeiro if');
-                console.log(idle);
                 return idle;
             }
             return false;
@@ -251,6 +249,9 @@ export const OfferUnitStore = signalStore(
             })
             try {
                 store.selectedCells().forEach(cell => {
+                    if(this.isCellBlocked(cell.offerUnitId, cell.quarterNumber)){
+                        return;
+                    }
                     const updatedCell = structuredClone(cell);
                     updatedCell.value = value;
                     this.updateCell(updatedCell);
