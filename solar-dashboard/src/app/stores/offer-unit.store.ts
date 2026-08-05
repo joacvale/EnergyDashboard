@@ -92,18 +92,24 @@ export const OfferUnitStore = signalStore(
                 error: null
             })
             try {
-
                 const updatedTableData = structuredClone(store.tableData());
                 const offerUnit = updatedTableData.find(ou => ou.id === cell.offerUnitId);
                 const selectedQuarter = offerUnit?.quarters.find(q => q.quarter === cell.quarterNumber);
-                if (selectedQuarter) {
+                if (selectedQuarter && cell.field != 'idle') {
                     selectedQuarter[cell.field] = Number(cell.value);
+                } else if (selectedQuarter && cell.field === 'idle') {
+                    if (cell.value) {
+                        selectedQuarter[cell.field] = true;
+                    } else {
+                        selectedQuarter[cell.field] = false;
+                    }
+
                 }
+                this.updateEditedValues(cell);
+                this.updateErrorValues(cell);
                 patchState(store, {
                     tableData: updatedTableData
                 });
-                this.updateEditedValues(cell);
-                this.updateErrorValues(cell);
             } catch (error) {
                 patchState(store, {
                     error: {
@@ -126,6 +132,7 @@ export const OfferUnitStore = signalStore(
                 const originalOfferUnit = originalData.find(ou => ou.id === cell.offerUnitId);
                 const originalQuarter = originalOfferUnit?.quarters.find(q => q.quarter === cell.quarterNumber);
 
+
                 if (originalQuarter) {
                     if (originalQuarter[cell.field] === cell.value) {
                         delete editedValuesCopy[id],
@@ -137,6 +144,12 @@ export const OfferUnitStore = signalStore(
                         patchState(store, {
                             editedValues: editedValuesCopy,
                         });
+                        if(cell.field==='idle' && cell.value===false){
+                            delete editedValuesCopy[id],
+                            patchState(store, {
+                                editedValues: editedValuesCopy,
+                            });
+                        }
                     }
                 }
             } catch (error) {
@@ -160,6 +173,14 @@ export const OfferUnitStore = signalStore(
             }
             if (selectedCell.offerUnitId === cell.offerUnitId && (selectedCell.quarterNumber === cell.quarterNumber || selectedCell.field === cell.field)) {
                 return true;
+            }
+            return false;
+        },
+        isCellBlocked(offerUnitId: string, quarter:number): boolean{
+            const tableData = store.tableData();
+            const idle = tableData.find(ou => ou.id === offerUnitId)?.quarters.find(q => q.quarter === quarter)?.idle
+            if(idle){
+                return idle;
             }
             return false;
         },
@@ -228,12 +249,15 @@ export const OfferUnitStore = signalStore(
                 })
             }
         },
-        updateSelectedCells(value: number) {
+        updateSelectedCells(value: number | boolean) {
             patchState(store, {
                 error: null,
             })
             try {
                 store.selectedCells().forEach(cell => {
+                    if(this.isCellBlocked(cell.offerUnitId, cell.quarterNumber)){
+                        return;
+                    }
                     const updatedCell = structuredClone(cell);
                     updatedCell.value = value;
                     this.updateCell(updatedCell);
@@ -273,7 +297,7 @@ export const OfferUnitStore = signalStore(
             if (initialCell.offerUnitId !== lastCell.offerUnitId) {
                 return;
             }
-            
+
             this.clearSelectedCells();
             const offerUnitId = initialCell.offerUnitId;
 
@@ -281,7 +305,8 @@ export const OfferUnitStore = signalStore(
                 'volume',
                 'price',
                 'netPosition',
-                'damPrice'
+                'damPrice',
+                'idle'
             ];
 
             const startQuarter = Math.min(initialCell.quarterNumber, lastCell.quarterNumber);
@@ -292,7 +317,7 @@ export const OfferUnitStore = signalStore(
             for (let quarterIndex = startQuarter; quarterIndex <= endQuarter; quarterIndex++) {
                 for (let fieldIndex = startField; fieldIndex <= endField; fieldIndex++) {
                     const cell: Cell = {
-                        id: offerUnitId+'-'+quarterIndex+'-'+fieldOrder[fieldIndex],
+                        id: offerUnitId + '-' + quarterIndex + '-' + fieldOrder[fieldIndex],
                         offerUnitId: offerUnitId,
                         quarterNumber: quarterIndex,
                         field: fieldOrder[fieldIndex],
@@ -326,27 +351,32 @@ export const OfferUnitStore = signalStore(
                 })
             }
         },
-        getVolumeDataPerQuarter(offerUnit: OfferUnit): (number|null)[] {
-            const volumeData: (number|null)[] = [];
+        getVolumeDataPerQuarter(offerUnit: OfferUnit): (number | null)[] {
+            const volumeData: (number | null)[] = [];
             offerUnit.quarters.forEach((quarter: OfferUnitQuarter) => {
-                
+
                 volumeData[quarter.quarter] = quarter.volume || null;
-                
-            }); 
+
+            });
             return volumeData;
         },
-        getPriceDataPerQuarter(offerUnit: OfferUnit): (number|null)[] {
-            const priceData: (number|null)[] = [];
+        getPriceDataPerQuarter(offerUnit: OfferUnit): (number | null)[] {
+            const priceData: (number | null)[] = [];
             offerUnit.quarters.forEach((quarter: OfferUnitQuarter) => {
 
                 priceData[quarter.quarter] = quarter.price || null;
-                
+
             });
             return priceData;
         },
-        getIsIdle(offerUnit: OfferUnit, quarterNumber: number): boolean {
+        getIsIdle(offerUnit: OfferUnit, quarterNumber: number): number {
             const quarter = offerUnit.quarters.find(q => q.quarter === quarterNumber);
-            return quarter?.idle || false;
+            if (quarter?.idle) {
+                return 1;
+            } else {
+                return 0;
+            }
+
         }
     })),
 

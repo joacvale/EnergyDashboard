@@ -2,12 +2,13 @@ import { Component, computed, input, effect, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OfferUnit, OfferUnitQuarter, Cell, QuarterField } from '../../interfaces/offer-unit.interface';
 import { InputDirective } from '../../directives/input-directive';
+import { InputDirectiveIdle } from '../../directives/input-directive-idle';
 import { OfferUnitStore } from '../../stores/offer-unit.store';
 
 
 @Component({
   selector: 'app-dynamic-table-component',
-  imports: [FormsModule, InputDirective],
+  imports: [FormsModule, InputDirective, InputDirectiveIdle],
   standalone: true,
   templateUrl: './dynamic-table-component.html',
   styleUrl: './dynamic-table-component.scss',
@@ -38,6 +39,10 @@ export class DynamicTableComponent {
       {
         rowName: 'DAM Price',
         field: 'damPrice'
+      },
+      {
+        rowName: 'Idle',
+        field: 'idle'
       }
     ];
 
@@ -59,34 +64,48 @@ export class DynamicTableComponent {
 
   getValue(quarter: OfferUnitQuarter, field: QuarterField) {
     const value = quarter[field];
+
     if (value == null) {
       return '';
+    }
+
+    if (typeof value === 'boolean') {
+      return value ? 'i' : '';
     }
 
     return value.toFixed(2);
   }
 
   setValue(quarter: OfferUnitQuarter, field: QuarterField, value: string) {
+    const cell: Cell = {
+      id: this.offerUnit().id + '-' + quarter.quarter + '-' + field,
+      offerUnitId: this.offerUnit().id,
+      quarterNumber: quarter.quarter,
+      field: field,
+    };
+    if (field === 'idle' && !value.trim()) {
+      cell.value = false;
+      this.offerUnitStore.updateCell(cell);
+      return;
+    }
     if (!value.trim()) {
-      const cell: Cell = {
-        id: this.offerUnit().id + '-' + quarter.quarter + '-' + field,
-        offerUnitId: this.offerUnit().id,
-        quarterNumber: quarter.quarter,
-        field: field,
-      };
       this.offerUnitStore.updateEditedValues(cell);
       this.offerUnitStore.updateErrorValues(cell);
       return;
     }
-    const cell: Cell = {
-      id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
-      offerUnitId: this.offerUnit().id,
-      quarterNumber: quarter.quarter,
-      field: field,
-      value: Number(value)
-    };
-    this.offerUnitStore.updateCell(cell);
+    if (field === 'idle') {
+      cell.value = true;
+      this.offerUnitStore.updateCell(cell);
+      return;
+    } else {
+      cell.value = Number(value);
+      this.offerUnitStore.updateCell(cell);
+
+    }
+
   }
+
+
 
   isCellEdited(quarter: OfferUnitQuarter, field: QuarterField) {
     const cellId = this.offerUnit().id + '-' + quarter.quarter + '-' + field;
@@ -115,9 +134,17 @@ export class DynamicTableComponent {
     return this.offerUnitStore.isInCross(cell);
   }
 
+  isIdle(quarter:OfferUnitQuarter){
+    return this.offerUnitStore.getIsIdle(this.offerUnit(),quarter.quarter);
+  }
+
+  isBlocked(quarter:OfferUnitQuarter){
+    return this.offerUnitStore.isCellBlocked(this.offerUnit().id, quarter.quarter)
+  }
+
 
   onMouseDown(event: MouseEvent, quarter: OfferUnitQuarter, field: QuarterField) {
-    this.isDragging=false;
+    this.isDragging = false;
     const cell: Cell = {
       id: `${this.offerUnit().id}-${quarter.quarter}-${field}`,
       offerUnitId: this.offerUnit().id,
@@ -139,7 +166,7 @@ export class DynamicTableComponent {
       this.offerUnitStore.toggleSelectedCell(cell);
       return;
     }
-    this.isDragging=true;
+    this.isDragging = true;
     this.offerUnitStore.clearSelectedCells();
   }
 

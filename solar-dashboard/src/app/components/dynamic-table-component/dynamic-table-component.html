@@ -1,4 +1,3 @@
-
 <h3>
   {{ offerUnit()?.id }} - {{ offerUnit()?.name }}
 </h3>
@@ -11,48 +10,61 @@
           Volume Buy
         </th>
         @for (hour of hours; track hour.label) {
-          <th
-            colspan="4"
-            class="hour-header">
-            {{ hour.label }}
-          </th>
+        <th colspan="4" class="hour-header">
+          {{ hour.label }}
+        </th>
         }
       </tr>
 
       <tr>
         @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
-          <th>
-            Q{{ $index + 1 }}
-          </th>
+        <th>
+          Q{{ $index + 1 }}
+        </th>
         }
       </tr>
     </thead>
 
     <tbody>
       @for (row of tableData; track row.field) {
-        <tr>
-          <td class="field-cell">
-            {{ row.rowName }}
-          </td>
+      <tr>
+        <td class="field-cell">
+          {{ row.rowName }}
+        </td>
 
-          @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
-            <td [class.edited-cell]="isCellEdited(quarter, row.field)" 
-            [class.selected-cell]="isCellSelected(quarter, row.field)" 
-            [class.highlight-cross-cells]="isInCross(quarter,row.field)"
-            [id]="offerUnit().id + '-' + quarter.quarter + '-' + row.field"
-            (mousedown)="onMouseDown($event,quarter, row.field)"
-            (mouseup)="onMouseUp(quarter,row.field)">
-              <input
-                #inputElement
-                appInputDirective
-                (ctrlEnter)="offerUnitStore.updateSelectedCells($event)"
-                type="text"
-                step="0.01"
-                [ngModel]="getValue(quarter, row.field)"
-                (blur)="setValue(quarter, row.field, inputElement.value)">
-            </td>
-          }
-        </tr>
+        @for (quarter of offerUnit()?.quarters; track quarter.quarter) {
+        @if(row.field==='idle'){
+        <td [class.edited-cell]="isCellEdited(quarter, row.field)"
+          [class.selected-cell]="isCellSelected(quarter, row.field)"
+          [class.highlight-cross-cells]="isInCross(quarter,row.field)" [class.isIdle]="isIdle(quarter)"
+          [id]="offerUnit().id + '-' + quarter.quarter + '-' + row.field"
+          (mousedown)="onMouseDown($event,quarter, row.field)" (mouseup)="onMouseUp(quarter,row.field)">
+          <input #inputElement appInputDirectiveIdle (ctrlEnter)="offerUnitStore.updateSelectedCells($event)"
+            type="text" step="0.01" [ngModel]="getValue(quarter, row.field)"
+            (blur)="setValue(quarter, row.field, inputElement.value)">
+        </td>
+        }@else(){
+        @if(isBlocked(quarter)){
+        <td [class.isBlocked]="isBlocked(quarter)" [id]="offerUnit().id + '-' + quarter.quarter + '-' + row.field">
+            {{ getValue(quarter, row.field) }}
+        </td>
+
+        }@else(){
+        <td [class.edited-cell]="isCellEdited(quarter, row.field)"
+          [class.selected-cell]="isCellSelected(quarter, row.field)"
+          [class.highlight-cross-cells]="isInCross(quarter,row.field)" [class.isBlocked]="isBlocked(quarter)"
+          [id]="offerUnit().id + '-' + quarter.quarter + '-' + row.field"
+          (mousedown)="onMouseDown($event,quarter, row.field)" (mouseup)="onMouseUp(quarter,row.field)">
+          <input #inputElement appInputDirective (ctrlEnter)="offerUnitStore.updateSelectedCells($event)" type="text"
+            step="0.01" [ngModel]="getValue(quarter, row.field)"
+            (blur)="setValue(quarter, row.field, inputElement.value)">
+        </td>
+        }
+        }
+
+
+        }
+      </tr>
       }
     </tbody>
 
@@ -68,6 +80,3 @@
   </button>
 
 </div>
-
-
-  
