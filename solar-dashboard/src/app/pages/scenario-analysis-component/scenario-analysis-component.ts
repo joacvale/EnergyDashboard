@@ -8,7 +8,7 @@ import { DynamicTableComponent } from '../../components/dynamic-table-component/
 import { DynamicChartComponent } from '../../components/dynamic-chart-component/dynamic-chart-component';
 import { OfferUnitStore } from '../../stores/offer-unit.store';
 import { MatAnchor } from "@angular/material/button";
-import {MatCardModule} from "@angular/material/card"; 
+import { MatCardModule } from "@angular/material/card";
 
 
 
@@ -23,6 +23,7 @@ export class ScenarioAnalysisComponent {
   solarPanelService = inject(SolarPanelService);
   offerUnitStore = inject(OfferUnitStore);
 
+
   viewMode = signal<ViewMode>(ViewMode.TABLE);
 
   offerUnits = this.offerUnitStore.tableData;
@@ -30,13 +31,12 @@ export class ScenarioAnalysisComponent {
   errorMessages = this.offerUnitStore.getErrorMessages;
 
 
-
-
   constructor() {
     effect(() => {
       this.solarPanelService.selectedCountry();
-      this.offerUnitStore.loadOfferUnits();
     });
+    this.reloadData();
+
   }
 
   //showTable()
@@ -62,6 +62,19 @@ export class ScenarioAnalysisComponent {
     setTimeout(() => { element.classList.remove('focused-error'); }, 3000);
   }
 
-  
+  reloadData() {
+    const hasChanges = this.modifiedCellsCount() > 0;
+    if (hasChanges) {
+      const reload = confirm('Existem alterações não guardadas. Pretende recarregar os dados e perder essas alterações?');
+
+      if (!reload) {
+        return;
+      }
+    }
+
+    this.offerUnitStore.loadOfferUnits();
+  }
+
+
 
 }
