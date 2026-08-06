@@ -18,6 +18,7 @@ export class ReloadDialogComponent {
     title: string;
     icon: string;
     message: string;
+    lastOpen:string;
     cancelText: string;
     confirmText: string;
   };

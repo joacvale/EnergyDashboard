@@ -11,7 +11,7 @@ import { MatAnchor } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatDialog } from '@angular/material/dialog';
 import { ReloadDialogComponent } from '../../components/reload-dialog-component/reload-dialog-component';
-
+import { untracked } from '@angular/core';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class ScenarioAnalysisComponent implements AfterViewInit {
   solarPanelService = inject(SolarPanelService);
   offerUnitStore = inject(OfferUnitStore);
   dialog = inject(MatDialog);
-
+  editStartTime: Date | null = null;
 
   viewMode = signal<ViewMode>(ViewMode.TABLE);
 
@@ -33,10 +33,17 @@ export class ScenarioAnalysisComponent implements AfterViewInit {
   modifiedCellsCount = this.offerUnitStore.modifiedCellsCount;
   errorMessages = this.offerUnitStore.getErrorMessages;
 
+  previousCountry='';
+
 
   constructor() {
+    this.previousCountry=this.solarPanelService.selectedCountry();
+
     effect(() => {
       this.solarPanelService.selectedCountry();
+      untracked(() => {
+        this.reloadData();
+      });
     });
   }
 
@@ -81,8 +88,8 @@ export class ScenarioAnalysisComponent implements AfterViewInit {
       data: {
         title: 'Alterações não guardadas',
         icon: 'warning',
-        message:
-          'Existem alterações não guardadas. Pretende recarregar os dados e perder essas alterações?',
+        message: 'Existem alterações não guardadas. Pretende recarregar os dados e perder essas alterações?',
+        lastOpen: `(A ultima alteração foi às ${this.offerUnitStore.lastUpdate().toLocaleTimeString('pt-PT')})`,
         cancelText: 'Manter alterações',
         confirmText: 'Recarregar'
       }
@@ -91,6 +98,8 @@ export class ScenarioAnalysisComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.offerUnitStore.loadOfferUnits();
+      } else{
+        this.solarPanelService.setCountry(this.previousCountry);
       }
     });
   }

@@ -5,6 +5,7 @@
 
 .dialog-title {
   margin-bottom: 20px;
+  font-weight: 500;
 }
 
 .dialog-content {
@@ -26,7 +27,13 @@
   line-height: 1.4;
   white-space: normal;
 }
-
+.dialog-submessage {
+  font-size: 10x;
+  font-weight: lighter;
+  color: grey;
+  line-height: 1.4;
+  white-space: normal;
+}
 .dialog-actions {
   display: flex;
   justify-content: center;
