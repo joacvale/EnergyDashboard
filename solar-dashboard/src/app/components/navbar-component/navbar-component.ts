@@ -34,7 +34,6 @@ export class NavbarComponent {
   title = 'Solar Energy Dashboard';
   icon = 'light_mode';
 
-
   logout() {
     this.authenticationService.logout().subscribe(data => {
       if (data.status === 200) {
@@ -48,13 +47,13 @@ export class NavbarComponent {
   }
 
   get selectedCountry() {
-    return this.solarPanelService.selectedCountry();
+    return this.solarPanelService.requestedCountry();
   }
 
-  updateCountry(country: string) {
-    localStorage.setItem('selectedCountry', country)
-    this.solarPanelService.setCountry(country);
-  }
+updateCountry(country: string) {
+  localStorage.setItem('selectedCountry', country);
+  this.solarPanelService.requestCountry(country);
+}
 
   allowedCountries = computed(() => {
     const countries = this.solarPanelService.countryData();

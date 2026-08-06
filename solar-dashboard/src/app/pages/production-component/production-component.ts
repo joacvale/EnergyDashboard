@@ -53,6 +53,19 @@ export class ProductionComponent {
 
   constructor() {
     effect(() => {
+      const requestedCountry = this.solarPanelService.requestedCountry();
+      const selectedCountry =
+        this.solarPanelService.selectedCountry();
+      if (!requestedCountry || requestedCountry === selectedCountry) {
+        return;
+      }
+      this.solarPanelService.setCountry(
+        requestedCountry
+      );
+
+    });
+    effect(() => {
+
       this.panelsDataSource.data = this.solarPanelService.panels();
     });
   }

@@ -33,17 +33,22 @@ export class ScenarioAnalysisComponent implements AfterViewInit {
   modifiedCellsCount = this.offerUnitStore.modifiedCellsCount;
   errorMessages = this.offerUnitStore.getErrorMessages;
 
-  previousCountry='';
-
 
   constructor() {
-    this.previousCountry=this.solarPanelService.selectedCountry();
-
     effect(() => {
-      this.solarPanelService.selectedCountry();
+      const requestedCountry = this.solarPanelService.requestedCountry();
+      const selectedCountry = this.solarPanelService.selectedCountry();
+
+      if (!requestedCountry) {
+        return;
+      }
+      if (requestedCountry === selectedCountry) {
+        return;
+      }
       untracked(() => {
-        this.reloadData();
+        this.confirmCountryChange(requestedCountry);
       });
+
     });
   }
 
@@ -98,8 +103,46 @@ export class ScenarioAnalysisComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.offerUnitStore.loadOfferUnits();
-      } else{
-        this.solarPanelService.setCountry(this.previousCountry);
+      }
+    });
+
+  }
+
+  confirmCountryChange(country: string) {
+    const hasChanges =this.modifiedCellsCount() > 0;
+
+    if (!hasChanges) {
+      this.solarPanelService.setCountry(country);
+      this.offerUnitStore.loadOfferUnits();
+      return;
+    }
+
+    const dialogRef = this.dialog.open(
+      ReloadDialogComponent,
+      {
+        width: '600px',
+        disableClose: true,
+        data: {
+          title: 'Country change',
+          icon: 'warning',
+          message:
+            'You will lose your changes when moving countries.',
+          lastOpen:
+            `(Last change at ${this.offerUnitStore.lastUpdate().toLocaleTimeString('pt-PT')})`,
+          cancelText: 'Stay',
+          confirmText: 'Change country'
+        }
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.solarPanelService.setCountry(country);
+        this.offerUnitStore.loadOfferUnits();
+      } else {
+        this.solarPanelService.requestedCountry.set(
+          this.solarPanelService.selectedCountry()
+        );
       }
     });
   }
