@@ -1,0 +1,35 @@
+.dialog-card {
+  padding: 24px;
+  text-align: center;
+}
+
+.dialog-title {
+  margin-bottom: 20px;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.dialog-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #ff9800;
+}
+
+.dialog-message {
+  font-size: 16px;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}

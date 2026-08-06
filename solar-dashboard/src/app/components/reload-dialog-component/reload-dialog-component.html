@@ -1,0 +1,26 @@
+<mat-card class="dialog-card">
+  <mat-card-title class="dialog-title">
+    {{ data.title }}
+  </mat-card-title>
+
+  <mat-card-content class="dialog-content">
+    <mat-icon class="dialog-icon">
+      {{ data.icon }}
+    </mat-icon>
+
+    <mat-card-subtitle class="dialog-message">
+      {{ data.message }}
+    </mat-card-subtitle>
+  </mat-card-content>
+
+  <mat-card-actions class="dialog-actions">
+    <button mat-raised-button color="primary" (click)="cancel()">
+      {{ data.cancelText }}
+    </button>
+
+    <button mat-raised-button color="primary" (click)="confirm()">
+      {{ data.confirmText }}
+    </button>
+  </mat-card-actions>
+
+</mat-card>
