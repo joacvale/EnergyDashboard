@@ -148,7 +148,7 @@ export const OfferUnitStore = signalStore(
                         patchState(store, {
                             editedValues: editedValuesCopy,
                         });
-                        if(cell.field==='idle' && cell.value===false){
+                        if(cell.field==='idle' && !originalQuarter[cell.field] && cell.value===false){
                             delete editedValuesCopy[id],
                             patchState(store, {
                                 editedValues: editedValuesCopy,

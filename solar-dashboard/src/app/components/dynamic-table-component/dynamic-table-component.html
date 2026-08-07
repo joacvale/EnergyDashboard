@@ -44,12 +44,7 @@
             (blur)="setValue(quarter, row.field, inputElement.value)">
         </td>
         }@else(){
-        @if(isBlocked(quarter)){
-        <td [class.isBlocked]="isBlocked(quarter)" [id]="offerUnit().id + '-' + quarter.quarter + '-' + row.field">
-            {{ getValue(quarter, row.field) }}
-        </td>
 
-        }@else(){
         <td [class.edited-cell]="isCellEdited(quarter, row.field)"
           [class.selected-cell]="isCellSelected(quarter, row.field)"
           [class.highlight-cross-cells]="isInCross(quarter,row.field)" [class.isBlocked]="isBlocked(quarter)"
@@ -57,9 +52,9 @@
           (mousedown)="onMouseDown($event,quarter, row.field)" (mouseup)="onMouseUp(quarter,row.field)">
           <input #inputElement appInputDirective (ctrlEnter)="offerUnitStore.updateSelectedCells($event)" type="text"
             step="0.01" [ngModel]="getValue(quarter, row.field)"
-            (blur)="setValue(quarter, row.field, inputElement.value)">
+            (blur)="setValue(quarter, row.field, inputElement.value)" [disabled]="isBlocked(quarter)">
         </td>
-        }
+
         }
 
 

@@ -86,17 +86,18 @@ export class ScenarioAnalysisComponent implements AfterViewInit {
       this.offerUnitStore.loadOfferUnits();
       return;
     }
-
     const dialogRef = this.dialog.open(ReloadDialogComponent, {
       width: '600px',
       disableClose: true,
       data: {
-        title: 'Alterações não guardadas',
+        title: 'Unsaved Changes',
         icon: 'warning',
-        message: 'Existem alterações não guardadas. Pretende recarregar os dados e perder essas alterações?',
-        lastOpen: `(A ultima alteração foi às ${this.offerUnitStore.lastUpdate().toLocaleTimeString('pt-PT')})`,
-        cancelText: 'Manter alterações',
-        confirmText: 'Recarregar'
+        message:
+          'You have unsaved changes. Reloading the data will discard all modifications made since the last update. Do you want to continue?',
+        lastOpen:
+          `(Last modification detected at ${this.offerUnitStore.lastUpdate().toLocaleTimeString('pt-PT')})`,
+        cancelText: 'Keep Changes',
+        confirmText: 'Reload Data'
       }
     });
 
@@ -109,7 +110,7 @@ export class ScenarioAnalysisComponent implements AfterViewInit {
   }
 
   confirmCountryChange(country: string) {
-    const hasChanges =this.modifiedCellsCount() > 0;
+    const hasChanges = this.modifiedCellsCount() > 0;
 
     if (!hasChanges) {
       this.solarPanelService.setCountry(country);
@@ -123,17 +124,18 @@ export class ScenarioAnalysisComponent implements AfterViewInit {
         width: '600px',
         disableClose: true,
         data: {
-          title: 'Country change',
+          title: 'Change Country',
           icon: 'warning',
           message:
-            'You will lose your changes when moving countries.',
+            'Changing the selected country will discard all unsaved changes in the current scenario. Do you want to continue?',
           lastOpen:
-            `(Last change at ${this.offerUnitStore.lastUpdate().toLocaleTimeString('pt-PT')})`,
-          cancelText: 'Stay',
-          confirmText: 'Change country'
+            `(Last modification detected at ${this.offerUnitStore.lastUpdate().toLocaleTimeString('en-GB')})`,
+          cancelText: 'Stay on Current Country',
+          confirmText: 'Change Country'
         }
       }
     );
+    
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
