@@ -22,6 +22,7 @@ export class SolarPanelService {
     energyPriceData = signal<EnergyPriceData[]>([]); //list of energy price data - default empty array~
     countryData = signal<CountryData[]>([]);
     selectedCountry = signal<string>('');
+    requestedCountry = signal<string>('');
 
     authenticationService = inject(AuthenticationService);
 
@@ -222,10 +223,15 @@ export class SolarPanelService {
 
     async setCountry(countryId: string) {
         this.selectedCountry.set(countryId);
+        this.requestedCountry.set(countryId);
         this.loadPanels();
         this.loadProductionData();
         this.loadEnergyPriceData();
         this.loadCountryData();
+    }
+    
+    requestCountry(country: string) {
+        this.requestedCountry.set(country);
     }
 
     constructor() {

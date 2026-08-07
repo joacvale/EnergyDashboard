@@ -35,6 +35,7 @@ export interface OfferUnitState {
     activeCell: Cell | null;
     loading: loadingStatus;
     error: error | null;
+    lastUpdate: Date;
 };
 
 const initialState: OfferUnitState = {
@@ -46,6 +47,7 @@ const initialState: OfferUnitState = {
     activeCell: null,
     loading: 'idle',
     error: null,
+    lastUpdate: new Date(),
 };
 
 export const OfferUnitStore = signalStore(
@@ -62,6 +64,7 @@ export const OfferUnitStore = signalStore(
                 errorValues: {},
                 selectedCells: [],
                 activeCell: null,
+                lastUpdate:new Date(),
             });
 
             try {
@@ -108,7 +111,8 @@ export const OfferUnitStore = signalStore(
                 this.updateEditedValues(cell);
                 this.updateErrorValues(cell);
                 patchState(store, {
-                    tableData: updatedTableData
+                    tableData: updatedTableData,
+                    lastUpdate: new Date(),
                 });
             } catch (error) {
                 patchState(store, {
@@ -144,7 +148,7 @@ export const OfferUnitStore = signalStore(
                         patchState(store, {
                             editedValues: editedValuesCopy,
                         });
-                        if(cell.field==='idle' && cell.value===false){
+                        if(cell.field==='idle' && !originalQuarter[cell.field] && cell.value===false){
                             delete editedValuesCopy[id],
                             patchState(store, {
                                 editedValues: editedValuesCopy,

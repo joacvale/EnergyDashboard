@@ -42,26 +42,22 @@ export class DynamicChartComponent {
     );
 
     const chartValues = offerUnit.quarters.map(q => {
-      if (q.idle) {
-        return maxVolume;
-      } else if (q.volume === undefined) {
+      if (q.idle ||q.volume === undefined || q.volume === 0) {
         return maxVolume;
       }
-      return q.volume ?? 0;
+      return q.volume;
     });
     const backgroundColors = offerUnit.quarters.map(q => {
-      if (q.idle) {
+      if (q.idle || q.volume === undefined || q.volume === 0.00) {
         return 'transparent';
 
-      } else if (q.volume === undefined) {
-        return 'transparent';
-      }
+      } 
       return 'rgba(128,128,128,1)';
     });
     const borderColors = offerUnit.quarters.map(q => {
       if (q.idle) {
         return 'green';
-      } else if (q.volume === undefined) {
+      } else if (q.volume === undefined || q.volume === 0.00) {
         return 'blue';
       }
       return 'black';
@@ -137,7 +133,7 @@ export class DynamicChartComponent {
             } else if (idle && priceItem !== null) {
               this.message = `Idle is true, €/MWh: ${priceItem}`;
             }
-            else if (!idle && priceItem === null && (productionItem === null || productionItem === undefined)) {
+            else if (!idle && priceItem === null && (productionItem === null || productionItem === undefined || productionItem === 0)) {
               this.message = `MW: StartAppShutdown; €/MWh: No data for price`;
             } else if (!idle && priceItem !== null && (productionItem === null || productionItem === undefined)) {
               this.message = `MW:StartAppShutdown; €/MWh: ${priceItem}`;
