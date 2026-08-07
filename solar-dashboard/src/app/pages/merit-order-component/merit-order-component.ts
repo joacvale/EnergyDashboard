@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MeritOrderStore } from '../../stores/merit-order.store';
 
 @Component({
   selector: 'app-merit-order-component',
@@ -6,4 +7,14 @@ import { Component } from '@angular/core';
   templateUrl: './merit-order-component.html',
   styleUrl: './merit-order-component.scss',
 })
-export class MeritOrderComponent {}
+export class MeritOrderComponent {
+  meritOrderStore = inject(MeritOrderStore);
+
+  async getMeritOrder(){
+    const test = await this.meritOrderStore.loadMeritOrder();
+  }
+
+  constructor() {
+    this.getMeritOrder();
+  }
+}

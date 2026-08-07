@@ -1,4 +1,4 @@
-  "content": {
+  {"content": {
     "referenceValues": [
       {
         "tsoUp": [
@@ -22631,4 +22631,5 @@
         ]
       }
     ]
-  },
+  }
+}
