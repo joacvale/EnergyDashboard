@@ -10,11 +10,23 @@ import { MeritOrderStore } from '../../stores/merit-order.store';
 export class MeritOrderComponent {
   meritOrderStore = inject(MeritOrderStore);
 
-  async getMeritOrder(){
-    const test = await this.meritOrderStore.loadMeritOrder();
+  async test(){
+    const periodIndex = 1;
+    const blockIndex = 4;
+    //test 1
+    const testGetMeritOrderTable = await this.meritOrderStore.loadMeritOrder();
+    //test 2
+    const testGetMeritOrder = this.meritOrderStore.getMeritOrderByPeriod(periodIndex);
+    //test 3
+    const testGetBlock =  this.meritOrderStore.getBlockByIndex(periodIndex, blockIndex);
+    //test 4
+    if(testGetMeritOrder && testGetBlock){
+      const testIncrement = this.meritOrderStore.incrementProgramValue(testGetMeritOrder, testGetBlock);
+
+    }
   }
 
   constructor() {
-    this.getMeritOrder();
+    this.test();
   }
 }

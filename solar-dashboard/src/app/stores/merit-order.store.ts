@@ -23,6 +23,7 @@ export interface MeritOrderState {
     meritOrderOriginal: MeritOrder[];
     selectedBlock: Block | null;
     selectedMeritOrder: MeritOrder | null;
+    increment: number;
     loading: boolean;
     error: string | null;
     lastUpdate: Date;
@@ -33,6 +34,7 @@ const initialState: MeritOrderState = {
     meritOrderOriginal: [],
     selectedBlock: null,
     selectedMeritOrder: null,
+    increment: 0,
     loading: false,
     error: null,
     lastUpdate: new Date(),
@@ -43,6 +45,7 @@ export const MeritOrderStore = signalStore(
 
     withState(initialState),
 
+
     withMethods((store, meritOrderService = inject(MeritOrderService)) => ({
         loadMeritOrder: async () => {
             patchState(store, {
@@ -50,17 +53,20 @@ export const MeritOrderStore = signalStore(
                 meritOrderOriginal: [],
                 selectedBlock: null,
                 selectedMeritOrder: null,
+                increment: 0,
                 loading: true,
                 error: null,
                 lastUpdate: new Date(),
             })
             try {
+                const increment = await meritOrderService.getIncrement();
                 const data = await meritOrderService.getMeritOrder();
                 const meritOrderData = data.content.meritOrder[0].upPriceMeritOrder;
-
+                //console.log (meritOrderData);
                 patchState(store, {
                     meritOrderTable: meritOrderData,
                     meritOrderOriginal: meritOrderData,
+                    increment: increment,
                     lastUpdate: new Date(),
                 });
             } catch (error) {
@@ -78,10 +84,12 @@ export const MeritOrderStore = signalStore(
                 loading: true,
             });
             try {
-                const meritOrder: MeritOrder = store.meritOrderTable()[period];
-                if(!meritOrder){
+                const index = period - 1;
+                const meritOrder: MeritOrder = store.meritOrderTable()[index];
+                if (!meritOrder) {
                     return null;
                 }
+                //console.log(meritOrder);
                 return meritOrder;
             } catch (error) {
                 patchState(store, {
@@ -94,21 +102,57 @@ export const MeritOrderStore = signalStore(
                 })
             }
         },
-        getBlockByIndex(period: number, index: number) {
+        getBlockByIndex(period: number, blockIndex: number) {
             patchState(store, {
                 loading: true,
             });
             try {
-                const meritOrder= this.getMeritOrderByPeriod(period) || null;
+                const index = blockIndex - 1;
+                const meritOrder = this.getMeritOrderByPeriod(period) || null;
                 if (!meritOrder || meritOrder.blocks.length <= index) {
                     return; //possivelmente mandar erro aqui
                 }
+                //console.log(meritOrder.blocks[index]);
                 return meritOrder.blocks[index];
             } catch (error) {
                 patchState(store, {
                     error: 'error getting block',
                 })
                 return null;
+            } finally {
+                patchState(store, {
+                    loading: false,
+                })
+            }
+        },
+        incrementProgramValue(meritOrder: MeritOrder, changedBlock: Block) {
+            patchState(store, {
+                loading: true,
+            });
+            try {
+                //console.log('program value inicial '+ changedBlock.programValue);
+                const updatedMeritOrderTable: MeritOrder[] = structuredClone(store.meritOrderTable());
+                const updatedMeritOrderIndex = updatedMeritOrderTable.findIndex(mo => mo.period === meritOrder.period);
+                const updatedMeritOrder = updatedMeritOrderTable.find(mo => mo.period === meritOrder.period);
+                const changedBlockIndex = updatedMeritOrder?.blocks.findIndex(block => block.label === changedBlock.label);
+                if (changedBlockIndex && changedBlockIndex>0) {
+                    const previousBlock = updatedMeritOrder?.blocks[changedBlockIndex -1];
+                    if (previousBlock) {
+                        //console.log('previous block program value '+previousBlock.programValue);
+                        changedBlock.programValue = previousBlock.programValue + store.increment();
+                        updatedMeritOrder.blocks[changedBlockIndex] = changedBlock;
+                        updatedMeritOrderTable[updatedMeritOrderIndex] = updatedMeritOrder;
+                        //console.log('final '+ updatedMeritOrderTable[updatedMeritOrderIndex].blocks[changedBlockIndex].programValue);
+                        patchState(store, {
+                            meritOrderTable: updatedMeritOrderTable,
+                            lastUpdate: new Date(),
+                        })
+                    }
+                }
+            } catch (error) {
+                patchState(store, {
+                    error: 'error incrementing program value',
+                })
             } finally {
                 patchState(store, {
                     loading: false,
