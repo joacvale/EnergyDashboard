@@ -2,11 +2,10 @@ import { Component, inject, computed } from '@angular/core';
 import { MeritOrderStore, Block } from '../../stores/merit-order.store';
 import { CdkDropList, CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { MatTooltip } from '@angular/material/tooltip';
-import { MatTable, MatHeaderRow, MatHeaderRowDef, MatRowDef, MatRow, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef } from "@angular/material/table";
 
 @Component({
   selector: 'app-merit-order-component',
-  imports: [CdkDropList, CdkDrag, MatTooltip, MatTable, MatHeaderRow, MatHeaderRowDef, MatRowDef, MatRow, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef],
+  imports: [CdkDropList, CdkDrag, MatTooltip],
   standalone: true,
   templateUrl: './merit-order-component.html',
   styleUrl: './merit-order-component.scss',
