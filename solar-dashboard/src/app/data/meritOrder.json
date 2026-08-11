@@ -798,14 +798,14 @@
               {
                 "label": "ALQ-3",
                 "name": "ALQUE-3",
-                "programValue": 40,
+                "programValue": 0,
                 "offerPrice": 0.24,
                 "bandPercentage": 7.1
               },
               {
                 "label": "AGU-3",
                 "name": "AGUIEI-3",
-                "programValue": 12,
+                "programValue": 100,
                 "offerPrice": 0.67,
                 "bandPercentage": 2.1
               },

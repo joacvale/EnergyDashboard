@@ -1,6 +1,7 @@
 import { inject, computed } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { MeritOrderService } from '../services/merit-order.service';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { firstValueFrom } from 'rxjs';
 
 
@@ -45,6 +46,17 @@ export const MeritOrderStore = signalStore(
 
     withState(initialState),
 
+     withComputed((store) => ({
+        getMeritOrderTable: computed(() =>
+            store.meritOrderTable
+        ),
+
+        maxPeriodValue: computed(() =>
+            Math.max(...store.meritOrderTable().map(mo => mo.blocks.reduce((sum, block) => sum + (block.programValue || 0),0 )))
+        ),
+
+
+    })),
 
     withMethods((store, meritOrderService = inject(MeritOrderService)) => ({
         loadMeritOrder: async () => {
@@ -64,8 +76,8 @@ export const MeritOrderStore = signalStore(
                 const meritOrderData = data.content.meritOrder[0].upPriceMeritOrder;
                 //console.log (meritOrderData);
                 patchState(store, {
-                    meritOrderTable: meritOrderData,
-                    meritOrderOriginal: meritOrderData,
+                    meritOrderTable: structuredClone(meritOrderData),
+                    meritOrderOriginal: structuredClone(meritOrderData),
                     increment: increment,
                     lastUpdate: new Date(),
                 });
@@ -125,40 +137,68 @@ export const MeritOrderStore = signalStore(
                 })
             }
         },
-        incrementProgramValue(meritOrder: MeritOrder, changedBlock: Block) {
-            patchState(store, {
-                loading: true,
-            });
-            try {
-                //console.log('program value inicial '+ changedBlock.programValue);
-                const updatedMeritOrderTable: MeritOrder[] = structuredClone(store.meritOrderTable());
-                const updatedMeritOrderIndex = updatedMeritOrderTable.findIndex(mo => mo.period === meritOrder.period);
-                const updatedMeritOrder = updatedMeritOrderTable.find(mo => mo.period === meritOrder.period);
-                const changedBlockIndex = updatedMeritOrder?.blocks.findIndex(block => block.label === changedBlock.label);
-                if (changedBlockIndex && changedBlockIndex>0) {
-                    const previousBlock = updatedMeritOrder?.blocks[changedBlockIndex -1];
-                    if (previousBlock) {
-                        //console.log('previous block program value '+previousBlock.programValue);
-                        changedBlock.programValue = previousBlock.programValue + store.increment();
-                        updatedMeritOrder.blocks[changedBlockIndex] = changedBlock;
-                        updatedMeritOrderTable[updatedMeritOrderIndex] = updatedMeritOrder;
-                        //console.log('final '+ updatedMeritOrderTable[updatedMeritOrderIndex].blocks[changedBlockIndex].programValue);
-                        patchState(store, {
-                            meritOrderTable: updatedMeritOrderTable,
-                            lastUpdate: new Date(),
-                        })
-                    }
-                }
-            } catch (error) {
-                patchState(store, {
-                    error: 'error incrementing program value',
-                })
-            } finally {
-                patchState(store, {
-                    loading: false,
-                })
+        changeBlocksPositions(period: number, sourceIndex: number, targetIndex: number) {
+            const updatedMeritOrderTable = structuredClone(store.meritOrderTable());
+            const meritOrder = updatedMeritOrderTable.find(mo => mo.period === period);
+
+
+            if (!meritOrder) {
+                return;
             }
-        }
-    }))
+            //console.log(meritOrder.blocks.map(b => b.label));
+            moveItemInArray(meritOrder.blocks, sourceIndex, targetIndex);
+            //console.log(meritOrder.blocks.map(b => b.label));
+            //console.log('prev ' + meritOrder.blocks[targetIndex].programValue)
+            meritOrder.blocks[targetIndex].programValue = this.incrementProgramValue(meritOrder.blocks[targetIndex], meritOrder.blocks[targetIndex + 1]);
+            //console.log('after ' + meritOrder.blocks[targetIndex].programValue)
+            patchState(store, {
+                meritOrderTable: updatedMeritOrderTable,
+                lastUpdate: new Date(),
+            });
+        },
+        incrementProgramValue(changedBlock: Block, bellowBlock: Block | null): number {
+
+            if (!bellowBlock || changedBlock.programValue === 0) {
+                return changedBlock.programValue;
+            }
+            return bellowBlock.programValue + store.increment();
+        },
+        nullProgramValueCountPerPeriod(period: number) {
+            const meritOrder = store.meritOrderTable().find(mo => mo.period === period);
+            const blocks = meritOrder?.blocks;
+
+            //console.log(blocks?.filter(b => b.programValue === 0 || b.programValue === null || b.programValue === undefined).length);
+            return blocks?.filter(b => b.programValue === 0 || b.programValue === null || b.programValue === undefined).length ?? 0;
+        },
+
+        periodProgramValue(period: number): number {
+            const meritOrder = store
+                .meritOrderTable()
+                .find(mo => mo.period === period);
+
+            if (!meritOrder) {
+                return 0;
+            }
+
+            return meritOrder.blocks.reduce(
+                (sum, block) => sum + (block.programValue || 0),
+                0
+            );
+        },
+        blockHeight(period: number, programValue: number) {
+            if (!programValue) {
+                return 15;
+            }
+
+            const nullValues = this.nullProgramValueCountPerPeriod(period) ?? 0;
+            const reservedHeight = nullValues * 15;
+            const availableHeight = 600 - reservedHeight;
+
+            return (programValue * availableHeight / store.maxPeriodValue());
+        },
+    })),
+
+   
+
 
 )

@@ -1,32 +1,43 @@
-import { Component, inject } from '@angular/core';
-import { MeritOrderStore } from '../../stores/merit-order.store';
+import { Component, inject, computed } from '@angular/core';
+import { MeritOrderStore, Block } from '../../stores/merit-order.store';
+import { CdkDropList, CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-merit-order-component',
-  imports: [],
+  imports: [CdkDropList, CdkDrag],
+  standalone: true,
   templateUrl: './merit-order-component.html',
   styleUrl: './merit-order-component.scss',
 })
 export class MeritOrderComponent {
   meritOrderStore = inject(MeritOrderStore);
+  //meritOrder = this.meritOrderStore.getMeritOrderTable
 
-  async test(){
-    const periodIndex = 1;
-    const blockIndex = 4;
-    //test 1
-    const testGetMeritOrderTable = await this.meritOrderStore.loadMeritOrder();
-    //test 2
-    const testGetMeritOrder = this.meritOrderStore.getMeritOrderByPeriod(periodIndex);
-    //test 3
-    const testGetBlock =  this.meritOrderStore.getBlockByIndex(periodIndex, blockIndex);
-    //test 4
-    if(testGetMeritOrder && testGetBlock){
-      const testIncrement = this.meritOrderStore.incrementProgramValue(testGetMeritOrder, testGetBlock);
 
-    }
+
+  getHour(period: number): number {
+    return Math.floor((period - 1) / 4) + 1;
+  }
+
+  yAxis = computed(() => {
+    const max =this.meritOrderStore.maxPeriodValue();
+
+    return [
+      Number(max.toFixed(2)),
+      Number((max * 0.75).toFixed(2)),
+      Number((max * 0.5).toFixed(2)),
+      Number((max * 0.25).toFixed(2)),
+      0
+    ];
+  });
+
+  drop(event: CdkDragDrop<Block[]>, period: number) {
+    this.meritOrderStore.changeBlocksPositions(period, event.previousIndex, event.currentIndex);
   }
 
   constructor() {
-    this.test();
+    this.meritOrderStore.loadMeritOrder();
+
   }
+
 }
