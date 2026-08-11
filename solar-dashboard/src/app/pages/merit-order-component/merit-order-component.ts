@@ -2,10 +2,11 @@ import { Component, inject, computed } from '@angular/core';
 import { MeritOrderStore, Block } from '../../stores/merit-order.store';
 import { CdkDropList, CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { MatTooltip } from '@angular/material/tooltip';
+import { MatTable, MatHeaderRow, MatHeaderRowDef, MatRowDef, MatRow, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef } from "@angular/material/table";
 
 @Component({
   selector: 'app-merit-order-component',
-  imports: [CdkDropList, CdkDrag, MatTooltip],
+  imports: [CdkDropList, CdkDrag, MatTooltip, MatTable, MatHeaderRow, MatHeaderRowDef, MatRowDef, MatRow, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatCell, MatCellDef],
   standalone: true,
   templateUrl: './merit-order-component.html',
   styleUrl: './merit-order-component.scss',
@@ -13,7 +14,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 export class MeritOrderComponent {
   meritOrderStore = inject(MeritOrderStore);
   //meritOrder = this.meritOrderStore.getMeritOrderTable
-
+  
 
 
   getHour(period: number): number {
@@ -44,11 +45,34 @@ Up qFFR price - ${block.offerPrice} €/MWh
 Up aFRR - ${block.bandPercentage}%`;
   } 
 
+
+  periods = computed(() =>
+  this.meritOrderStore.tsoUpTable()
+);
+
+tableRows = computed(() => [
+  {
+    label: 'TSO Up',
+    values: this.meritOrderStore.tsoUpTable()
+  },
+  {
+    label: 'TSO Up 95%',
+    values: this.meritOrderStore.tsoUp95Table()
+  },
+  {
+    label: 'TSO Up 105%',
+    values: this.meritOrderStore.tsoUp105Table()
+  }
+]);
+
   constructor() {
     this.meritOrderStore.loadMeritOrder();
-    this.meritOrderStore.calcTsoUp105();
-    this.meritOrderStore.calcTsoUp95();
 
+  }
+
+  ngAfterViewInit(): void {
+    this.meritOrderStore.calcTsoUp95();
+    this.meritOrderStore.calcTsoUp105();
   }
 
 }

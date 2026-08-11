@@ -66,6 +66,7 @@ export const MeritOrderStore = signalStore(
         ),
     })),
 
+    
     withMethods((store, meritOrderService = inject(MeritOrderService)) => ({
         loadMeritOrder: async () => {
             patchState(store, {
@@ -228,15 +229,20 @@ export const MeritOrderStore = signalStore(
         },
         calcTsoUp95() {
             try {
-                const table95 = structuredClone(store.tsoUp95Table());
-                table95.forEach(row => {
+                const table = structuredClone(store.tsoUpTable());
+                let volume:number;
+                let table95: tsoUp[]=[];
+                let newTso: tsoUp;
+                table.forEach(row => {
                     const referenceTso = store.tsoUpTable().find(tso => tso.period === row.period)
                     if (!referenceTso) {
-                        row.volume = 0;
+                        volume = 0;
                     } else {
                         const referenceValue = referenceTso.volume * 0.95;
-                        row.volume = this.findBlock(row.period, referenceValue);
+                        volume = this.findBlock(row.period, referenceValue);
                     }
+                    newTso = {period:row.period, volume:volume};
+                    table95= [...table95,newTso];
                 });
                 patchState(store, {
                     tsoUp95Table: table95
@@ -247,20 +253,26 @@ export const MeritOrderStore = signalStore(
                 })
             }
         },
+                
         calcTsoUp105() {
             try {
-                const table105 = structuredClone(store.tsoUp105Table());
-                table105.forEach(row => {
+                const table = structuredClone(store.tsoUpTable());
+                let volume:number;
+                let table105: tsoUp[]=[];
+                let newTso: tsoUp;
+                table.forEach(row => {
                     const referenceTso = store.tsoUpTable().find(tso => tso.period === row.period)
                     if (!referenceTso) {
-                        row.volume = 0;
+                        volume = 0;
                     } else {
                         const referenceValue = referenceTso.volume * 1.05;
-                        row.volume = this.findBlock(row.period, referenceValue);
+                        volume = this.findBlock(row.period, referenceValue);
                     }
+                    newTso = {period:row.period, volume:volume};
+                    table105 = [...table105,newTso];
                 });
                 patchState(store, {
-                    tsoUp95Table: table105
+                    tsoUp105Table: table105
                 })
             } catch (error) {
                 patchState(store, {

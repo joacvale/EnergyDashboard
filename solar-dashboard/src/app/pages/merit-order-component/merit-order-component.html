@@ -1,4 +1,33 @@
-<div class="content">
+<div class="reference-table">
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        @for(period of periods(); track period.period){
+          <th>{{ period.period }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for(row of tableRows(); track row.label){
+        <tr>
+          <td class="row-label">
+            {{ row.label }}
+          </td>
+          @for(value of row.values; track value.period){
+            <td>
+              {{ value.volume }}
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+
+<div class="drag-content">
 
     <div class="y-axis">
         @for(value of yAxis(); track value){
@@ -8,7 +37,7 @@
         }
     </div>
 
-    <div class="table">
+    <div class="drag-drop-table">
         <div class="header-container">
             <div class="hours-row">
                 @for(period of meritOrderStore.meritOrderTable(); track period.period){
@@ -39,8 +68,6 @@
                     [style.height.px]="meritOrderStore.blockHeight(period.period,block.programValue)">
                     {{ block.label }}
                 </div>
-
-
                 }
             </div>
             }
