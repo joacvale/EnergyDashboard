@@ -34,7 +34,10 @@
             <div cdkDropList [cdkDropListData]="period.blocks" class="period-column"
                 (cdkDropListDropped)="drop($event, period.period)">
                 @for(block of period.blocks; track block.label){
-                <div cdkDrag class="block" [class.empty-block]="!block.programValue"
+                <div cdkDrag class="block" 
+                    [matTooltip]="getTooltip(block)"
+                    matTooltipClass="merit-tooltip"
+                    [class.empty-block]="!block.programValue"
                     [style.height.px]="meritOrderStore.blockHeight(period.period,block.programValue)">
                     {{ block.label }}
                 </div>

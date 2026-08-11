@@ -151,3 +151,16 @@
 .period-column.cdk-drop-list-receiving {
     background-color: rgba(25,118,210,0.05);
 }
+
+::ng-deep .merit-tooltip {
+  white-space: pre-wrap !important;
+  text-align: left !important;
+  min-width: 200px !important;
+}
+
+::ng-deep .merit-tooltip .mdc-tooltip__surface {
+  white-space: pre-wrap !important;
+  text-align: left !important;
+  min-width: 200px !important;
+
+}
