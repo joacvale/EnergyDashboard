@@ -46,6 +46,8 @@ Up aFRR - ${block.bandPercentage}%`;
 
   constructor() {
     this.meritOrderStore.loadMeritOrder();
+    this.meritOrderStore.calcTsoUp105();
+    this.meritOrderStore.calcTsoUp95();
 
   }
 
