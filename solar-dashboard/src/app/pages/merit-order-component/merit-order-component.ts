@@ -49,15 +49,15 @@ Up aFRR - ${block.bandPercentage}%`;
 
 tableRows = computed(() => [
   {
-    label: 'TSO Up',
+    label: 'TSO Up (MW)',
     values: this.meritOrderStore.tsoUpTable()
   },
   {
-    label: 'TSO Up 95%',
+    label: 'TSO Up 95% (€/MWh)',
     values: this.meritOrderStore.tsoUp95Table()
   },
   {
-    label: 'TSO Up 105%',
+    label: 'TSO Up 105% (€/MWh)',
     values: this.meritOrderStore.tsoUp105Table()
   }
 ]);

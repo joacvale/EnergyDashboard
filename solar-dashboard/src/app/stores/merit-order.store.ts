@@ -224,7 +224,7 @@ export const MeritOrderStore = signalStore(
                     if(period===13){
                         console.log('refValue - '+referenceValue+' label - '+block.label+' vol - '+ block.programValue);
                     }
-                    return block.programValue;
+                    return block.offerPrice;
                 }
             }
             return 0;
