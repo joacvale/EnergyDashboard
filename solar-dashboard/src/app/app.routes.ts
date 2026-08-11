@@ -28,6 +28,14 @@ export const routes: Routes = [
         }
     },
     {
+        path: 'meritOrder',
+        canActivate:[authGuard],
+        loadComponent: () => {
+            return import('./pages/merit-order-component/merit-order-component').then(
+                (m) => m.MeritOrderComponent);
+        }
+    },
+    {
         path: 'login',
         loadComponent: () => {
             return import('./pages/login-component/login-component').then(

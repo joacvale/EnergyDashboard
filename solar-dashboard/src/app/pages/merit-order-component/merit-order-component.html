@@ -1,1 +1,50 @@
-<p>merit-order-component works!</p>
+<div class="content">
+
+    <div class="y-axis">
+        @for(value of yAxis(); track value){
+        <div class="y-axis-label">
+            aFRR {{ value }} MW
+        </div>
+        }
+    </div>
+
+    <div class="table">
+        <div class="header-container">
+            <div class="hours-row">
+                @for(period of meritOrderStore.meritOrderTable(); track period.period){
+                @if ((period.period - 1) % 4 === 0) {
+                <div class="hour-header">
+                    H{{ getHour(period.period) }}
+                </div>
+                }
+                }
+            </div>
+            <div class="periods-row">
+                @for(period of meritOrderStore.meritOrderTable(); track period.period){
+                <div class="period-header" [class.hour-border]="((period.period - 1) % 4 === 0)">
+                    {{ period.period }}
+                </div>
+                }
+            </div>
+
+        </div>
+
+        <div class="blocks-row">
+            @for(period of meritOrderStore.meritOrderTable(); track period.period){
+            <div cdkDropList [cdkDropListData]="period.blocks" class="period-column"
+                (cdkDropListDropped)="drop($event, period.period)">
+                @for(block of period.blocks; track block.label){
+                <div cdkDrag class="block" [cdkDragDisabled]="block.programValue === 0" [matTooltip]="getTooltip(block)"
+                    matTooltipClass="merit-tooltip" [class.empty-block]="!block.programValue"
+                    [style.height.px]="meritOrderStore.blockHeight(period.period,block.programValue)">
+                    {{ block.label }}
+                </div>
+
+
+                }
+            </div>
+            }
+        </div>
+    </div>
+
+</div>

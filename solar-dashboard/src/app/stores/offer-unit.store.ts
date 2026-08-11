@@ -24,8 +24,6 @@ export interface error {
     error: errorType;
 }
 
-
-
 export interface OfferUnitState {
     tableData: OfferUnit[];
     originalData: OfferUnit[];
