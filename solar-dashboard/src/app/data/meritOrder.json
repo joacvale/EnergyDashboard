@@ -798,7 +798,7 @@
               {
                 "label": "ALQ-3",
                 "name": "ALQUE-3",
-                "programValue": 0,
+                "programValue": 45,
                 "offerPrice": 0.24,
                 "bandPercentage": 7.1
               },
@@ -826,7 +826,7 @@
               {
                 "label": "CAR-3",
                 "name": "CARRAPA-3",
-                "programValue": 18,
+                "programValue": 0,
                 "offerPrice": 2.29,
                 "bandPercentage": 3.2
               },

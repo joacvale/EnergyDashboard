@@ -149,19 +149,19 @@ export const MeritOrderStore = signalStore(
             moveItemInArray(meritOrder.blocks, sourceIndex, targetIndex);
             //console.log(meritOrder.blocks.map(b => b.label));
             //console.log('prev ' + meritOrder.blocks[targetIndex].programValue)
-            meritOrder.blocks[targetIndex].programValue = this.incrementProgramValue(meritOrder.blocks[targetIndex], meritOrder.blocks[targetIndex + 1]);
+            meritOrder.blocks[targetIndex].offerPrice = this.incrementOfferPrice(meritOrder.blocks[targetIndex], meritOrder.blocks[targetIndex + 1]);
             //console.log('after ' + meritOrder.blocks[targetIndex].programValue)
             patchState(store, {
                 meritOrderTable: updatedMeritOrderTable,
                 lastUpdate: new Date(),
             });
         },
-        incrementProgramValue(changedBlock: Block, bellowBlock: Block | null): number {
+        incrementOfferPrice(changedBlock: Block, bellowBlock: Block | null): number {
 
-            if (!bellowBlock || changedBlock.programValue === 0) {
-                return changedBlock.programValue;
+            if (!bellowBlock || bellowBlock.programValue===0) {
+                return changedBlock.offerPrice;
             }
-            return bellowBlock.programValue + store.increment();
+            return bellowBlock.offerPrice + store.increment();
         },
         nullProgramValueCountPerPeriod(period: number) {
             const meritOrder = store.meritOrderTable().find(mo => mo.period === period);
