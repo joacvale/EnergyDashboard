@@ -2,7 +2,6 @@ import { inject, computed } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { MeritOrderService } from '../services/merit-order.service';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { firstValueFrom } from 'rxjs';
 
 
 
@@ -19,9 +18,17 @@ export interface Block {
     bandPercentage: number;
 };
 
+export interface tsoUp {
+    period: number;
+    volume: number;
+}
+
 export interface MeritOrderState {
     meritOrderTable: MeritOrder[];
     meritOrderOriginal: MeritOrder[];
+    tsoUpTable: tsoUp[];
+    tsoUp95Table: tsoUp[];
+    tsoUp105Table: tsoUp[];
     selectedBlock: Block | null;
     selectedMeritOrder: MeritOrder | null;
     increment: number;
@@ -33,6 +40,9 @@ export interface MeritOrderState {
 const initialState: MeritOrderState = {
     meritOrderTable: [],
     meritOrderOriginal: [],
+    tsoUpTable: [],
+    tsoUp95Table: [],
+    tsoUp105Table: [],
     selectedBlock: null,
     selectedMeritOrder: null,
     increment: 0,
@@ -46,23 +56,25 @@ export const MeritOrderStore = signalStore(
 
     withState(initialState),
 
-     withComputed((store) => ({
+    withComputed((store) => ({
         getMeritOrderTable: computed(() =>
             store.meritOrderTable
         ),
 
         maxPeriodValue: computed(() =>
-            Math.max(...store.meritOrderTable().map(mo => mo.blocks.reduce((sum, block) => sum + (block.programValue || 0),0 )))
+            Math.max(...store.meritOrderTable().map(mo => mo.blocks.reduce((sum, block) => sum + (block.programValue || 0), 0)))
         ),
-
-
     })),
 
+    
     withMethods((store, meritOrderService = inject(MeritOrderService)) => ({
         loadMeritOrder: async () => {
             patchState(store, {
                 meritOrderTable: [],
                 meritOrderOriginal: [],
+                tsoUpTable: [],
+                tsoUp95Table: [],
+                tsoUp105Table: [],
                 selectedBlock: null,
                 selectedMeritOrder: null,
                 increment: 0,
@@ -74,10 +86,12 @@ export const MeritOrderStore = signalStore(
                 const increment = await meritOrderService.getIncrement();
                 const data = await meritOrderService.getMeritOrder();
                 const meritOrderData = data.content.meritOrder[0].upPriceMeritOrder;
+                const tsoUpTable = data.content.referenceValues[0].tsoUp;
                 //console.log (meritOrderData);
                 patchState(store, {
                     meritOrderTable: structuredClone(meritOrderData),
                     meritOrderOriginal: structuredClone(meritOrderData),
+                    tsoUpTable: structuredClone(tsoUpTable),
                     increment: increment,
                     lastUpdate: new Date(),
                 });
@@ -158,7 +172,7 @@ export const MeritOrderStore = signalStore(
         },
         incrementOfferPrice(changedBlock: Block, bellowBlock: Block | null): number {
 
-            if (!bellowBlock || bellowBlock.programValue===0) {
+            if (!bellowBlock || bellowBlock.programValue === 0) {
                 return changedBlock.offerPrice;
             }
             return bellowBlock.offerPrice + store.increment();
@@ -196,9 +210,81 @@ export const MeritOrderStore = signalStore(
 
             return (programValue * availableHeight / store.maxPeriodValue());
         },
+        findBlock(period: number, referenceValue: number): number {
+            const meritOrder = structuredClone(store.meritOrderTable().find(mo => mo.period === period));
+
+            if (!meritOrder) {
+                return 0;
+            }
+            let sum = 0;
+            const reversedBlocks = meritOrder.blocks.reverse();
+            for (const block of reversedBlocks) {
+                sum += block.programValue;
+                if (sum >= referenceValue) {
+                    if(period===13){
+                        console.log('refValue - '+referenceValue+' label - '+block.label+' vol - '+ block.programValue);
+                    }
+                    return block.programValue;
+                }
+            }
+            return 0;
+        },
+        calcTsoUp95() {
+            try {
+                const table = structuredClone(store.tsoUpTable());
+                let volume:number;
+                let table95: tsoUp[]=[];
+                let newTso: tsoUp;
+                table.forEach(row => {
+                    const referenceTso = store.tsoUpTable().find(tso => tso.period === row.period)
+                    if (!referenceTso) {
+                        volume = 0;
+                    } else {
+                        const referenceValue = referenceTso.volume * 0.95;
+                        volume = this.findBlock(row.period, referenceValue);
+                    }
+                    newTso = {period:row.period, volume:volume};
+                    table95= [...table95,newTso];
+                });
+                patchState(store, {
+                    tsoUp95Table: table95
+                })
+            } catch (error) {
+                patchState(store, {
+                    error: 'error calc table95'
+                })
+            }
+        },
+                
+        calcTsoUp105() {
+            try {
+                const table = structuredClone(store.tsoUpTable());
+                let volume:number;
+                let table105: tsoUp[]=[];
+                let newTso: tsoUp;
+                table.forEach(row => {
+                    const referenceTso = store.tsoUpTable().find(tso => tso.period === row.period)
+                    if (!referenceTso) {
+                        volume = 0;
+                    } else {
+                        const referenceValue = referenceTso.volume * 1.05;
+                        volume = this.findBlock(row.period, referenceValue);
+                    }
+                    newTso = {period:row.period, volume:volume};
+                    table105 = [...table105,newTso];
+                });
+                patchState(store, {
+                    tsoUp105Table: table105
+                })
+            } catch (error) {
+                patchState(store, {
+                    error: 'error calc table95'
+                })
+            }
+        },
     })),
 
-   
+
 
 
 )

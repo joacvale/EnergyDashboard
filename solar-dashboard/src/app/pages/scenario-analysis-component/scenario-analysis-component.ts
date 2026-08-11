@@ -1,7 +1,5 @@
 import { Component, signal, effect, inject, input, computed, AfterViewInit } from '@angular/core';
 import { ViewMode } from '../../enums';
-import { Cell, OfferUnit } from '../../interfaces/offer-unit.interface';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatIcon } from '@angular/material/icon';
 import { SolarPanelService } from '../../services/solar-panel.service';
 import { DynamicTableComponent } from '../../components/dynamic-table-component/dynamic-table-component';

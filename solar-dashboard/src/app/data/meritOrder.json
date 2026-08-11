@@ -6,6 +6,38 @@
             "period": 1,
             "volume": 301
           },
+                    {
+            "period": 2,
+            "volume": 301
+          },
+          {
+            "period": 3,
+            "volume": 301
+          },
+          {
+            "period": 4,
+            "volume": 301
+          },
+          {
+            "period": 5,
+            "volume": 284
+          },
+          {
+            "period": 6,
+            "volume": 284
+          },
+          {
+            "period": 7,
+            "volume": 284
+          },
+          {
+            "period": 8,
+            "volume": 284
+          },
+          {
+            "period": 9,
+            "volume": 257
+          },
           {
             "period": 10,
             "volume": 257
@@ -45,10 +77,6 @@
           {
             "period": 19,
             "volume": 244
-          },
-          {
-            "period": 2,
-            "volume": 301
           },
           {
             "period": 20,
@@ -91,10 +119,6 @@
             "volume": 280
           },
           {
-            "period": 3,
-            "volume": 301
-          },
-          {
             "period": 30,
             "volume": 280
           },
@@ -133,10 +157,6 @@
           {
             "period": 39,
             "volume": 286
-          },
-          {
-            "period": 4,
-            "volume": 301
           },
           {
             "period": 40,
@@ -179,10 +199,6 @@
             "volume": 307
           },
           {
-            "period": 5,
-            "volume": 284
-          },
-          {
             "period": 50,
             "volume": 307
           },
@@ -221,10 +237,6 @@
           {
             "period": 59,
             "volume": 287
-          },
-          {
-            "period": 6,
-            "volume": 284
           },
           {
             "period": 60,
@@ -267,10 +279,6 @@
             "volume": 305
           },
           {
-            "period": 7,
-            "volume": 284
-          },
-          {
             "period": 70,
             "volume": 305
           },
@@ -311,10 +319,6 @@
             "volume": 312
           },
           {
-            "period": 8,
-            "volume": 284
-          },
-          {
             "period": 80,
             "volume": 312
           },
@@ -353,10 +357,6 @@
           {
             "period": 89,
             "volume": 318
-          },
-          {
-            "period": 9,
-            "volume": 257
           },
           {
             "period": 90,

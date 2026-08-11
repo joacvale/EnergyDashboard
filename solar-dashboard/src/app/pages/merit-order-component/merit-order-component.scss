@@ -73,12 +73,11 @@
     border-left: 1px solid #ccc;
 }
 
-.content {
+.drag-content {
     display: flex;
     align-items: flex-end;
     margin: 20px;
     border: 3px solid #ccc;
-
     max-width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
@@ -164,4 +163,35 @@
   text-align: left !important;
   min-width: 200px !important;
 
+}
+
+.reference-table {
+    display: flex;
+    align-items: flex-end;
+    margin: 20px;
+    border: 3px solid #ccc;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position:relative;
+
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 4px 8px;
+  text-align: center;
+  min-width: 60px;
+}
+
+.row-label {
+  position: sticky;
+  left: 0;
+  background: white;
+  font-weight: 600;
 }
