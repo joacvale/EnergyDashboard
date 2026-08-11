@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, effect } from '@angular/core';
 import { MeritOrderStore, Block } from '../../stores/merit-order.store';
 import { CdkDropList, CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -12,9 +12,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 })
 export class MeritOrderComponent {
   meritOrderStore = inject(MeritOrderStore);
-  //meritOrder = this.meritOrderStore.getMeritOrderTable
   
-
 
   getHour(period: number): number {
     return Math.floor((period - 1) / 4) + 1;
@@ -46,8 +44,8 @@ Up aFRR - ${block.bandPercentage}%`;
 
 
   periods = computed(() =>
-  this.meritOrderStore.tsoUpTable()
-);
+    this.meritOrderStore.tsoUpTable()
+  );
 
 tableRows = computed(() => [
   {
@@ -66,12 +64,10 @@ tableRows = computed(() => [
 
   constructor() {
     this.meritOrderStore.loadMeritOrder();
-
-  }
-
-  ngAfterViewInit(): void {
-    this.meritOrderStore.calcTsoUp95();
-    this.meritOrderStore.calcTsoUp105();
+    effect(()=>{
+      this.meritOrderStore.calcTsoUp95();
+      this.meritOrderStore.calcTsoUp105();
+    })
   }
 
 }

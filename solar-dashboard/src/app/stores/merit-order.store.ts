@@ -211,17 +211,19 @@ export const MeritOrderStore = signalStore(
             return (programValue * availableHeight / store.maxPeriodValue());
         },
         findBlock(period: number, referenceValue: number): number {
-            const meritOrder = store.meritOrderTable().find(mo => mo.period === period);
+            const meritOrder = structuredClone(store.meritOrderTable().find(mo => mo.period === period));
 
             if (!meritOrder) {
                 return 0;
             }
-
             let sum = 0;
-
-            for (const block of meritOrder.blocks) {
+            const reversedBlocks = meritOrder.blocks.reverse();
+            for (const block of reversedBlocks) {
                 sum += block.programValue;
                 if (sum >= referenceValue) {
+                    if(period===13){
+                        console.log('refValue - '+referenceValue+' label - '+block.label+' vol - '+ block.programValue);
+                    }
                     return block.programValue;
                 }
             }
