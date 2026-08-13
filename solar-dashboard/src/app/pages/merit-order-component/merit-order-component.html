@@ -47,9 +47,25 @@
 
     <div class="drag-drop-table">
         <svg class="overlay-line" [attr.width]="periods().length * 80" height="600">
+<text
+    [attr.x]="line95()[0].x"
+    [attr.y]="line95()[0].y - 5"
+    fill="black"
+    font-size="10"
+    font-weight="700">
+    oFRR 95% MW
+</text>
             <path [attr.d]="line95Path()" stroke="black" stroke-width="1" stroke-dasharray="5,5" fill="none">
             </path>
-            <path [attr.d]="line105Path()" stroke="black" stroke-width="1"  fill="none">
+            <text
+    [attr.x]="line105()[0].x"
+    [attr.y]="line105()[0].y - 5"
+    fill="black"
+    font-size="10"
+    font-weight="700">
+    oFRR 105% MW
+</text>
+            <path [attr.d]="line105Path()" stroke="black" stroke-width="1" fill="none">
             </path>
 
         </svg>
