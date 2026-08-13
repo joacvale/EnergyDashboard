@@ -1,29 +1,37 @@
 <div class="reference-table">
 
-  <table>
-    <thead>
-      <tr>
-        <th></th>
-        @for(period of periods(); track period.period){
-          <th>{{ period.period }}</th>
-        }
-      </tr>
-    </thead>
-    <tbody>
-      @for(row of tableRows(); track row.label){
-        <tr>
-          <td class="row-label">
-            {{ row.label }}
-          </td>
-          @for(value of row.values; track value.period){
-            <td>
-              {{ value.volume }}
-            </td>
-          }
-        </tr>
-      }
-    </tbody>
-  </table>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                @for(period of periods(); track period.period){
+                <th>{{ period.period }}</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for(row of tableRows(); track row.label){
+            <tr>
+                <td class="row-label">
+                    {{ row.label }}
+                </td>
+
+                @for(value of row.values; track value.period){
+                @if(value.price){
+                <td>
+                    {{ value.price }}
+                </td>
+                } @else {
+                <td>
+                    {{ value.volume }}
+                </td>
+                }
+                }
+
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 
@@ -38,6 +46,13 @@
     </div>
 
     <div class="drag-drop-table">
+        <svg class="overlay-line" [attr.width]="periods().length * 80" height="600">
+            <path [attr.d]="line95Path()" stroke="black" stroke-width="1" stroke-dasharray="5,5" fill="none">
+            </path>
+            <path [attr.d]="line105Path()" stroke="black" stroke-width="1"  fill="none">
+            </path>
+
+        </svg>
         <div class="header-container">
             <div class="hours-row">
                 @for(period of meritOrderStore.meritOrderTable(); track period.period){
@@ -73,5 +88,4 @@
             }
         </div>
     </div>
-
 </div>

@@ -22,13 +22,18 @@ export interface tsoUp {
     period: number;
     volume: number;
 }
+export interface tsoUpWithPrice {
+    period: number;
+    volume?: number;
+    price?: number|undefined;
+}
 
 export interface MeritOrderState {
     meritOrderTable: MeritOrder[];
     meritOrderOriginal: MeritOrder[];
-    tsoUpTable: tsoUp[];
-    tsoUp95Table: tsoUp[];
-    tsoUp105Table: tsoUp[];
+    tsoUpTable: tsoUpWithPrice[];
+    tsoUp95Table: tsoUpWithPrice[];
+    tsoUp105Table: tsoUpWithPrice[];
     selectedBlock: Block | null;
     selectedMeritOrder: MeritOrder | null;
     increment: number;
@@ -210,11 +215,11 @@ export const MeritOrderStore = signalStore(
 
             return (programValue * availableHeight / store.maxPeriodValue());
         },
-        findBlock(period: number, referenceValue: number): number {
+        findBlock(period: number, referenceValue: number): Block | null {
             const meritOrder = structuredClone(store.meritOrderTable().find(mo => mo.period === period));
 
             if (!meritOrder) {
-                return 0;
+                return null;
             }
             let sum = 0;
             const reversedBlocks = meritOrder.blocks.reverse();
@@ -224,26 +229,25 @@ export const MeritOrderStore = signalStore(
                     if(period===13){
                         console.log('refValue - '+referenceValue+' label - '+block.label+' vol - '+ block.programValue);
                     }
-                    return block.offerPrice;
+                    return block;
                 }
             }
-            return 0;
+            return null;
         },
         calcTsoUp95() {
             try {
                 const table = structuredClone(store.tsoUpTable());
-                let volume:number;
-                let table95: tsoUp[]=[];
-                let newTso: tsoUp;
+                let table95: tsoUpWithPrice[]=[];
+                let newTso: tsoUpWithPrice;
                 table.forEach(row => {
                     const referenceTso = store.tsoUpTable().find(tso => tso.period === row.period)
-                    if (!referenceTso) {
-                        volume = 0;
+                    if (!referenceTso || !referenceTso.volume) {
+                        newTso = {period:row.period, volume: 0, price: 0};
                     } else {
                         const referenceValue = referenceTso.volume * 0.95;
-                        volume = this.findBlock(row.period, referenceValue);
+                        const newBlock = this.findBlock(row.period, referenceValue);
+                        newTso = {period:row.period, volume:newBlock?.programValue, price:newBlock?.offerPrice};
                     }
-                    newTso = {period:row.period, volume:volume};
                     table95= [...table95,newTso];
                 });
                 patchState(store, {
@@ -259,19 +263,18 @@ export const MeritOrderStore = signalStore(
         calcTsoUp105() {
             try {
                 const table = structuredClone(store.tsoUpTable());
-                let volume:number;
-                let table105: tsoUp[]=[];
-                let newTso: tsoUp;
+                let table105: tsoUpWithPrice[]=[];
+                let newTso: tsoUpWithPrice;
                 table.forEach(row => {
                     const referenceTso = store.tsoUpTable().find(tso => tso.period === row.period)
-                    if (!referenceTso) {
-                        volume = 0;
+                    if (!referenceTso || !referenceTso.volume) {
+                        newTso = {period:row.period, volume: 0, price: 0};
                     } else {
                         const referenceValue = referenceTso.volume * 1.05;
-                        volume = this.findBlock(row.period, referenceValue);
+                        const newBlock = this.findBlock(row.period, referenceValue);
+                        newTso = {period:row.period, volume:newBlock?.programValue, price:newBlock?.offerPrice};
                     }
-                    newTso = {period:row.period, volume:volume};
-                    table105 = [...table105,newTso];
+                    table105= [...table105,newTso];
                 });
                 patchState(store, {
                     tsoUp105Table: table105

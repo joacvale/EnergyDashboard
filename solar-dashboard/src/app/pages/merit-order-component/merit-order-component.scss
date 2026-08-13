@@ -1,6 +1,6 @@
 .header-container{
     min-width: 318px;
-    max-height: 318px;
+    max-width: 318px;
 }
 .hours-row {
     display: flex;
@@ -199,4 +199,18 @@ td {
   left: 0;
   background: white;
   font-weight: 600;
+}
+
+
+.drag-drop-table {
+  position: relative;
+}
+
+.overlay-line {
+  position: absolute;
+  left: 0;
+  top: 58px; // ajustar à altura do header
+
+  pointer-events: none;
+  z-index: 100;
 }
